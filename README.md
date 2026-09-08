@@ -36,7 +36,7 @@ Deploys to GitHub Pages via `.github/workflows/deploy.yml` on every push to
 `main`: it builds the site and publishes `build/` to the `gh-pages` branch.
 GitHub Pages is configured to serve that branch under the custom domain
 `docs.corvis.au` (see `static/CNAME`) - the DNS record for that subdomain
-needs a `CNAME` pointing at `corvisrob.github.io`, set up once outside this
+needs a `CNAME` pointing at `corvisau.github.io`, set up once outside this
 repo.
 
 ## Writing

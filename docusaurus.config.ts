@@ -18,7 +18,7 @@ const config: Config = {
   baseUrl: '/',
 
   // GitHub Pages deployment config, served via docs.corvis.au (see static/CNAME).
-  organizationName: 'corvisrob',
+  organizationName: 'corvisau',
   projectName: 'corvis-sightline-whitepapers',
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
@@ -74,7 +74,7 @@ const config: Config = {
             '**/PUBLISH.md',
           ],
           editUrl:
-            'https://github.com/corvisrob/corvis-sightline-whitepapers/tree/main/',
+            'https://github.com/corvisau/corvis-sightline-whitepapers/tree/main/',
         },
         blog: {
           path: 'blog',
@@ -88,7 +88,7 @@ const config: Config = {
             xslt: true,
           },
           editUrl:
-            'https://github.com/corvisrob/corvis-sightline-whitepapers/tree/main/',
+            'https://github.com/corvisau/corvis-sightline-whitepapers/tree/main/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -122,7 +122,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Whitepapers', position: 'left'},
         {
-          href: 'https://github.com/corvisrob/sightline-v2',
+          href: 'https://github.com/corvisau/sightline-v2',
           label: 'GitHub',
           position: 'right',
         },
@@ -158,7 +158,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/corvisrob/sightline-v2',
+              href: 'https://github.com/corvisau/sightline-v2',
             },
           ],
         },
