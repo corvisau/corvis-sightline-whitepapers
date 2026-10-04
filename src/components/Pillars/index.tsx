@@ -17,21 +17,21 @@ const PIPELINE: Pillar[] = [
     name: 'Tetra',
     role: 'Models the architecture',
     description: 'Zones, devices, networks, channels and flows, as plain YAML.',
-    href: '/docs/tetra/',
+    href: '/docs/sightline/architecture/tetra',
   },
   {
     step: '2',
-    name: 'Bowtie',
+    name: 'Lamina',
     role: 'Grounds the risk',
     description: 'Causes, controls and consequences, referencing the real architecture.',
-    href: '/docs/bowtie/',
+    href: '/docs/sightline/architecture/lamina',
   },
   {
     step: '3',
     name: 'Metron',
     role: 'Proves compliance',
     description: 'Requirement packages assessed against the model, with a findings ledger.',
-    href: '/docs/metron/',
+    href: '/docs/sightline/architecture/metron',
   },
 ];
 

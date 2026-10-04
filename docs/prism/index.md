@@ -12,7 +12,7 @@ before.
 
 ## Why this sits underneath the other three pillars
 
-[Tetra](../tetra/index.md), [Bowtie](../bowtie/index.md) and [Metron](../metron/index.md) are only
+[Tetra](/docs/sightline/architecture/tetra), [Lamina](/docs/sightline/architecture/lamina) and [Metron](/docs/sightline/architecture/metron) are only
 as accurate as the asset data behind them. A model built from a one-off
 import at project kickoff is accurate on day one and wrong by month three.
 Prism keeps that data current by collecting from multiple sources on an
@@ -32,6 +32,6 @@ consistently.
 ## Where it fits
 
 Prism is the data foundation the other three pillars draw on. It doesn't
-have a page-by-page workflow of its own the way Tetra, Bowtie and Metron
+have a page-by-page workflow of its own the way Tetra, Lamina and Metron
 do; instead, its job is making sure those three are working from current,
 reconciled asset data.
