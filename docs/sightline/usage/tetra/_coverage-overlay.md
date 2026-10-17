@@ -5,9 +5,10 @@ the Metron pages for how assessments are authored.
 
 ## Switching it on
 
-The overlay is off by default. Run **Sightline: Toggle Coverage Overlay (this
-diagram)** from the command palette, or use the toolbar button beside **View
-Findings on Diagram**. Run the command again to hide the overlay.
+The overlay is off by default. Select the coverage button in the diagram's
+title bar, beside **View Findings on Diagram**, or run **Sightline: Toggle
+Coverage Overlay (this diagram)** from the command palette. Select the button
+again to hide the overlay.
 
 The overlay reads Metron data, which needs a licence that names Metron data. See [Licensing](/docs/sightline/usage/shared/licensing).
 
@@ -58,6 +59,12 @@ Hover over a badge to open a read-only popup:
 - One row per package that assesses the entity, with its own `done/total`.
 
 To change anything, open the entity's assessment in Metron.
+
+Channels and flows carry an entity version, like devices and zones. It starts at
+1 and rises when you change a field that carries meaning, such as a label or a
+protocol. Moving a line's ports or its label positions leaves it alone. A model
+that has no version on its channels and flows needs no change, because each
+loads at version 1.
 
 ## What the numbers mean
 

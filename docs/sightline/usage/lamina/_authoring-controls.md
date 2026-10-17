@@ -11,8 +11,8 @@ Write the control inside the cause or the outcome that owns it:
 
 ```yaml
 causes:
-  - id: STN-NET-LTE-A
-    label: LTE modem compromise
+  - id: C-0001
+    label: Example cause
     controls:
       - id: K-MMM44
         label: Network segregation
@@ -96,13 +96,14 @@ A zone id on a cause, outcome, exposure, objective, control, element narrow or
 vector `sourceZones` is the id of a zone in your tetra model. Lamina accepts any
 non-empty string. Lamina has no `Zone` entity of its own.
 
-Lamina checks zone ids when it opens a `*.bowtie.yaml` manifest or saves a yaml
-file beside it. It adds a Problems-panel warning (`unresolved-zone-ref`) to the
-manifest for each zone id that no tetra model defines.
+Lamina checks zone ids when it opens a `*.bowtie.yaml` manifest, and again when
+you save a yaml file in the workspace. It adds a Problems-panel warning
+(`unresolved-zone-ref`) to the manifest for each zone id that no tetra model
+defines.
 
-The check reads the tetra models (`*.tetra.yaml` and the files each lists) under
-the manifest's directory. A tetra model outside that directory is not seen, so
-its zone ids report as unresolved.
+The check reads every tetra model that the workspace lists, in any folder, with
+the files each model lists. A tetra model needs a `meta.id` to be listed. The
+check gives no warning for a manifest that the workspace does not list.
 
 ## A template can derive from another template
 
@@ -160,3 +161,9 @@ A template that derives from a template of a different type appears in the
 picker as a top-level entry with no warning. An example is a control template
 that names a cause template. Check the parent's type when a sub-template does
 not appear where you expect it.
+
+## Open the Template Editor and the Constants Editor
+
+The diagram toolbar has an **Edit Templates** button and an **Edit Constants** button. In VS Code each opens an editor panel beside the diagram. Both buttons are disabled in a read-only view, because both editors write to the model. The **Sightline: Edit Templates** and **Sightline: Edit Constants** commands open each editor in a read-only view too, with every control disabled.
+
+In the web shell each button opens its editor in a tab of its own, named after the model. Select the button again to return to the tab that is open. The editor saves to the model, and the diagram tab shows the saved change. A Lamina page opened outside the web shell has no shell to open a tab in, so it shows neither button.

@@ -13,7 +13,7 @@ The section appears only while a model of that app is open in an editor.
 
 The tree follows the editor you are looking at. Open two models and select between their tabs, and the tree shows the entities of whichever one has focus.
 
-On the Tabular Editor the section reads `The model tree is not available on the tabular surface.` Switch back to the diagram to see the tree again.
+On the Tabular Editor the tree stays available in both apps. It works as described under [Tetra](#tetra) and [Lamina](#lamina).
 
 ## Filtering
 
@@ -49,14 +49,19 @@ Every root opens on first paint. Deeper branches stay closed until you click the
 
 The filter match ignores case.
 
-Switching from the Tabular Editor back to the diagram restores the tree with your open branches and filter text intact.
+Switching between the diagram and the Tabular Editor keeps your open branches and filter text.
 
-Two gestures differ from Lamina:
+Five gestures differ from Lamina:
 
 - Clicking a canvas node opens the ancestors of that entity, highlights its row, and leaves the props drawer closed.
-- Clicking empty canvas clears the tree highlight and closes the props drawer.
+- Hold Cmd (macOS) or Ctrl (Windows, Linux) and click more canvas nodes to select several. The tree highlights the row of every selected node, and the canvas and the tree stay in step as you add or remove nodes.
+- Hold Cmd (macOS) or Ctrl (Windows, Linux) and click a row to add it to the selection, or to remove it again. The canvas selects every node in the set.
+- Hold Shift and click a row to select every visible row between the last row you clicked and this one. Rows inside a collapsed branch and rows the filter hides are not part of the range, and group headers are skipped.
+- Clicking empty canvas, or pressing Escape, clears the whole selection and the tree highlight, and closes the props drawer. While a dialog, a popover or a menu is open, Escape closes it and the selection stays. Press Escape again to clear the selection. Escape leaves the selection alone while you type in a field.
 
 The canvas cannot always move to the entity you clicked. A node inside a collapsed zone, or one that a View menu toggle hides, has no box to centre on. The viewport then stays where it is, and the row still highlights.
+
+A greyed row can join a multi-selection. Its row highlights, and the canvas skips it because there is no node to select.
 
 A greyed row has the tooltip `not in the active data slice`. Both filter modes produce greyed rows:
 
@@ -66,6 +71,25 @@ A greyed row has the tooltip `not in the active data slice`. Both filter modes p
 The View menu's "Hide ..." toggles declutter the canvas without greying anything in the tree.
 
 For how a data slice narrows the canvas, see the [Tetra Data Slice Filtering](/docs/sightline/usage/tetra/data-slice-filtering) page.
+
+### On the Tabular Editor
+
+The tree lists the whole model. No row greys, because the table shows every entity whatever data slice is active.
+
+| Action | Result |
+|---|---|
+| Single click on a row | The table ticks that entity's row and scrolls it into view. |
+| Cmd or Ctrl click, or Shift click, on rows | The table ticks every row in the resulting set. |
+| Tick rows in the table | The tree highlights the matching rows. |
+| Double-click on a row | The props drawer opens for that entity. |
+
+With **Tree** on, a click first opens the rows above the entity. With a **Group** active, it opens the group that holds the row. A single click never opens the props drawer.
+
+Channels, flows, systems and annotations are not tree members. Ticking one highlights no tree row, and a tree click never ticks one. A channel you ticked in the table stays ticked.
+
+A Type or Filter condition can hide the row of a tree-selected entity. The tree row highlights, the table ticks nothing, and the condition stays as it is. When **Tree** is on and the condition removed only an ancestor, the table shows that ancestor greyed and scrolls to it without ticking it.
+
+A selection made in the table does not select nodes on the diagram.
 
 ## Lamina
 
@@ -81,5 +105,25 @@ Two groups collect the controls that cannot nest:
 - **Unattached controls.** No cause or outcome references the control. It is either an entry in the top-level `controls:` list that nothing uses, or a reference that does not resolve. Both are usually worth fixing in the model.
 
 A shared control has a node on every line that carries it. Selecting its row centres the viewport on all of them together.
+
+Lamina's tree selects one row at a time. Cmd, Ctrl and Shift clicks on its rows act as a plain click.
+
+### On the Tabular Editor
+
+The tree lists the whole model. No row greys, because the table shows every entity whatever data slice is active.
+
+| Action | Result |
+|---|---|
+| Single click on a row | The table ticks that entity's row and scrolls it into view. |
+| Tick rows in the table | The tree highlights the matching rows. |
+| Double-click on a row | The props drawer opens for that entity. |
+
+With a **Group** active, a click first opens the group that holds the row. A single click never opens the props drawer.
+
+A single click on a tree row replaces the table selection with that one row. Ticking several rows in the table highlights every one of them in the tree.
+
+A control has no row in the table, so its tree row highlights and the table ticks nothing. A Type or Filter condition can hide the row of a tree-selected entity. The tree row highlights, the table ticks nothing, and the condition stays as it is.
+
+A selection made in the table does not select nodes on the diagram.
 
 For how a slice decides which entities reach the canvas, see the [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices) page. The Tetra tree uses the same control over a containment tree.

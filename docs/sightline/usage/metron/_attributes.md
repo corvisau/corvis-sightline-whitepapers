@@ -6,7 +6,7 @@ A **tag** is a freeform label with no key and no value, such as `EDR` or
 `do later`.
 
 > **Authoring:** attribute sets, requirement attachment and pair-level overrides
-> all have UI now - see [Authoring attributes and attribute sets](/docs/sightline/usage/metron/attribute-authoring).
+> are all authored in the app - see [Authoring attributes and attribute sets](/docs/sightline/usage/metron/attribute-authoring).
 > This page covers the shape and the model; that one covers where you edit it.
 
 ---
@@ -54,8 +54,8 @@ otherwise preserved, through both loading and saving.
 
 When the same attributes apply to many requirements, such as one control
 deployed across fifteen zones, author them once as an **attribute set**. Sets
-live in `attributes/*.attributes.yaml`, which is glob-scanned like `rules/` and
-needs no manifest entry:
+live in an attribute-set package, in `attributes/*.attributes.yaml` fragments.
+A requirement package uses them by naming that package in its `uses:` list:
 
 ```yaml
 attributeSets:
@@ -183,8 +183,8 @@ has its own **`[Edit columns]`** toolbar button to show, hide and reorder column
 
 - The attribute-set package's own editor never lists **source** in its
   picker: an attribute-set package holds only its own sets, so the column
-  would always read `this package`. The requirement package's Attribute sets
-  tab does list it, since its grid mixes sets from more than one source.
+  would repeat one value. The requirement package's Attribute sets tab does
+  list it, since its grid mixes sets from more than one package.
 - Drag the handle at the left of a column header to move that column. To use the keyboard, focus the handle, press Space, press the left or right arrow key, then press Space again. The picker shows the same order, and a drag never sorts the column. The handle works in both hosts.
 - Your choice is personal and local. Hiding a column in either
   host is reflected the next time either mounts. Toggling a column from the attribute-set package's own editor never

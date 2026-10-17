@@ -22,6 +22,10 @@ A YAML file that none of the apps claims opens as plain text.
 
 The apps find each other's files in the workspace. A finding that Metron records can become a cause in Lamina. Tetra can draw the assessment coverage of Metron on its diagram. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 
+## Ways to run Sightline
+
+Sightline runs in your own VS Code, on infrastructure that you operate, or on a deployment that Corvis runs for you. The options differ in who operates Sightline and what support applies. See [Deployment options](/docs/sightline/architecture/deployment-options).
+
 ## Where to go next
 
 - [Install Sightline](/docs/sightline/install/extensions)

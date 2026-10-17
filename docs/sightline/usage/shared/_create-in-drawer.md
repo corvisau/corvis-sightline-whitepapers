@@ -30,9 +30,9 @@ Every entry point opens the same drawer.
 
 | Entry point | How |
 |---|---|
-| Canvas | Right-click the pane, then choose **Add Zone**, **Add Group**, **Add Device**, **Add Network**, **Add System**, **Add Information**, **Add Channel** or **Add Flow**. Right-click a node for the subset that the node can hold. A zone, group, device or network also offers **Add Channel from here** and **Add Flow from here**. |
+| Canvas | Right-click the pane, then choose **Add Zone**, **Add Group**, **Add Device**, **Add Network**, **Add System**, **Add Information**, **Add Channel** or **Add Flow**. Right-click a node for the subset that the node can hold. A zone, group, device or network also offers **Add Channel from here** and **Add Flow from here**. To connect two nodes in one step, select exactly two of them, right-click one, and choose **Add Flow, first selected to second** or **Add Channel, first selected to second**. The drawer opens with the first node you selected in the first endpoint field and the second node in the second endpoint field, whichever one you right-clicked. You can swap them. A flow accepts an information item as an end, and a channel does not. The two entries do not appear when the selection holds an annotation or a system. |
 | Table | The toolbar's **New** menu, a row's context menu, or a right-click on empty space in the table (Tetra) |
-| Device drawer | **+ New channel** and **+ New flow** in a device's Relationships section |
+| Device drawer | **+ New channel** and **+ New flow** in a device's Relationships section, and **+ Add information** in its Information section |
 | Canvas annotations | Right-click a node or an edge, then choose **Add Annotation…** |
 
 ### Form fields
@@ -48,13 +48,13 @@ Three controls surround the form. **Parent** sits above it. **Create as inline m
 
 - **Parent** chooses the container that the entity lands under. It is the same control as the **Parent** field in the Edit drawer, and it sits in the same place, above **ID** and **Label**. The Edit drawer of a zone, group or device shows it, and choosing a different container there moves the entity. Type to filter the containers, or select **Browse…** to pick one from a tree. The field shows the container's name. It starts with the place where you began the create: right-clicking a zone pre-selects that zone, and starting from an empty part of the canvas or the toolbar **New** menu selects the model root, shown as **(root: model name)**. In a Tetra model with a hidden root group, **(root: model name)** is that group, so the entity lands at the top level of the canvas, and the group does not appear a second time in the list. Choose a different container to place the entity under it at creation. Zones, groups, devices, networks and information items show this control. Information items can be placed under a device or a zone. The other types can be placed under a zone or a group. Systems are stored on their own, and channels and flows are relationships, so they do not show it. **Add to New Group** does not show it either, because the group lands beside the members that you selected.
 - **Create as inline member** nests the entity inside its parent's YAML. Without it, the entity gets a typed entry of its own. Containers (zones and groups) default to inline. Leaves (devices and networks) default to a standalone entry. Turning the option on hides the destination file, because an inline member has no file of its own.
-- **Destination file** chooses the `*.tetra.yaml` file that receives the definition. It defaults to the file where the entity's would-be siblings already live. It falls back to the parent's own file or the manifest, shown as **Store with parent**. You can also create a new file or import an existing file without leaving the drawer.
+- **Destination file** chooses the `*.tetra.yaml` file that receives the definition. It defaults to the file where the entity's would-be siblings already live. It falls back to the parent's own file or the manifest, shown as **Store with parent**. You can also create a new file or import an existing file without leaving the drawer. When Sightline refuses a new or imported file, for example because the model already has a file of that name, the dialog stays open and shows the reason above its buttons.
 
 An information item created under an owner becomes a per-owner inline badge. Its stored id carries the owner as a prefix, for example `dev-a.I-3KNT7`. The form shows only the bare tag.
 
 ### Finishing
 
-**Create** writes the entity and leaves the drawer open on it, switched to edit mode.
+**Create** stages the entity and closes the drawer. To edit the new entity, open it again. When you start a create from a device's drawer, with **+ New channel**, **+ New flow** or **+ Add information**, the drawer returns to that device instead of closing.
 
 The drawer asks for **Discard** or **Cancel** when you close it, open a different entity, start another create, or switch surface or data slice.
 

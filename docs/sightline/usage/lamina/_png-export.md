@@ -1,6 +1,8 @@
 Export PNG on the diagram toolbar writes a picture of the current bow-tie to the
 model's `outputs/` folder. A dialog collects the filename and whether to frame
-the diagram to a fixed aspect ratio.
+the diagram to a fixed aspect ratio. The diagram draws only through a data
+slice, so on a model with no data slices Export PNG and Export Draw.io are
+disabled until you create one.
 
 ## The export renders separately from what is on screen
 
@@ -29,7 +31,8 @@ Three rules apply to every exported PNG, whatever the editor looks like:
 ## Exporting every data slice
 
 Export, then All slices (PNG), writes one picture for each saved data slice. The
-item appears only when the model has at least one data slice.
+item appears only when the model file holds at least one data slice; a slice
+created since the last Save all does not count.
 
 Each picture is rendered in the same offscreen view as a single export, one after
 another, under one progress notification. Cancel stops the batch after the slice

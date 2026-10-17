@@ -75,17 +75,14 @@ A requirement package's **Attribute sets** tab lists every set the package can
 attach. The tab is read-only. It has no **+ Add attribute set** button or
 drawer, and no delete.
 
-- The **source** column names the attribute-set package each set comes from. A
-  set from the package's own `attributes/` folder reads `this package`.
-- To change a set from an attribute-set package, right-click it. Select
-  **Open package**. The attribute-set package opens in its own editor.
-- A set from the package's own folder has no action. To edit it, move it into
-  an attribute-set package. The [Component packages](/docs/sightline/usage/metron/component-packages)
+- The **source** column names the attribute-set package each set comes from.
+- To change a set, right-click it. Select **Open package**. The attribute-set
+  package opens in its own editor. The [Component packages](/docs/sightline/usage/metron/component-packages)
   page describes attribute-set packages.
 - The **used by** column counts requirements in this package only.
 
-A local set with the same id as a referenced one still overrides it for this
-package alone.
+When two attribute-set packages define the same id, the later `uses:` entry
+supplies the set.
 
 ## 2. Attach a set to a requirement
 

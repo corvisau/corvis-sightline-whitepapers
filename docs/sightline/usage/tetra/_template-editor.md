@@ -4,10 +4,14 @@ is covered in the [Tetra templates](/docs/sightline/usage/tetra/templates) page.
 
 ## Opening it
 
-Command palette -> **Tetra: Edit Templates**, with a `.tetra.yaml` model open.
+Select **Templates** in the toolbar of an open Tetra diagram. You can also run
+**Tetra: Edit Templates** from the command palette with a `.tetra.yaml` model
+open. The toolbar button is disabled in a read-only view, because the editor
+writes to the model. The command opens the editor in a read-only view too, with
+every control disabled.
 
-The panel is per-model. Invoking the command again for the same model focuses
-the panel you already have. Invoking it while a second model is open gives
+The panel is per-model. Opening it again for the same model focuses
+the panel you already have. Opening it while a second model is open gives
 that model its own panel. Close it like any editor tab.
 
 If no Tetra model is open, the command tells you so and does nothing.

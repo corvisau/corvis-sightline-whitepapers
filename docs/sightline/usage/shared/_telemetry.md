@@ -11,7 +11,7 @@ The ping never carries your full email address, `USERDOMAIN` (NetBIOS), hostname
 
 ## Cadence and behaviour
 
-The ping fires once per activation and stores nothing on the machine. No UI element shows it, and a failed ping does not affect the app.
+The ping fires once per activation and stores nothing on the machine. No UI element shows it.
 
 Activation also runs a licence-revocation check, described under Revocation in [Licensing](/docs/sightline/usage/shared/licensing).
 

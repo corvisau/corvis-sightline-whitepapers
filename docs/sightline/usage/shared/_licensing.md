@@ -24,9 +24,24 @@ When a licence is valid but does not name an app, the licence badge in that app 
 
 Tetra reads Metron findings and coverage to draw the findings badges and the coverage overlay. This read needs a licence that carries the `view:metron` grant. A licence that lacks it leaves Tetra fully usable. The findings badges do not load, and the coverage overlay shows a notice that gives the reason.
 
+The Rules panel reads Metron rule packages and Metron records with the same grant. Without it, the panel lists no Metron package and no Metron record. Where a read is refused, the **Add** control on the **Packages** tab is disabled and gives the reason, and the **Rules** and **Records** tabs show the same reason in place of their empty message. Tetra rule packages and Tetra records need no `view:metron`, as [Rule packages](#rule-packages) explains.
+
 The grant covers the read only. It does not unlock editing in any app.
 
+## Rule packages
+
+A rule package names the app that runs its rules, its domain. The domain decides which grant reads the package and the records its rules produce:
+
+| Package domain | Read with |
+|---|---|
+| `tetra` | The Tetra editing grant, `edit:tetra`. No `view:metron` is needed. |
+| `metron` | The `view:metron` grant. |
+
+The list of installed rule packages shows each package's domain, and it omits the packages that your licence cannot read. A hosted deployment with no licence still lists and reads the `tetra` packages and their records. A list of records shows the records of the domains that your licence can read and omits the others.
+
 ## Editing without a licence
+
+In a hosted deployment, the server tells each tab whether you may save in its app. Save is disabled in a tab when the licence does not name the app or when your account is read-only.
 
 Every editing control stays enabled without a licence, with the exceptions listed for each app below. You can make changes, but the app does not save them.
 
@@ -53,6 +68,28 @@ Select the licence badge in the bottom-right corner to paste, view or clear the 
 
 Pasting or clearing a licence takes effect without reopening the panel. In the app where you paste it, the banner and the **Save** button in the dialog follow the new licence straight away. The app sections below list any further controls that follow it.
 
+## Grants in the licence dialog
+
+The licence dialog shows who the licence is issued to, its ID and its dates. Under them, the **Grants** list names every grant that Sightline knows.
+
+| Grant | Meaning |
+|---|---|
+| `edit:lamina` | Edit in Lamina |
+| `edit:tetra` | Edit in Tetra |
+| `edit:metron` | Edit in Metron |
+| `view:metron` | Read Metron findings and coverage in other apps |
+
+Each row shows its state two ways, so a high-contrast theme loses nothing:
+
+- A grant the licence holds appears in green bold with a tick.
+- A grant the licence lacks appears in grey with a dash.
+
+A screen reader announces each row as held or not held.
+
+A licence can carry a grant that this version of Sightline does not know. That grant appears after the four above, in green bold with its raw string as the label.
+
+An expired licence still lists the grants it holds, struck through and in grey. A line under the list says that the grants are not in effect. A licence that is absent or invalid shows no **Grants** list.
+
 ## A read-only view is a different thing
 
 The licence answers whether a change can be saved. It never stops you making a change.
@@ -60,7 +97,7 @@ The licence answers whether a change can be saved. It never stops you making a c
 A second, independent setting answers whether a surface can be changed at all. With that setting off, every control that would edit the model is disabled.
 The two settings never read each other. An unlicensed app is fully editable and refuses at **Save**. Controls that only read an entity's properties or source stay available in both, because reading is not editing.
 
-Every panel opens editable.
+A VS Code panel always opens editable. A web shell tab opens with editing off when the access token has the reader role.
 
 ## Revocation
 
@@ -113,6 +150,8 @@ Collapsing a zone or group is a pending change like any other. It stages onto th
 
 **Read-only view.** **Edit…** and **View Code** stay available with the licence off and with the read-only setting on.
 
+With the read-only setting on, the toolbar's **Templates** and **Constants** buttons are disabled, because both editors write to the model.
+
 **Managing your licence.** In the app where you paste a licence, the banner and the **Save** button in the dialog follow it at once.
 
 ## Lamina
@@ -151,6 +190,8 @@ A new entity that waits for **Save** shows on the canvas even when the active da
 - `View Code of Target`
 - Copy, because the clipboard is not the model
 
+With the read-only setting on, the toolbar's **Edit Templates** and **Edit Constants** buttons are disabled, because both editors write to the model.
+
 **Managing your licence.** In the app where you paste a licence, the banner and the **Save** button in the dialog follow it at once.
 
 **Revocation.** A revocation applies to the current VS Code session only. A new session checks again.
@@ -167,7 +208,7 @@ A new entity that waits for **Save** shows on the canvas even when the active da
 
 Without a licence, **+ New assessment** and **Run assessments** are disabled, and their tooltip gives the reason.
 
-The banner shows at the top of the editor. **Save all** appears in the pool save bar only. The **Save changes** dialog lists each change by its id. A pair reads as `<requirement id> × <entity label>`.
+The banner shows at the top of the editor. **Save all** appears in the pool save bar only, at the bottom of the editor. The **Save changes** dialog lists each change by its id. A pair reads as `<requirement id> × <entity label>`.
 
 **Refused saves.** The pool save bar shows the reason beside **Save all**. A write refused by an assessment business rule reports itself the same way.
 

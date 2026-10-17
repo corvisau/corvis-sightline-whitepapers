@@ -12,6 +12,16 @@ The binding terms are in the `LICENSE` file that ships with the product. The sum
 
 See [Licensing](/docs/sightline/usage/shared/licensing) for the banner, the licence badge and the behaviour of each app.
 
+## Deployment options
+
+The licence applies in the same way to each of the three deployment options.
+
+- **The same grants apply.** Local Community Sightline, Self-Hosted Sightline and Corvis Sightline each check the per-app grants described above.
+- **A hosted deployment applies the grants to each save.** The operator provides one licence. A save by a signed-in user needs the grant for that app.
+- **Documentation only means no support.** Self-Hosted Sightline carries no support obligation.
+
+See [Deployment options](/docs/sightline/architecture/deployment-options).
+
 ## Telemetry
 
 Each app sends one activation ping when it starts. The telemetry section of the licence terms discloses it. See [Telemetry](/docs/sightline/usage/shared/telemetry).

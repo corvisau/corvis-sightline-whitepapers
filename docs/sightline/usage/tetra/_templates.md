@@ -73,8 +73,9 @@ warning.
 
 ## Authoring templates in the UI
 
-Templates can also be edited from the **Templates** panel (command
-palette -> **Tetra: Edit Templates**). See
+Templates can also be edited from the **Templates** panel (select
+**Templates** in the diagram toolbar, or run **Tetra: Edit Templates** from the
+command palette). See
 [Tetra Template Editor](/docs/sightline/usage/tetra/template-editor). The panel types each template by
 its top-level key. The `tpl-plc` example above is a device template because it
 sits under `devices:`, and it lists and edits like any other template. The

@@ -1,18 +1,56 @@
 This page lists which versions of a model, a template and a command work together. It records the changes that can stop an older file from loading or from rendering.
 
+A migration tool converts a model in the earlier format. Ask Corvis for the tool that matches your release.
+
 ## Lamina schema versions
 
 A Lamina manifest carries a `schemaVersion`.
 
 | Version | Shape | Status |
 |---|---|---|
-| 0 | Views can carry an inline `aggregation` field. | Migrated on load |
-| 1 | `aggregations[]` holds the aggregations. Views carry `savedFilterId`. Reports carry `filter`, `filterRef` and `aggregation`. | Migrated on load |
-| 2 | `dataSlices[]` holds the data slices. Reports use `dataSlice: string`. The manifest has no `views[]`, and views have no `savedFilterId`. | Current |
+| 0, or absent with an older shape in the manifest | An older shape that Tetra no longer converts. | Does not open |
+| Absent, with no older shape in the manifest | Read as version 1. | Opens |
+| 1 | The shape that **Tetra: New Model** writes. | Current |
 
-Lamina migrates a version 0 or version 1 manifest to version 2 in memory when it loads the manifest. See [Open a Lamina model](/docs/sightline/usage/lamina/opening-a-model).
+A model with no `schemaVersion` opens when its manifest holds none of the older shapes. Tetra does not add the key when it saves such a model, because a saved model can still hold older shapes in its entity files.
 
-A release can drop the migration for an old version. If the `schemaVersion` of a manifest is below the minimum that the app supports, the app stops. The error asks you to upgrade the manifest first. Upgrade the manifest with a release that still supports its version.
+A model whose manifest holds an older shape does not open. The message names each older shape that the manifest holds and the conversion that applies to it.
+
+A model whose `schemaVersion` is higher than this build supports does not open. The message says that the model is newer than the installed build and asks you to update Sightline. A `schemaVersion` that is not a whole number of 0 or higher also stops the model from opening, and the message names the value.
+
+Each older shape has a conversion. Apply the conversions that suit a model directory once, and apply them before anything else loads the model.
+
+| Older shape | Conversion |
+|---|---|
+| A flat `blockdiagram` with an `id` and a `label` and no `meta` | Moves the `id`, `label` and `description` under `meta`. |
+| A model-level `layout` | Removes it, because a data slice sets the orientation. |
+| An inline `members` list | Moves the inline members of a manifest into a tree file of their own. |
+| A `views:` list | Folds it into the data slices. |
+| A data slice filter written as a string, or collapsed containers listed in `collapsed` or `groups` | Converts string filters to program filters and the `collapsed` and `groups` options to `containers`. |
+
+A conversion stamps `schemaVersion: 1` on a manifest when none of the older shapes is left in it. A second run changes nothing. A dry run lists the files without writing them. A conversion rewrites the file with a YAML serializer, so comments in a manifest it rewrites are not kept.
+
+## Lamina manifest id
+
+A Lamina manifest needs a `meta.id`. A manifest without one does not open, because the Models tree does not list it. The message that Lamina shows names the file and gives the command that adds an id to every manifest in its folder. See [Open a Lamina model](/docs/sightline/usage/lamina/opening-a-model).
+
+## Rule package domain
+
+A rule package names the app that runs its rules in `meta.domain`. A rule no longer carries a `domain` of its own. A rule package manifest with no `meta.domain` does not load. Tetra and Metron report the package, and a run skips its rules.
+
+Migrate a model directory once with the migration for this change.
+
+The migration moves the per-rule `domain` of each package to `meta.domain`. A package whose rules name no domain gets `domain: metron`, and its rules then run in the Metron domain. A package whose rules name two domains is left unchanged, and the report names its rules. Move the rules of one domain to a package of their own, then run the migration again. The migration keeps the comments in the files that it rewrites, and a second run changes nothing. A dry run lists the files without writing them.
+
+## Package name
+
+A Metron package manifest names the package in `meta.name`, and the manifest has no `meta.title`. Metron shows the name in the Models tree, in the editor heading and in the package pickers. A package manifest with no `meta.name` does not load. The message names the field. This applies to requirement, rule, attribute-set and scheme packages, and to the rule packages that Tetra reads.
+
+Migrate a model directory once with the migration for this change.
+
+The migration removes `meta.title` from every `*.metron.yaml` manifest under the directory. A manifest with no name takes its title as its name, or its id when it has no title. A title that differs from the name is reported, so you can move wording into the name before you keep the result. The migration changes only those lines, and a second run changes nothing. A dry run lists the files without writing them.
+
+A report template variable `packageTitle` keeps its name and now holds the package name.
 
 ## Report templates
 

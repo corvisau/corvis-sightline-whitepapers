@@ -4,8 +4,7 @@ run of **segments**, and this is the surface for editing them.
 
 A relationship's node sequence is `[nodeA, ...path hops, nodeB]`, so a path with
 `n` hops has `n + 1` segments. A relationship with no path has exactly one,
-whose two ends are the relationship's own, so a direct edge behaves here as it
-always has.
+whose two ends are the relationship's own.
 
 Everything the popover writes goes to the **active data slice**, never to the
 model. See [Per-Slice Layout & Nudge Overrides](/docs/sightline/usage/tetra/per-slice-layout) for the storage,
@@ -24,6 +23,8 @@ The `<` / `>` buttons step to the neighbouring segment; the counter says where
 you are. On a relationship with one segment the header names both
 endpoints and there is no stepper.
 
+Drag the title bar to move the popover. It then reopens where you left it. See [Moving a nudge panel](/docs/sightline/usage/shared/annotations#moving-a-nudge-panel).
+
 While the popover is open, the segment it is editing glows on the canvas, so
 the mapping from control to geometry is visible. The glow covers that segment
 exactly; it stops at each node the line passes through.
@@ -34,7 +35,7 @@ exactly; it stops at each node the line passes through.
 |---|---|
 | On a segment's line | that segment |
 | On a label pill | the segment the pill sits on |
-| On the short run passing **through** an intermediate node | **nothing** — no segment owns that stretch |
+| On the short run passing **through** an intermediate node | **nothing**; no segment owns that stretch |
 | On a label pill that sits over one of those runs | the popover, on whichever segment it was already showing |
 | Anywhere else on the edge (entry dot, arrowhead) | the popover, on whichever segment it was already showing |
 | On a line that cannot be sliced at all (a `via`-routed relationship) | the popover, with a note saying the clicked segment could not be identified |
@@ -90,9 +91,14 @@ where to draw the borrowed route.
 channel's waypoints *for the segment arriving at that node*, so its `viaOffset`
 belongs to that segment. The row addresses the hop the segment arrives at.
 
-On the last segment there is no hop to store it on, so the row addresses the
-relationship's own `viaOffset` and is labelled **Via offset (default)**. That
-value is the default every `via` hop inherits, not the last segment's own.
+Only a segment that follows another channel's route has the row. A segment that
+arrives at a hop with no `via`, and the last segment, are drawn direct and are
+never offset, so the panel shows no `Via offset` row for them.
+
+A relationship can also carry its own `viaOffset`, the default every `via` hop
+inherits. A `via` segment with no offset of its own shows that default and
+labels the row **Via offset (inherited)**. Entering a value stores it on that
+segment's hop only, and the other `via` segments keep the default.
 
 ## The run through a node
 
@@ -104,7 +110,7 @@ are drawn separately from the segments and differ from them as follows:
 |---|---|---|
 | Count for `n` hops | `n + 1` | `n` |
 | Addressable (header, counter, `<`/`>`) | yes | **never** |
-| Right-click resolves to it | yes | no — the click opens nothing |
+| Right-click resolves to it | yes | no; the click opens nothing |
 | Glows | when it is the segment being edited | **never** |
 
 A through-node run carries no hit target at all, so the node underneath it stays
@@ -130,12 +136,17 @@ drawer offers no attach edges, standoffs, ports or via offset, on the
 relationship or on a path hop.
 
 The drawer lists the path as **segment rows**, one per run of line between
-`[nodeA, ...hops, nodeB]` (the same `n + 1` count as the popover). Each row is
-labelled `From → To` with node names, using the popover's own arrow.
+`[nodeA, ...hops, nodeB]` (the same count as the popover: `n + 1` for `n` hops,
+or `n` when the last hop is `nodeB` itself, which folds into the final row).
+Each row is labelled `From → To` with node names, using the popover's own
+arrow.
 
 A row that arrives at a hop keeps that hop's structure: a node picker, a `via`
-select, drag-reorder and remove. The final row, which arrives at `nodeB`,
-carries its label only, since there is no hop there to edit.
+select, drag-reorder and remove. The final row, which arrives at `nodeB`, has
+no picker, drag or remove, since there is no hop to edit. It does offer a `via`
+select: choosing a channel routes the last run along that channel, and
+choosing `none (direct)` clears it. A path that already ends at `nodeB` shows
+one final row, not a hop row followed by a `nodeB → nodeB` row.
 
 Every row, the final one included, offers two more actions:
 
@@ -173,6 +184,7 @@ standoffs, ports, `viaOffset`) gets edited.
   directly. A hop whose `via` channel does not exist keeps its place in the
   line. That one segment routes directly instead of along the missing
   channel. The rest of the path routes as authored. The connection is drawn
-  with the routing warning, and the loader names the broken reference in the
-  Problems panel. Only a path with no usable hop left collapses to a straight
-  line between the relationship's own two ends.
+  with the routing warning. Tetra names the broken reference in the
+  Problems panel, or the `path-hop-missing` and `path-via-missing` rules do when
+  the model lists the starter package. Only a path with no usable hop left
+  collapses to a straight line between the relationship's own two ends.

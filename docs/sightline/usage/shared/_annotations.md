@@ -34,6 +34,18 @@ An annotation takes an optional `width`, in pixels. The bubble renders exactly t
 - An id-only badge ignores `width`. The badge appears when the view option shows annotation ids, or when the link sets `style: id`.
 - Edit `width` in the props drawer. The field is also on the create surface. Clear the field to remove `width` from the YAML.
 
+## Moving a nudge panel
+
+The Shift+right-click panels have a title bar that names the panel. Drag the title bar to move the panel off the part of the diagram you are adjusting.
+
+- The panel opens where you last left it. One position serves every nudge panel in both apps.
+- Double-click the title bar to return the panel to its default place. That place is below and right of the click.
+- Focus the move button in the title bar. An arrow key moves the panel 10 px, and Shift with an arrow key moves it 50 px.
+- Press Home on the move button to return the panel to its default place.
+- The close button in the title bar closes the panel, as Escape does.
+
+The application stores the position on this computer, not in the model. A saved position that no longer fits the window is pulled back inside it. Lamina has the annotation placement panel only. Tetra also has the segment nudge and Container Properties panels.
+
 ---
 
 ## Tetra

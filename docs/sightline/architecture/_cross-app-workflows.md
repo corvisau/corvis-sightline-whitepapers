@@ -6,7 +6,7 @@ This page describes how Lamina, Tetra and Metron work together. It covers how th
 |---|---|---|
 | Tetra | Architecture models: zones, devices, networks, channels, flows, information and data slices | `*.tetra.yaml` |
 | Lamina | Risk models: causes, exposures, controls, consequences and the risk matrix | `*.bowtie.yaml` |
-| Metron | Requirement packages, assessments, rules and findings | `*.metron.yaml`, `*.req.yaml`, `*.assessment.yaml`, `*.rules.yaml`, `*.finding.yaml` |
+| Metron | Requirement packages, assessments, rules and findings | `*.metron.yaml`, `*.req.yaml`, `*.assessment.yaml`, `*.rules.yaml`, `*.rule-findings.jsonl` |
 | Sightline | Coordinator: one activity-bar entry with a combined model tree over Tetra, Lamina and Metron | — |
 
 Lamina, Tetra and Metron run inside the Sightline extension. The apps share the model files in the workspace.
@@ -20,7 +20,7 @@ Lamina and Tetra resolve `template:` inheritance and Handlebars partials with th
 Two rules hold for every cross-app interaction.
 
 1. **An app finds another app's files by scanning the workspace for well-known file patterns.** No setting lists another app's files. A new file is found the next time the app loads.
-2. **Each app writes only its own model files, with one exception.** An app that owns a link writes that link's reference field into the other app's record, and it rewrites only that one file. Lamina writes `causeRef` onto a finding. Metron never writes a Lamina cause or control.
+2. **Each app writes only its own model files.** An app that owns a link writes that link's reference field in its own record only. Lamina never writes a record or a finding, and Metron never writes a Lamina cause or control.
 
 A cross-app link is a plain string reference. The side that owns the lifecycle of the relationship stores it. The other side resolves it when it reads, as a computed back-reference that is never saved. This design has two effects:
 
@@ -38,11 +38,27 @@ Every model has a stable id that does not depend on its file path:
 
 Ids are unique within each kind of model. A Lamina id and a Tetra id can share a string without a conflict. Every Metron package kind also compares on its version. A Metron rule package can share an id with a requirement package. Metron tells the package kinds apart by the `kind` field of each manifest. Every Metron outcome record and finding reference carries the model id, so two models that share an entity id never collide.
 
+### Renaming, moving and deleting a model
+
+A Tetra or Lamina model can be renamed, moved to another folder and deleted. Rename changes only the name that the model is listed under. Move re-files the model's directory and changes no id, so every reference to the model keeps resolving: a Metron assessment finds the model from `meta.modelId`, and a Lamina model finds it from `tetraModel`.
+
+Delete is refused while another file still names the model's id. The refusal lists each referrer, and nothing is removed. These files count as referrers:
+
+- A findings register for the model.
+- A Metron assessment that binds the model in `meta.modelId`.
+- A Lamina manifest that scopes to the model in `tetraModel`.
+
+Move and delete act on the whole directory of a model, so both are refused for a directory that holds another model, and for the workspace root. A move is also refused when the target directory exists, or when the model reads files outside its own directory.
+
+A folder can be renamed, moved and deleted as well. Rename and move change no id, so no reference changes. Delete is refused while the folder holds any file, so a folder is removed only when it is empty. Rename and move are refused for the `findings` folder and everything under it, for a folder inside a model's directory, and for a folder that holds a Metron package. A move is also refused when a model in the folder reads files outside it, and when the destination exists.
+
 ## Workflow: compliance assessment (Metron and Tetra)
 
-Metron loads a requirement package and binds it to a Tetra model through an assessment file. The assessment file names the Tetra model in `meta.model`. Metron then resolves each pair of one requirement and one entity.
+Metron loads a requirement package and binds it to a Tetra model through an assessment file. The assessment file names the Tetra model by its id, in `meta.modelId`. Metron finds the model from that id each time it loads the assessment, so the model can move to another folder without an edit to the assessment. Metron then resolves each pair of one requirement and one entity.
 
-Each pair carries its outcome, evidence and notes in the assessment file. A pair has one of three built-in states:
+A reference from one model to another holds an id and never a folder or a path.
+
+Each pair carries its outcome, evidence and notes in the assessment file. A run of the assessment also keeps an assessment register, a `.rule-findings.jsonl` file with one record for each requirement and in-scope entity. Each record also holds its pair's outcome, state and evidence, and every change to the assessment keeps the two in step. The records are not shown; the assessment file stays the source of the outcomes. A pair has one of three built-in states:
 
 | State | Meaning |
 |---|---|
@@ -65,15 +81,24 @@ Tetra can draw the assessment coverage of each entity on its diagram. The overla
 
 ### How Tetra reads Metron data
 
-Tetra reads the Metron findings and coverage of the model that it has open from the assessments in the workspace. These reads need the `view:metron` licence grant, and a refused read reports its reason. See [Licensing](/docs/sightline/usage/shared/licensing).
+Tetra reads the Metron findings and coverage of the model that it has open from the assessments in the workspace. These reads need the `view:metron` licence grant, and a refused read reports its reason. A rule package is read with the grant of its domain: Tetra's own rule packages, and the findings their rules produce, need only the Tetra grant. The Metron findings that Tetra reads for its badges stay on `view:metron`. See [Licensing](/docs/sightline/usage/shared/licensing).
 
 The storage server exposes the same findings and coverage, and the causes that cover a Tetra entity, as routes. See the [API reference](/docs/sightline/reference/api/overview).
 
-### How Lamina reads Tetra Vectors
+### How Lamina reads Tetra records
 
-Lamina reads the Tetra Vectors of the Tetra models under the Lamina model's folder. It uses them for a cause's vector picker, for the Current, Changed and Gone check on a linked vector, and for the vectors in the declared zones that no cause links. None of these reads needs a Metron licence grant.
+Lamina reads the records that the rule packages of a Tetra model create. It uses them for the state of each record that a cause links, and for the records in the declared scope that no cause links. It also lists the Tetra models under the Lamina model's folder, which the Model Properties drawer offers as the choices for `tetraModel` and `tetraZones`.
 
-The storage server exposes the same three reads as routes. See the [Discovery routes](/docs/sightline/reference/api/discovery).
+The VS Code host reads these answers through the storage server's routes, in process, by the Lamina model's own id. A manifest outside the first workspace folder, or one that shares its `meta.id` with another manifest, has no id to read by, so the host shows no record data for it. A Lamina app serves four routes, and each takes the Lamina model's own id:
+
+| Route | Answer |
+|---|---|
+| `GET /cross-app/models/:modelId/tetra-scope` | The Tetra models of the workspace, each with the zone ids it declares |
+| `GET /cross-app/models/:modelId/finding-links` | The drift of every record that a cause of the model links: one of eight states, including `unreadable` for a register that cannot be read |
+| `GET /cross-app/models/:modelId/causes/:causeId/finding-links` | The same entries for one cause |
+| `GET /cross-app/models/:modelId/finding-inbox` | The records in the model's scope, each marked linked or not |
+
+The `tetra-scope` read needs no Metron licence grant. The three record reads follow the server's read check, as every finding read does. See the [Discovery routes](/docs/sightline/reference/api/discovery).
 
 ## Workflow: rule, finding, cause (Metron, Tetra and Lamina)
 
@@ -83,24 +108,26 @@ This workflow links a compliance gap to the risk register.
 Metron: assessed pairs of requirement and entity
         |
         v  promote
-Metron: finding in a findings register (a *.finding.yaml file in any folder)
+Metron: manual finding in the register of the Tetra model
+        (rule package assessment-findings, rule assessment-gap)
         status: open, reviewed or resolved (you set it)
-        refs: version-pinned references to the assessed pairs
+        links: the versions of the entity and the requirement
         |
-        v  Lamina: the findings inbox lists findings that have no cause
+        v  Lamina: the findings inbox lists Metron findings that no cause links
 Lamina: Create cause from finding
-        |  1. creates a draft cause
-        |  2. writes causeRef onto the finding in its own file
+        |  creates a draft cause whose vector holds the record link
+        |  pinned at the state of the finding that it accepted
         v
-Lamina: the cause shows its linked findings, read only
+Lamina: the cause shows the state of its linked finding
 ```
 
-A Metron user promotes assessed pairs into a **finding**. A Lamina user then promotes the finding into a **cause**.
+A Metron user promotes assessed pairs into a **finding**. A Lamina user then creates a **cause** that links the finding.
 
-- **A finding is a record that you edit.** Its status is `open`, `reviewed` or `resolved`, and you set it. Metron also computes a staleness check that compares the version that each reference pinned with the live pair.
-- **The finding stores the one persisted link.** `causeRef` lives on the finding. A cause has no stored finding reference. Lamina scans the findings registers and shows the findings that point to the cause.
-- **Metron ignores `causeRef`.** Metron keeps the field when it saves a finding. It does not mark a promoted finding differently from an open one.
-- **Rules do not create findings.** The **Rules** tab is for authoring. The only live rule execution is the scope rule or the assessment rule that a requirement names. A rule narrows the scope or suggests an outcome.
+- **A finding is a record that you edit.** Its status is `open`, `reviewed` or `resolved`, and you set it. A run of the model's Metron rules refreshes its links, and the finding shows **Source changed** when a version moved.
+- **The cause stores the one persisted link.** The link is in the cause's vector, with `scope: record`, and the accepted pin sits on the link. The link names the finding by id and by the Tetra model that holds it. A finding stores nothing about a cause. Lamina computes where a finding is used from the links of its models.
+- **Metron accepts a finding; Tetra only reads it.** **Accept** in Metron's **Findings** tab pins the links of the finding and records the acceptance in the finding's register. Tetra's **Records** tab lists the same record and changes none.
+- **Lamina writes only its own model.** Creating the cause and accepting a change commit the cause, with the model's other staged changes, on **Save all**. Metron's finding routes are not involved.
+- **Scope and assessment rules do not create findings.** The **Rules** tab is for authoring. A scope rule or an assessment rule that a requirement names narrows the scope or suggests an outcome. A rule in a package with `meta.domain: metron` creates records instead. See [Records from assessed pairs](#workflow-records-from-assessed-pairs-metron).
 
 ### Findings on the Tetra diagram
 
@@ -112,45 +139,65 @@ Tetra draws a findings badge on zones, groups, devices, networks and information
 
 A second jump for the same assessment reuses the open tab and moves the selection to the new finding. Jump to Metron finds the assessment from the model id and package id that the finding stores. See [Findings overlay](/docs/sightline/usage/tetra/findings-overlay).
 
-## Workflow: Tetra Vector, cause (Tetra and Lamina)
+## Workflow: records from assessed pairs (Metron)
+
+A Metron rule in a rule package with `meta.domain: metron` creates records from the assessed pairs and attributes of one Tetra model. Tetra and Metron parse a rule with one schema, so a package of either domain opens and saves in either editor without losing a field. Both editors use the same rule drawer and rules grid. The domain is chosen when the rule package is created and changed in its **Package meta** tab.
+
+```
+Metron: assessments (*.assessment.yaml) that name the Tetra model by meta.modelId
+        |
+        v  each assessment's requirement package lists rule packages in uses
+Metron: the rule packages of those requirement packages
+        |
+        v  a run reads the pair and attribute rows of every such assessment
+Record in the register of the rule package and model (the same register as a Tetra record)
+```
+
+- **Metron owns the rows, and the rule package owns the records.** A run reads the assessments of the model and writes only the register. It never writes an assessment or a Tetra file.
+- **The model decides what a run covers.** A run covers one Tetra model, and it reads every assessment that names that model, whatever requirement package the assessment pins.
+- **A link names the live versions.** A record stores the version of each Tetra entity and each requirement it depends on, and a hash of the outcome or of one attribute state. A change to one of them moves the record to Changed.
+- **A run refreshes manual links.** A record that a person created under a manual rule gets its links resolved again, so a moved version shows as Changed.
+
+
+See [Records in Metron](/docs/sightline/usage/metron/rule-findings).
+
+## Workflow: record, cause (Tetra and Lamina)
 
 This workflow links the architecture to the risk register without a Metron assessment.
 
 ```
-Tetra: a channel or flow that enters a zone from another zone
-       narrowed by the vector rules the model declares
+Tetra: a rule package that the model names under uses
        |
-       v  derived on every load, never stored
-Tetra Vector (key: channel or flow id, then the zone it enters)
+       v  a run of the rules writes the records to the register
+Tetra record (id: package, rule, model, then the rule's key)
        |
        v  a Lamina cause links it
-Lamina: cause.vector holds the link and a snapshot of the Tetra Vector
+Lamina: cause.vector holds the link and the hashes of what the cause accepted
        |
-       v  Lamina compares the snapshot with the live Tetra Vector on load
-Lamina: Current (no entry), Changed or Gone (a Problems-panel warning and a props drawer banner)
+       v  Lamina compares the hashes with the record on load
+Lamina: Current, Data changed, Source changed or Closed (a Problems-panel warning and a props drawer block)
        |
-       v  the banner updates the snapshot, removes the link or keeps the vector as hand-written
+       v  the block accepts the change or removes the link
 Lamina: the cause's vector, staged until the user saves
        |
-       v  Lamina lists the Tetra Vectors in the declared zones that no cause links
-Lamina: the Tetra Vectors section of the Sightline sidebar
+       v  Lamina lists the records in the declared scope that no cause links
+Lamina: the Tetra records list in the Findings dialog
        |
-       v  the user covers a listed vector from its context menu
-Lamina: the open editor stages the link and snapshot on a new or existing cause
+       v  the user creates a cause from a listed record
+Lamina: the open editor stages a new cause with the link and the accepted hashes
 ```
 
-- **Tetra owns the identity.** A Tetra Vector is a view of the model. Tetra stores no list of them, and Metron takes no part.
-- **The link is stored once, on the cause's vector.** It is an entity link with relationship `vector`. The snapshot sits beside it.
-- **Lamina checks the snapshot when the model opens.** It reads the Tetra models in the manifest's folder and below. A model with no Tetra manifest is not checked.
-- **The model declares the scope.** The Lamina manifest lists the Tetra zone ids it covers under `tetraZones`, and the one Tetra model it scans under `tetraModel`. The sidebar section lists only the Tetra Vectors of that model that enter those zones, and a cause covers one by linking its key. The Model Properties drawer in Lamina edits both fields.
-- **Each app opens the other at the object.** Lamina offers **Open in Tetra** on a cause, and Tetra offers **Open** on a covering cause. An open window is reused, and a window that is still loading opens on the entity when the model is ready.
-- **Tetra computes the back-reference.** Tetra scans every `*.bowtie.yaml` manifest in the workspace and reads the causes of the files each one lists. It lists the causes whose link names one of its Tetra Vectors, and stores nothing. The Tetra diagram shows the count as a cause badge, which the View menu can hide.
-- **The section acts on what it lists.** A row's context menu creates a cause from the vector or links the vector to an existing cause. The open editor stages the link and the snapshot, so Save commits the change.
-- **Rules carry the likelihood and the suggested controls.** A vector rule names a likelihood label and control template ids. Tetra never reads the risk matrix, so Lamina converts the label with the model's matrix and warns about a label or control id it cannot resolve. The snapshot holds both values.
-- **Lamina writes the fix into the Tetra rule file.** The Quick Fix on an unresolved likelihood or control id opens a picker in the Lamina editor. Lamina then replaces the value in the `*.vector-rules.yaml` file of each rule that emitted the vector. The edit changes the rule, so every vector that rule emits changes with it.
-- **Lamina resolves a Changed or Gone vector in the props drawer.** The banner stages one edit to the cause's vector: update the snapshot, remove the link, or keep the vector as hand-written. Tetra takes no part.
+- **Tetra owns the identity.** A record belongs to a rule package and a Tetra model. Tetra writes it to the register, and Metron takes no part.
+- **The link is stored once, on the cause's vector.** It is a link with target kind `finding` and relationship `vector`. The accepted hashes sit beside it.
+- **Lamina checks the hashes when the model opens.** It reads the register of each linked record through the storage server. A record that it cannot read shows the name the link holds.
+- **The model declares the scope.** The Lamina manifest lists the Tetra zone ids it covers under `tetraZones`, and the one Tetra model it lists under `tetraModel`. The Findings dialog lists only the records of that model that enter those zones, and a cause covers one by linking its id. The Model Properties drawer in Lamina edits both fields.
+- **Each app opens the other at the object.** Lamina offers **Open in Tetra** on a record block, and Tetra offers **Open** on a covering cause. An open window is reused, and a window that is still loading opens on the entity when the model is ready.
+- **Tetra computes the back-reference.** Tetra scans every `*.bowtie.yaml` manifest in the workspace and reads the causes of the files each one lists. It lists the causes whose link names a record of one of its channels or flows, and stores nothing. The Tetra diagram shows the count as a cause badge, which the View menu can hide.
+- **Accepting writes the cause only.** Accept stores the current hashes on the cause's vector. No register changes, and an Accept of the record in Metron leaves the cause's accepted state alone.
 
-See [Tetra Vector links](/docs/sightline/usage/lamina/tetra-vector-links) and [Jump between a cause and its Tetra channel or flow](/docs/sightline/usage/shared/tetra-vector-jump).
+A cause can hold a Tetra Vector link with a snapshot. Lamina keeps both in the file and does not read them. Remove the link and link a record instead.
+
+See [Record links](/docs/sightline/usage/lamina/finding-links) and [Jump between a cause and its Tetra channel or flow](/docs/sightline/usage/shared/finding-jump).
 
 ## Consequence categories (Lamina and reports)
 

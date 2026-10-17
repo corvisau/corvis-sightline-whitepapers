@@ -15,10 +15,11 @@ list. It does not copy their files.
 | Attribute sets | `<name>.attributes.metron.yaml` | An AttributeSet catalogue |
 | Scheme | `<name>.scheme.metron.yaml` | An AssessmentScheme catalogue |
 
-Every manifest carries the same `meta` block: `id`, `name`, `version`, `title`
-and an optional `description`. A manifest declares its kind in a top-level
-`kind` field. A requirement-package manifest may omit `kind`, which is why every
-package authored before this feature still loads.
+Every manifest carries the same `meta` block: `id`, `name`, `version` and an
+optional `description`. `name` is required and is the package's one display name:
+the tree, the editor heading and the package pickers all show it. A rule package
+also carries `domain`. A manifest declares its kind in a top-level
+`kind` field. A requirement-package manifest may omit `kind`.
 
 ⛔ The filename does not decide the kind. A glob `*` spans dots, so
 `**/*.metron.yaml` matches all four manifests. Metron reads the `kind` field
@@ -26,27 +27,53 @@ everywhere: in the Models tree, in the editor it opens, and in the resolver.
 
 ## Create a component package
 
-1. Select **Sightline** in the activity bar, then find the **Metron** group of the **Models** tree.
-2. Select the **+** action of the group for the kind you want.
-3. Enter a name, a location and an optional description.
+1. Select **Sightline** in the activity bar, then find the folder in the **Models** tree that should hold the package.
+2. Select **New…** on the folder and choose the kind you want.
+3. Enter a name and an optional description. A rule package also asks for its **domain**, which is the app that runs its rules: `metron` or `tetra`. The form selects `metron`. The form shows the folder as the location.
 
-The scaffold writes the manifest and one starter entry:
+The scaffold writes two files beside each other, with no subfolder: the manifest
+and one content file named after the package, holding a starter entry.
 
-- A rule at `rules/general.rules.yaml`
-- An attribute set at `attributes/general.attributes.yaml`
-- A scheme at `schemes/default.scheme.yaml`
+| Kind | Content file | Starter entry | `files:` in the manifest |
+|---|---|---|---|
+| Rules | `<name>.rules.yaml` | A rule | `<name>.rules.yaml` |
+| Attribute sets | `<name>.attributes.yaml` | An attribute set | `<name>.attributes.yaml` |
+| Scheme | `<name>.scheme.yaml` | A scheme | `*.scheme.yaml` |
 
 Select the package in the tree to open its editor.
 
+### The `files:` key
+
+Every component-package manifest declares `files:`, a list of the content files
+or glob patterns it holds, relative to the manifest. Metron refuses a manifest
+without the key and names it in the error. An empty list, `files: []`, declares a
+package with no content.
+
+A scheme package uses a pattern because each scheme is a file of its own, and a
+scheme added later is found through the pattern. A package authored before this
+key was required needs it added. A migration tool converts a model in the earlier format. Ask Corvis for the tool that matches your release.
+The tool writes the previous default pattern into each manifest that lacks the key,
+and leaves every other manifest unchanged.
+
 Every component-package editor has the same three tabs. The first authors the
 catalogue. **Package meta** edits the `meta` block. **References** shows which
-requirement packages consume this one.
+requirement packages consume this one. On a rule package, **Package meta** also
+has a **Domain** select. Changing it changes which app runs the package's rules
+the next time that app runs them; the rules themselves do not change.
 
-A rule package and an attribute-set package author in a full-width grid. Select
-**+ Add** to create an entry in the props drawer. Right-click a row to **Open**
-it in the same drawer, or to **Delete** it. A new entry and a deletion wait in
-the save bar until you select **Save all**. A scheme package edits the selected
-scheme in a panel beside its grid.
+A rule package authors in a full-width grid. Select **+ Add** to create an
+entry in the props drawer. Right-click a row to **Open** it in the same drawer,
+or to **Delete** it. A new entry and a deletion wait in the save bar until you
+select **Save all**. An attribute-set package shows its sets and attributes as a
+tree, described in the next section. A scheme package edits the selected scheme
+in a panel beside its grid.
+
+A rule package that Tetra authored opens and saves here like any other. A rule keeps
+every field it carries, such as `mode`, `hide`, `keyParts` and `dataFields`, when
+you edit another field of it. The rule drawer shows every field of a rule, the same
+drawer that Tetra uses. A requirement can run only a rule that has a program over the model. A
+requirement that names a manual rule, or a rule that reads records,
+shows an error for that reference and pairs no entity.
 
 The starter attribute set carries a typed attribute. The type is what makes an
 attribute assessable, so a set with untyped attributes attaches correctly and
@@ -54,6 +81,43 @@ then shows nothing in the Assess drawer.
 
 The starter scheme carries one `yes` outcome and one `no` outcome. It declares no
 `statuses`, so the package inherits the three built-in statuses.
+
+## Edit an attribute-set package
+
+The attribute-set editor shows each set as a row with its attributes beneath it,
+in the order the file lists them. Select the arrow on a set to collapse or
+expand it.
+
+A set row shows its **id**, its **name**, how many attributes it holds, how many
+requirements attach it, and its links. An attribute row shows its name under
+**id**, its label under **name**, and its **type**, **owner**, **value** and
+**description**.
+
+Right-click a row to open its menu.
+
+| Row | Menu item | Effect |
+|---|---|---|
+| Set | **Edit** | Opens the set in the props drawer. |
+| Set | **Add attribute** | Opens a form for a new attribute. The attribute goes last in the set. |
+| Set | **Duplicate** | Adds a copy of the set and its attributes, with the id `<id>-copy`. |
+| Set | **Delete** | Asks for confirmation, then removes the set and its attributes. |
+| Attribute | **Edit** | Opens the attribute in the props drawer. |
+| Attribute | **Duplicate** | Adds a copy directly after the attribute, named `<name>-copy`. |
+| Attribute | **Remove** | Removes the attribute. |
+
+Every change waits in the save bar until you select **Save all**. **Discard all**
+returns every row to its saved state. A row with an unsaved change is
+highlighted.
+
+The name of an attribute is fixed once the attribute exists. To change a name,
+add an attribute with the new name, then remove the original.
+
+The filter above the tree matches the id and name of a set, and the name, label,
+value, type, owner and description of an attribute. A set that holds a matching
+attribute stays in view, with only the matching attributes beneath it.
+
+The create form for a new set can list its first attributes. The props drawer of
+an existing set shows how many attributes it holds. Edit them in the tree.
 
 ## Consume a component package
 
@@ -70,9 +134,8 @@ The tab edits the manifest's `uses:` list, which reaches disk when you Save:
 ```yaml
 meta:
   id: aescsf
-  name: aescsf-v1
+  name: AESCSF v1
   version: 1
-  title: AESCSF v1
 schemeRef: mil
 files:
   - requirements/*.req.yaml
@@ -87,8 +150,8 @@ uses:
 Each entry names a package by its logical `id`, never by a path. Metron scans
 the workspace for a manifest of that kind and id.
 
-The **+** action of the Metron group writes this list too: a new requirement package
-gets a rule package and a scheme package beside it, already named.
+**Metron: New Package** writes this list empty. Add each rule, attribute set and
+scheme package that the new requirement package uses.
 
 The **status** column says what each entry contributes, or why it contributes
 nothing:
@@ -128,22 +191,33 @@ kind. Referenced rules are offered in the rule picker for `scopeRuleRef` and
 
 ### A requirement package does not author rules or attribute sets
 
-A requirement package's **Rules** and **Attribute sets** tabs are read-only
-lists. Neither has an add button, a drawer or a delete. Edit an entry in the
-component package that owns it.
+A requirement package holds no rules or attribute sets of its own. Its **Rules**
+and **Attribute sets** tabs are read-only lists of what the packages in `uses:`
+contribute. Neither tab has an add button, a drawer or a delete. Edit an entry
+in the component package that owns it.
 
-| Entry | **source** column | Right-click |
-|---|---|---|
-| From a package in `uses:` | Names the package | **Open package** opens that package's editor |
-| From the package's own `rules/` or `attributes/` folder | `this package` | No action. Move the entry into a component package to edit it |
-
-A requirement package created from the Metron group of the Models tree arrives with a rule package
-beside it. The second row covers a package authored before that, or one that
-still holds its own fragments.
+The **source** column names the package that supplies each entry. Right-click an
+entry and select **Open package** to open that package's editor.
 
 A notice above each tab says where its entries are authored. The host also
 refuses any rule or attribute-set write against a requirement package,
 whatever sends it.
+
+### A package that still holds its own fragments
+
+Metron does not load a `rules/`, `attributes/` or `*.scheme.yaml` file that sits
+in a requirement package's own folder. Such a file contributes nothing.
+
+Metron raises one warning for each such file. The warning names the file. A
+second migration tool moves it into a component package.
+
+The tool creates a rule package, an attribute-set package and a scheme
+package beside the requirement package, moves each fragment into the matching
+package, and adds the packages to `uses:`. It offers a dry run that shows what
+it would do first.
+
+⛔ A package whose `schemeRef` names a scheme in its own folder does not open
+until you move the scheme into a scheme package. A package with no scheme has no outcomes to show.
 
 ## Select a scoring scheme
 
@@ -161,9 +235,8 @@ uses:
 ```
 
 Metron builds the package's scheme catalogue from every scheme package in
-`uses:`, then folds the package's own `**/*.scheme.yaml` files on top.
-`schemeRef` selects one entry from that catalogue. Naming several scheme packages
-widens the choice; it never merges two schemes into one.
+`uses:`. `schemeRef` selects one entry from that catalogue. Naming several
+scheme packages widens the choice; it never merges two schemes into one.
 
 Select the scheme on the **Package meta** tab. The picker offers every id in the
 catalogue.
@@ -173,23 +246,11 @@ available and the line to write.
 
 ### A requirement package does not author its scheme
 
-The **Scoring scheme** tab is read-only, whatever the scheme's origin. Edit a
-scheme in the scheme package that owns it.
+The **Scoring scheme** tab is read-only. Edit a scheme in the scheme package that
+owns it.
 
-A banner on the tab names where the scheme lives:
-
-| Origin | Banner | Action |
-|---|---|---|
-| A referenced scheme package | Names the package | Select **Open** to edit it there |
-| The package's own `*.scheme.yaml` | Names the file | Open the file to edit it |
-
-A requirement package created from the Metron group of the Models tree arrives with a scheme
-package beside it. The second row covers a package that still holds its own
-`*.scheme.yaml`.
-
-⛔ Metron discovers a package's own schemes at `**/*.scheme.yaml`. A scheme file
-named outside that pattern is never loaded. Rename it. Then set `schemeRef` to
-the `id` inside it.
+A banner on the tab names the scheme package that supplies the scheme. Select
+**Open** to edit it there.
 
 ### Pin a version, or float
 
@@ -244,41 +305,39 @@ no document behind it and so gets no prompt, so save before closing that one.
 of pending changes, so your work stays where it was when you switch to
 **Package meta** or **References** and back.
 
+**Unsaved rows are tinted.** A row you have created, or edited, since the last
+save carries a yellow tint and a bar on its left edge in the grid. The tint
+stays until you save or discard the change, or undo it.
+
 ## Undo, redo and the journal
 
 **Undo** and **Redo** sit beside the pool save bar in every package editor.
+The bar sits at the bottom of the window and shows on every tab of the editor,
+so a change staged on one tab stays in reach from the others.
 They step back and forward through the changes you have staged this session,
 one at a time. Undo the only staged edit and the controls stay on screen so
 Redo is still reachable, even though nothing is pending any more.
 
 When you stage a new change after an undo, Redo loses whatever it would have restored.
 
-The requirement library also has a **Journal**. It is a section of the Sightline
+Every Metron editor has a **Journal**: the requirement library, each package
+editor and the assessment editor. It is a section of the Sightline
 sidebar, below Model Tree, and it starts collapsed. It lists every staged change
 in the order you made it. An undone entry stays listed, struck through, so you can see what you
 stepped back past. The journal has its own **Undo** and **Redo** buttons, and
-they act on the package you are looking at. The journal clears when you commit.
+they act on the package or assessment you are looking at. The journal clears when you commit.
 
 Undo reaches only what is staged. To recover a change you have already
 saved, use git.
 
 ## Precedence
 
-A requirement package's own fragments still load: `rules/**/*.rules.yaml`,
-`attributes/**/*.attributes.yaml` and `**/*.scheme.yaml`. They take precedence
-over anything a `uses:` entry contributes.
+A requirement package takes its rules, attribute sets and schemes only from the
+packages in `uses:`.
 
-Resolution order, lowest precedence first:
-
-1. Entries from each package in `uses:`, in `uses:` order.
-2. The requirement package's own fragments.
-
-An id defined in two places resolves to the last one in this order. Metron
-raises a warning naming both the winner and the definition it shadows.
-
-A local entry with the same id as a referenced one therefore overrides it for
-this package alone. Metron does not write local entries, so such an override
-exists only where one is written by hand in YAML.
+An id defined in two of those packages resolves to the one in the later `uses:`
+entry. Metron raises a warning naming both the winner and the definition it
+shadows.
 
 ### Two different orderings
 
@@ -286,7 +345,7 @@ exists only where one is written by hand in YAML.
 
 | Question | Decided by |
 |---|---|
-| Which attribute set does the id `mil-levels` resolve to? | Catalogue precedence: local beats referenced, later `uses:` beats earlier |
+| Which attribute set does the id `mil-levels` resolve to? | Catalogue precedence: the later `uses:` entry wins |
 | A requirement attaches `mil-levels` and `governance`. Which wins on an attribute both define? | `attributeSetRefs` order: the later ref |
 
 The first picks the set. The second folds the sets a requirement attached.
@@ -335,7 +394,7 @@ fails to load until you re-point `schemeRef`.
 ## Column visibility
 
 The References tab has two grids, each with its own **`[Edit columns]`**
-picker. **Consumed by** manages its 4 columns (`package`, `title`,
+picker. **Consumed by** manages its 4 columns (`package`, `name`,
 `pinned to`, `path`). Its picker appears only
 once the workspace scan finishes. **References by entry** manages its 3
 (`entry`, `title`, `references`). Its picker is always shown.

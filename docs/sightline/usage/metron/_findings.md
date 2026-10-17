@@ -1,9 +1,15 @@
-The **Findings** tab lists every authored finding for the assessment. A finding
-is created by promoting one or more flagged worklist outcomes (see the
-worklist's **Promote to finding** button on
+The **Findings** tab lists the findings of the assessment's Tetra model that name
+an entity and a requirement. A finding is created by promoting one or more
+flagged worklist outcomes (see the worklist's **Promote to finding** button on
 [the worklist filtering page](/docs/sightline/usage/metron/worklist-filtering)). Every field is directly
 editable in the grid, and the tab shares the same toolbar mechanism as the
 Assessment Worklist tab.
+
+Each finding is a manual record of the rule package `assessment-findings`. The
+[Records](/docs/sightline/usage/metron/rule-findings) panel lists the same findings and every other
+record of the model, with their state and journal. The Findings tab has one
+row for each requirement, entity and attribute, so a promote of a pair with two
+unmet attributes adds two rows.
 
 ## Fields
 
@@ -12,42 +18,30 @@ Assessment Worklist tab.
 | Label | text | Short finding title. |
 | Description | multi-line text | Free-form detail. |
 | Status | select (open / reviewed / resolved) | The human review lifecycle. |
-| Severity | select (low / medium / high / critical) | Author-assigned; defaults to `medium` when absent (findings authored before this field existed). |
+| Severity | select (low / medium / high / critical) | Author-assigned; defaults to `medium`. |
 | Tags | chip add/remove | Free-text labels; type a tag and press Enter to add, click a chip's `×` to remove. |
-| Stale | read-only badge | Shows `stale` when any of the finding's refs point at an entity/outcome that has since drifted. Never editable. |
+| Stale | read-only badge | Shows `stale` when the finding's entity or requirement has a newer version, when the assessed outcome changed, or when a run left the finding **Source changed** or **Data changed**. Never editable. |
 
 Click any editable cell to enter edit mode. Text fields stage on blur or
 Enter, selects stage on choosing an option, and tags stage on every
 add/remove. A staged cell shows a dirty highlight. Nothing writes to
-disk until you click **Save all** in the shared save bar, which appears
-whenever any Worklist, Findings, or Evidence edit is unsaved. **Discard all**
+disk until you click **Save all** in the shared save bar at the bottom of the
+assessment, which appears whenever any Worklist, Findings, or Evidence edit is unsaved. **Discard all**
 drops every staged edit across all three tabs.
 
-## Findings registers
+## Where findings are stored
 
-A finding lives in a **findings register**: any `*.finding.yaml` file in the
-workspace. A register holds a top-level `findings:` array, and the author picks
-its folder and its name. One register collects findings across assessments,
-models and requirement packages, which is the shape a findings register outside
-the workspace expects.
+A finding lives in the **register** of the assessment's Tetra model, under the
+rule package `assessment-findings`. The promote dialog has no register to choose:
+**Create finding** and **Add to existing** both write there. A promote needs the
+package. A requirement package that is bound to the model lists
+`assessment-findings` in `uses:`.
 
-The promote dialog asks which register to use whenever you create a finding.
+**Add to existing** creates one finding for each selected pair and attribute, and
+each copies the label, description, severity and tags of the finding you chose. A
+finding holds one pair, so it cannot take more links.
 
-| The workspace has | The dialog shows |
-|---|---|
-| No register yet | A **Register folder** field reading `findings` and a **Register file name** field reading `authored.finding.yaml` |
-| One or more registers | A **Register** picker, preselected to the register this assessment last wrote to, with a **New register...** entry that reveals the folder and name fields |
-
-Metron reads every register in the workspace. It never reads one inside
-`node_modules`, `.git`, `dist`, `out` or `.worktrees`.
-
-Adding outcomes to an existing finding writes to that finding's own register, so
-the promote dialog hides the register control in **Add to existing** mode.
-
-A register name ends `.finding.yaml`, and its path stays inside the workspace.
-The dialog appends the suffix to a name that omits it.
-
-## What a promoted reference cites
+## What a promoted finding cites
 
 Promoting a pair attaches every attribute the assessor recorded as **Not met**
 or **Partial** on it. A pair with two unmet attributes therefore gives two
@@ -56,10 +50,8 @@ independently trackable gaps. A pair with nothing recorded, or with everything
 promoting a pair attaches* on the
 [Per-attribute assessment](/docs/sightline/usage/metron/attribute-assessment) page.
 
-Those attribute names are stored on the reference as `attributeNames`. A file
-still carrying the pre-rename `indicatorKeys` loads, but raises a warning in
-the Problems panel and loses the key on the next save. Rename the key in
-place to keep the values, which are already bare attribute names.
+Each attribute name becomes the `attributeName` part of its finding's key, and a
+pair with none becomes one finding with no attribute name.
 
 ## Toolbar (Filter / Group / Saved filters / Columns)
 
@@ -116,11 +108,24 @@ for the assessment is visible.
 
 See [Findings overlay](/docs/sightline/usage/tetra/findings-overlay) for the Tetra-side trigger.
 
+## Accept
+
+**Accept** on a stale finding opens a confirmation. Confirming runs the model's
+Metron rules, which refresh the links of manual records, sets the finding's assessed
+outcome to the live outcome and accepts the finding. Its references then pin the
+current entity and requirement versions, and the journal records the acceptance. The
+status and the other person-owned fields stay as they were. A run covers every Metron
+finding of the model, so other findings whose links moved show **Source changed**
+afterwards. A finding whose entity no longer exists in the model keeps its stale badge
+and offers no Accept.
+
 ## Saving
 
 Every field above stages into one pool of unsaved changes shared with the Worklist and
-Evidence tabs. **Save all** flushes every staged finding in a single batched
-write, together with any other staged Worklist or Evidence edits. The write
-groups findings by the `*.finding.yaml` file each one lives in, so a save
-rewrites each touched file once. **Discard all** drops every staged edit across
-all three tabs and restores the last-saved values.
+Evidence tabs. **Save all** flushes every staged finding, together with any other
+staged Worklist or Evidence edits. The save applies the edits in order and stops at the first refused write:
+another writer that changed the same field first answers a conflict and leaves the
+rest staged. Edits to different fields of one finding, or to different findings,
+do not conflict.
+**Discard all** drops every staged edit across all three tabs and restores the
+last-saved values.

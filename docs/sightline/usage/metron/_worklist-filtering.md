@@ -17,7 +17,7 @@ Use the New, Edit, Duplicate and Delete icon buttons next to the **Compliance sl
   - **Category**: a `/`-separated prefix path (for example `Asset Management/Inventory`) matched against each requirement's own `category` path. A slice with `Asset Management` matches any requirement whose category starts with that segment.
   - **Tags**: key and optional value pairs matched against each requirement's resolved `attributes`, inherited from an attached `AttributeSet` or declared inline. A predicate with no value matches any value for that key.
   - **Target kinds**: restricts the slice to requirements whose scope targets any of the ticked entity kinds.
-  - **Entity filter**: a Bonsai program that narrows which entities survive, independent of the requirement-level predicates above. It uses the same visual query builder as the Filter popover's Advanced tab. A **Show code** button reveals the exact program as read-only text with a Copy button.
+  - **Entity filter**: a Bonsai program that narrows which entities survive, independent of the requirement-level predicates above. The editor shows the program as read-only text, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Select **Edit query** to open the same visual query builder as the Filter popover's Advanced tab in its own dialog. **Apply** returns the edited program to the editor, and **Cancel** or Escape keeps it as it was. Escape closes only the query dialog. A slice with no entity filter keeps every entity. **Edit query** on such a slice opens the builder on `model |> add()`, and the slice stays without an entity filter until you select **Apply**. A **Show code** button in the opened builder reveals the exact program as read-only text with a Copy button.
 - When no Compliance slice has been authored yet, the picker shows a synthetic "Default" placeholder (matches everything, mirrors "None"). It is never editable or deletable, and **New** replaces it with your first real slice.
 
 ### Assessing a progression together
@@ -41,18 +41,16 @@ The `[Filter]` and `[Group]` toolbar buttons choose which of the pairs in scope 
 - **`[Filter]` → Advanced tab**: the full query builder, editing the exact same Bonsai program as raw pipeline steps. Any expression Bonsai supports works here, including fields the Basic tab offers no picker for (see below). A **Show code** button reveals the same program as read-only text with a Copy button.
 - **`[Group]`**: pick a low-cardinality attribute to group the grid rows by (or "None" to ungroup). Only a handful of fields are offered. Grouping by a near-unique field like Requirement or Entity would produce one row per group, which isn't useful.
 
-Filter+Group replaces the worklist's old state chips (draft/in-progress/done/failed/all), the needs-revalidation toggle, the free-text "Filter pairs..." search box, and the per-column Req/Entity filter inputs.
-
 ### Available Basic-tab filter fields
 
 | Field | Type | Notes |
 |---|---|---|
-| State | enum (draft / in-progress / done) | The pair's fundamental lifecycle state: the old state chips' values. |
-| Needs revalidation | boolean | The pair's drift flag, replacing the old "needs revalidation" toggle. Also visible directly as the worklist's Reval column (see [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model)), with a right-click "Revalidate" action to clear it in bulk. |
+| State | enum (draft / in-progress / done) | The pair's fundamental lifecycle state. |
+| Needs revalidation | boolean | The pair's drift flag. Also visible directly as the worklist's Reval column (see [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model)), with a right-click "Revalidate" action to clear it in bulk. |
 | Outcome | enum (yes / no / partial / indeterminate / not applicable) | The fundamental outcome, which is the canonical compliance signal, rather than the raw scheme-specific outcome id. No derived pass/fail classification sits on top of it. Filter on the fundamental outcome you need, e.g. `Outcome = no OR Outcome = partial`. |
-| Requirement | string (equals/contains) | The requirement id; replaces the old per-column Req filter. |
-| Entity | string (equals/contains) | The entity id; replaces the old per-column Entity filter. |
-| Notes | string (equals/contains) | Free-text search over the pair's notes; replaces the old global search box. |
+| Requirement | string (equals/contains) | The requirement id. |
+| Entity | string (equals/contains) | The entity id. |
+| Notes | string (equals/contains) | Free-text search over the pair's notes. |
 | Category | string (equals/contains) | The pair's requirement's `category` path, joined with `/`. |
 
 The Basic tab offers no field for a requirement's `attributes` (MIL/security-level/SLT), because they are a list of key/value pairs and not a single scalar value. The Advanced tab reaches them by direct path (`item.attributes.mil.value == "MIL3"`). On the worklist that path resolves the pair's full attribute map, not only what was typed inline. The map holds what the requirement inherits, what it declares, and anything the target state overrides for that one entity. ⛔ Never pipe an attribute path into `hasAny`/`hasAll`/`hasNone`. They return `false` for a record with no diagnostic, so the filter silently matches nothing. `tags` is an array, so `item.tags |> hasAny('EDR')` is correct there. See [Attributes](/docs/sightline/usage/metron/attributes).

@@ -79,7 +79,6 @@ The Metron schemas check a package file. The block checks these files:
 | `*.attributes.yaml` | `attributesets.schema.json` |
 | `*.scheme.yaml` | `assessmentscheme.schema.json` |
 | `*.assessment.yaml` | `applicationbinding.schema.json` |
-| `*.finding.yaml` | `findingfile.schema.json` |
 | `*.external.yaml` | `externaldatafile.schema.json` |
 
 One schema, `metronpackagemanifest.schema.json`, covers all four package kinds: requirement, rules, attributes and scheme. A manifest that matches none of them shows an error.
@@ -88,3 +87,19 @@ Limits:
 
 - The schemas allow extra top-level keys, so a misspelt top-level key is not reported.
 - Metron files that end in `.rules.metron.yaml`, `.attributes.metron.yaml` and `.scheme.metron.yaml` are manifests. The `*.metron.yaml` entry checks them.
+
+## Problems from loading a model
+
+When a model loads, Tetra, Lamina and Metron list their findings in the Problems panel. Each finding names the file it came from. Select a finding to open that file at its line.
+
+The line is the first line of the entry that has the problem, such as the `- id:` line of a device or a requirement. It is not the line of a field inside the entry. A finding about a top-level setting in the manifest, such as `dataSlices`, opens at the line of that key.
+
+A finding that names no entry and no key opens its file at the top. Two examples are a Lamina `zones:` list that is no longer used and a Metron scheme that fails validation.
+
+A Metron finding about an assessment or a findings file opens that file, also when the assessment sits in a subfolder of the workspace. A warning about the `uses:` list of a requirement package opens the package manifest.
+
+In the web shell, the file viewer shows the files of the open model. A Metron finding in a file outside that model, such as a findings file in another folder or a file of a referenced component package, opens that file at its line. The file list marks it as outside the model. A finding in a file that the Metron workspace does not hold opens the manifest and says that the file is not one of the model's files.
+
+A file that is not valid YAML stops the model from loading. The editor shows the error, and the Problems panel lists one error that names the file and the line where the parser stopped.
+
+Lamina and Tetra expand templates before they parse a model file. For a file that uses templates, the parser counts lines in the expanded text. The reported line can then differ from the line in the file, and the error message says so.

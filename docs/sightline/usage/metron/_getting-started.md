@@ -9,32 +9,41 @@ This is the entry point. Each feature has its own guide, linked below.
 
 ## Creating a package
 
-The `+` action of the Metron group in the Models tree opens the new-package form.
+Select **New…** on a folder in the Models tree and choose **Metron: New Package** to open the new-package form.
 
 | Field | What to enter |
 |---|---|
-| Location | The folder that receives the package directory. The field is a list of the folders in the workspace and starts on the workspace root, so a package cannot be created outside the workspace. The form shows the folder or folders it will create under this location as you type the name |
-| Name | The package name. Metron slugifies it into the directory name and stores it at `meta.id` |
+| Location | The folder that receives the package. The form shows the folder you chose as text and cannot change it, so a package cannot be created outside the workspace. The form shows the manifest it will create in this folder as you type the name |
+| Name | The package name. Metron slugifies it into the manifest file name and stores it at `meta.id` |
 | Description | Optional text for the manifest |
 
-Metron creates three sibling directories under the Location:
+Metron writes the package directly in the Location, with no folder of its own:
 
-| Directory | Kind | Holds |
-|---|---|---|
-| `<slug>/` | Requirement | The manifest and a starter requirement |
-| `<slug>-rules/` | Rules | The scope rule that starter requirement names |
-| `<slug>-schemes/` | Scheme | The scheme the manifest's `schemeRef` selects |
+| File | Holds |
+|---|---|
+| `<slug>.metron.yaml` | The manifest |
+| `general.req.yaml` | A starter requirement |
 
-A requirement package authors no rule and no scheme of its own, so the manifest
-names the other two packages in its `uses:` list. Read the [Component
-packages](/docs/sightline/usage/metron/component-packages) guide for how a `uses:` entry resolves.
+A requirement package authors no rule and no scheme of its own. Its `uses:` list
+starts empty, and the rule and scheme packages it uses are packages you create or
+import. Read the [Component packages](/docs/sightline/usage/metron/component-packages) guide for how a
+`uses:` entry resolves.
 
-The form lists all three directories before you select **Create**. All three directories must be free. Metron writes nothing when one of them
-already holds files, and the error names that directory.
+A new package does not open until its `uses:` list names a scheme package. Add one
+to the `uses:` list in the manifest. The error that Metron shows names the
+available scheme ids.
 
-One workspace folder often holds several model directories, one per site or project.
-Set **Location** to the folder the package belongs under, rather than accepting the
-workspace root.
+One folder holds one package. Metron writes nothing when the Location already holds
+a Sightline manifest, or a file that the package would write. Files that are not
+part of a model do not stop the create.
+
+A workspace often holds several packages, one per site or project. Select **New…**
+on the folder the package belongs in. To make a folder for it, use **New folder…**
+in the web shell, or create the folder in your file explorer.
+
+## Packages and assessments outside the workspace
+
+Metron opens only a package or an assessment that the Models tree lists. A file from outside the workspace folders does not open, and Metron shows a message that names the file. Add the folder that holds the file to the workspace, then open the file from the tree.
 
 ## Requirement ids and labels
 

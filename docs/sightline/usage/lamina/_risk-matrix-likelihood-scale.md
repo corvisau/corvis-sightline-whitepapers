@@ -17,7 +17,7 @@ When a view's aggregation config combines more than one cause's likelihood (`sim
 
 | Value | Behaviour |
 |---|---|
-| absent or `1` (default) | Legacy damped-union formula. Inputs above `1` are clamped to `1` first so an unbounded (frequency) scale can't send the combined value negative or otherwise off-scale. This keeps the output safe, but it is not a mathematically correct combination for a frequency scale. |
+| absent or `1` (default) | Damped-union formula. Inputs above `1` are clamped to `1` first so an unbounded (frequency) scale can't send the combined value negative or otherwise off-scale. This keeps the output safe, but it is not a mathematically correct combination for a frequency scale. |
 | `2` | Poisson rate-to-probability transform: exact for a per-annum-frequency scale (reduces to plain rate addition when a mode's damping factor is `1`, and a principled discounted value when damping is `< 1`). |
 
 Set `formulaVersion: 2` if your def's likelihood scale is a per-annum frequency and you use any aggregation mode other than `max`. `max` mode (highest single cause wins, no arithmetic combination) is unaffected by this setting either way.

@@ -92,8 +92,8 @@ Rules:
 
   So it matches `10.30.235.0/26`, `10.30.12.128/25` and `10.30.7.9/32`
   alike, and does not match `10.31.1.0/24` or the broader `10.0.0.0/8`.
-  This matters because real per-site allocations are ragged. In one
-  network `/26` and `/29` masks are common and vary within one functional octet.
+  This matters because real per-site allocations are ragged. In practice
+  `/26` and `/29` masks are common and vary within one functional octet.
   An author must be able to assert the `/16` without being right about every
   site's mask.
 - **The bound value is reported.** Matching `10.30.235.0/26` yields

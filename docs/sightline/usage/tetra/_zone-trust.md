@@ -10,8 +10,8 @@ references, or keys off `zoneTrust`. Two zones may carry the same value.
 ```yaml
 zones:
   - id: sys-datacenter
-    label: Data Center
-    zoneTrust: Z-DC01
+    label: Example Data Centre
+    zoneTrust: Z-0001
     slT: 3
     members:
       - grp-storage
@@ -32,5 +32,5 @@ tree:
       - type: zone
         id: sys-field
         label: Field Site
-        zoneTrust: Z-FS01
+        zoneTrust: Z-0002
 ```

@@ -94,8 +94,8 @@ Both `outcomes[]` and `statuses[]` reject duplicate `id`s.
 ## Authoring in the scheme editor
 
 ⛔ A scheme is edited in a scheme package, never in a requirement package. The
-requirement package's **Scoring scheme** tab renders read-only and names where
-the scheme lives. See the [Component packages](/docs/sightline/usage/metron/component-packages) page
+requirement package's **Scoring scheme** tab renders read-only and names the
+scheme package that supplies the scheme. See the [Component packages](/docs/sightline/usage/metron/component-packages) page
 for how to create a scheme package and select one of its schemes.
 
 Each outcome row in the Scheme Editor shows an **id**, a **label** and a
@@ -224,16 +224,15 @@ Resolution is tracked at two grains:
   columns alongside the raw `state` and `outcome` columns. A spreadsheet can
   filter or pivot on the shared fundamental axis across packages with
   different custom labels.
-- **Report envelope** (pull API, contract v6): every pair in
+- **Report envelope** (pull API): every pair in
   `assessment.pairs[]` carries `fundamentalState` and `fundamentalOutcome`
-  alongside the raw `state` and `outcome`. The embedded scheme carries no
-  `kind`, `rollup`, `outcomes[].weight` or `outcomes[].excludeFromScore`.
+  alongside the raw `state` and `outcome`.
 - **Finding staleness**: a promoted finding stamps the `fundamentalOutcome`
   assessed at promote time. Metron
   recomputes staleness when the live pair's fundamental outcome no longer
   matches the stamp, or when the live entity version advances past the ref's
-  pinned version. The Findings tab shows a **Roll forward** action on
-  stale-badged rows. The action accepts the current live version and outcome
+  pinned version. The Findings tab shows an **Accept** action on
+  stale-badged rows. The action pins the current live version and outcome
   as the new baseline for each affected ref. It runs behind a confirm dialog
-  and leaves the finding's review status unchanged. Roll forward leaves untouched a ref whose
-  entity no longer resolves in the live model (deleted or re-scoped).
+  and leaves the finding's review status unchanged. A row whose
+  entity no longer resolves in the live model (deleted or re-scoped) keeps its stale badge and offers no Accept.

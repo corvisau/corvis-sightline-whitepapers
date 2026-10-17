@@ -5,9 +5,10 @@ inside an open assessment covers only that one binding.
 
 ## Opening it
 
-Run **Metron: View Portfolio Roll-Up** from the command palette. It prompts
-for a `*.metron.yaml` requirement package, then opens (or reveals) a
-read-only **Metron Portfolio** panel for that package. Reopening the command
+Select **Portfolio Roll-Up** under Metron in the Models view, or run
+**Metron: View Portfolio Roll-Up** from the command palette. Either way it
+prompts for a `*.metron.yaml` requirement package, then opens (or reveals) a
+read-only **Metron Portfolio** panel for that package. Opening it again
 for the same package reveals the existing panel rather than creating a
 second one.
 
@@ -40,8 +41,10 @@ Two commands export the same aggregated data the panel shows:
   which bindings were included (path + metadata) and which were excluded
   (path + reason).
 
-Both are also available as buttons directly on the open panel, which skip
-the package picker. Either way, a save dialog lets you choose where to write the file.
+Both exports are buttons on the open panel. They are also commands in the
+command palette, where each asks you to pick one of the workspace's requirement
+packages first. Either way, a save dialog lets you choose where to write the
+file.
 
 ## Coverage on the Tetra diagram
 

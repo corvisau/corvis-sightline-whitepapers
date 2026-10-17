@@ -36,7 +36,7 @@ reports:
     output: outputs/pptx-risk.pptx
 ```
 
-Then choose **Export**, **Reports…** in Lamina. Select the report. The generated slides use the **Title Only** layout of the template deck.
+Then choose **Export**, **Reports…** in Lamina. Select the report. In VS Code, the finished file lands in the model's `outputs/` folder and opens in its default application. The generated slides use the **Title Only** layout of the template deck.
 
 ## Related
 

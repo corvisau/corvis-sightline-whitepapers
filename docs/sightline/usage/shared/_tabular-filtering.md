@@ -4,7 +4,7 @@ Tetra has five mechanisms, and Lamina has four. The Tetra-only mechanism is the 
 
 The Metron assessment worklist has the analogous **Filter**, **Group** and **Saved filters** toolbar over a different, scheme-driven field set. See [Worklist filtering](/docs/sightline/usage/metron/worklist-filtering).
 
-A data slice is a coarser mechanism that the model author defines. A data slice narrows the whole model, on both the canvas and the Tabular Editor. **Filter** and **Group** reshape only the grid, on top of whichever data slice is active. For Tetra, see [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering). For Lamina, see [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices).
+A data slice is a coarser mechanism that the model author defines, and it narrows the diagram only. The Tabular Editor lists the whole model, staged changes included, whatever data slice is active. **Filter** and **Group** are the only controls that narrow the grid. For Tetra, see [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering). For Lamina, see [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices).
 
 ---
 

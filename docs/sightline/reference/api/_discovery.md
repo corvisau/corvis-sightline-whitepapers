@@ -1,46 +1,43 @@
+## `GET /session`
+
+Answers who the bearer token acts as, so a client can show read-only controls to a reader before it offers an edit. A server without authentication permits every write, so it answers `{ "role": "editor" }` with no user id.
+
+### Responses
+
+**200: The caller's role, and its user id and organisation when the server authenticates.**
+
+```json
+{
+  "role": "reader",
+  "userId": "user-1",
+  "orgId": "org-1"
+}
+```
+**401: The request carries no valid bearer token.**
+
 ## `GET /discovery/models`
 
 Unlike `/models`, this lists every model kind in the workspace, not tetra models only.
 
 ### Responses
 
-**200 — The models in the workspace, of every kind.**
+**200: The models in the workspace, of every kind.**
 
 ```json
-[
-  {
-    "kind": "tetra",
-    "id": "plant-a",
-    "locator": "example/tetra.yaml"
-  },
-  {
-    "kind": "metron-package",
-    "id": "rp-1",
-    "locator": "example/pkg.metron.yaml"
-  }
-]
-```
-
-## `GET /discovery/findings`
-
-Reads every findings register in the workspace. A register that fails to parse is skipped rather than failing the whole listing.
-
-### Responses
-
-**200 — Findings, grouped by the register file each came from.**
-
-```json
-[
-  {
-    "sourceFile": "findings/a.finding.yaml",
-    "records": [
-      {
-        "id": "F-1",
-        "label": "Weak segmentation"
-      }
-    ]
-  }
-]
+{
+  "models": [
+    {
+      "kind": "tetra",
+      "id": "plant-a",
+      "locator": "example/tetra.yaml"
+    },
+    {
+      "kind": "metron-package",
+      "id": "rp-1",
+      "locator": "example/pkg.metron.yaml"
+    }
+  ]
+}
 ```
 
 ## `GET /discovery/bindings`
@@ -49,16 +46,18 @@ Lists every assessment binding candidate found across the workspace's model dire
 
 ### Responses
 
-**200 — Assessment binding candidates.**
+**200: Assessment binding candidates.**
 
 ```json
-[
-  {
-    "modelId": "plant-a",
-    "packageId": "rp-1",
-    "packageVersion": 1
-  }
-]
+{
+  "bindings": [
+    {
+      "modelId": "plant-a",
+      "packageId": "rp-1",
+      "packageVersion": 1
+    }
+  ]
+}
 ```
 
 ## `GET /discovery/external-data`
@@ -67,20 +66,22 @@ Reads every external-data file in the workspace. A file that fails to parse repo
 
 ### Responses
 
-**200 — External data results, one entry per source file.**
+**200: External data results, one entry per source file.**
 
 ```json
-[
-  {
-    "sourceFile": "external/a.external.yaml",
-    "tables": [
-      {
-        "id": "attestations",
-        "label": "Control attestations"
-      }
-    ]
-  }
-]
+{
+  "files": [
+    {
+      "sourceFile": "external/a.external.yaml",
+      "tables": [
+        {
+          "id": "attestations",
+          "label": "Control attestations"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ## `GET /discovery/rules`
@@ -94,24 +95,52 @@ packageDir must stay inside the workspace root; a pattern that resolves outside 
 
 ### Responses
 
-**200 — The rules matched by the given patterns.**
+**200: The rules matched by the given patterns.**
 
 ```json
-[
-  {
-    "rule": {
-      "ruleId": "r-1",
-      "title": "Cross-zone exposure"
-    },
-    "sourceFile": "rules/arch.rules.yaml"
-  }
-]
+{
+  "rules": [
+    {
+      "rule": {
+        "ruleId": "r-1",
+        "title": "Cross-zone exposure"
+      },
+      "sourceFile": "rules/arch.rules.yaml"
+    }
+  ]
+}
 ```
-**400 — packageDir is missing, or packageDir or a pattern resolves outside the package directory.**
+**400: packageDir is missing, or packageDir or a pattern resolves outside the package directory.**
 
 ```json
 {
   "error": "packageDir must not escape the workspace root"
+}
+```
+
+## `GET /discovery/rule-packages`
+
+Lists every rule package installed under the workspace root, one element per id and version, ordered by id then version. A client names a package by `id` and `version`, as a `uses:` entry does. Each element carries the package's `domain`. A package whose domain the caller's licence cannot read is omitted, so the answer is `200` with a shorter list and never `403`.
+
+### Responses
+
+**200: The installed packages.**
+
+```json
+{
+  "packages": [
+    {
+      "id": "example-rules",
+      "version": 1,
+      "name": "Example rules",
+      "domain": "tetra"
+    },
+    {
+      "id": "vendor-rules",
+      "version": 2,
+      "domain": "metron"
+    }
+  ]
 }
 ```
 
@@ -126,20 +155,22 @@ Same parameters and 400 rule as `/discovery/rules`.
 
 ### Responses
 
-**200 — The attribute sets matched by the given patterns.**
+**200: The attribute sets matched by the given patterns.**
 
 ```json
-[
-  {
-    "attributeSet": {
-      "id": "s-1",
-      "label": "Set 1"
-    },
-    "sourceFile": "attributes/main.attributes.yaml"
-  }
-]
+{
+  "attributeSets": [
+    {
+      "attributeSet": {
+        "id": "s-1",
+        "label": "Set 1"
+      },
+      "sourceFile": "attributes/main.attributes.yaml"
+    }
+  ]
+}
 ```
-**400 — packageDir is missing, or packageDir or a pattern resolves outside the package directory.**
+**400: packageDir is missing, or packageDir or a pattern resolves outside the package directory.**
 
 ```json
 {
@@ -158,17 +189,19 @@ packageDir must stay inside the workspace root and answers 400 otherwise, as for
 
 ### Responses
 
-**200 — One outcome per matched file: a parsed scheme, an empty file, or an invalid one.**
+**200: One outcome per matched file: a parsed scheme, an empty file, or an invalid one.**
 
 ```json
-[
-  {
-    "sourceFile": "default.scheme.yaml",
-    "kind": "scheme"
-  }
-]
+{
+  "schemes": [
+    {
+      "sourceFile": "default.scheme.yaml",
+      "kind": "scheme"
+    }
+  ]
+}
 ```
-**400 — packageDir is missing, or resolves outside the workspace root.**
+**400: packageDir is missing, or resolves outside the workspace root.**
 
 ```json
 {
@@ -187,15 +220,17 @@ baseDir must stay inside the workspace root; a pattern that resolves outside bas
 
 ### Responses
 
-**200 — The matched file paths, relative to baseDir.**
+**200: The matched file paths, relative to baseDir.**
 
 ```json
-[
-  "frags/a.yaml",
-  "frags/b.yaml"
-]
+{
+  "paths": [
+    "frags/a.yaml",
+    "frags/b.yaml"
+  ]
+}
 ```
-**400 — baseDir is missing, or baseDir or a pattern resolves outside baseDir.**
+**400: baseDir is missing, or baseDir or a pattern resolves outside baseDir.**
 
 ```json
 {
@@ -213,22 +248,24 @@ Reads every findings register in the workspace and returns the findings that ref
 
 ### Responses
 
-**200 — Findings grouped by entity id. An empty array when nothing references the model.**
+**200: Findings grouped by entity id. The `entities` list is empty when nothing references the model.**
 
 ```json
-[
-  {
-    "entityId": "z-ot",
-    "findings": [
-      {
-        "id": "F-1",
-        "label": "Weak segmentation"
-      }
-    ]
-  }
-]
+{
+  "entities": [
+    {
+      "entityId": "z-ot",
+      "findings": [
+        {
+          "id": "F-1",
+          "label": "Weak segmentation"
+        }
+      ]
+    }
+  ]
+}
 ```
-**403 — The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
 
 ```json
 {
@@ -246,38 +283,40 @@ Returns one coverage entry for each entity of the model that an assessment cover
 
 ### Responses
 
-**200 — Coverage entries sorted by entity id. An empty array when no assessment covers the model.**
+**200: Coverage entries sorted by entity id. The `entities` list is empty when no assessment covers the model.**
 
 ```json
-[
-  {
-    "entityId": "z-ot",
-    "counts": {
-      "draft": 1,
-      "inProgress": 0,
-      "done": 1,
-      "na": 0,
-      "requiresRevalidation": 0,
-      "total": 2
-    },
-    "distribution": {
-      "yes": 0,
-      "no": 0,
-      "partial": 1,
-      "indeterminate": 0,
-      "not-applicable": 0
-    },
-    "packages": [
-      {
-        "packageId": "example-package",
-        "packageTitle": "Example package",
-        "bindingRel": "models/example.assessment.yaml"
-      }
-    ]
-  }
-]
+{
+  "entities": [
+    {
+      "entityId": "z-ot",
+      "counts": {
+        "draft": 1,
+        "inProgress": 0,
+        "done": 1,
+        "na": 0,
+        "requiresRevalidation": 0,
+        "total": 2
+      },
+      "distribution": {
+        "yes": 0,
+        "no": 0,
+        "partial": 1,
+        "indeterminate": 0,
+        "not-applicable": 0
+      },
+      "packages": [
+        {
+          "packageId": "example-package",
+          "packageTitle": "Example package",
+          "bindingRel": "models/example.assessment.yaml"
+        }
+      ]
+    }
+  ]
+}
 ```
-**403 — The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
 
 ```json
 {
@@ -287,7 +326,7 @@ Returns one coverage entry for each entity of the model that an assessment cover
 
 ## `GET /cross-app/models/{modelId}/covering-causes`
 
-Scans every Lamina model in the workspace and returns, for each channel or flow of the Tetra model, the causes whose vector link names one of the model's vectors. A cause whose link names a different Tetra model is left out. A cause appears once for each channel or flow it covers. This is the read that Tetra uses for its Causes section and cause badges.
+Scans every Lamina model in the workspace and returns, for each channel or flow of the Tetra model, the causes whose vector links a rule finding that has that channel or flow among its references. A cause whose link names a different Tetra model is left out. A cause appears once for each channel or flow it covers. This is the read that Tetra uses for its Causes section and cause badges.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -295,32 +334,34 @@ Scans every Lamina model in the workspace and returns, for each channel or flow 
 
 ### Responses
 
-**200 — The covering causes grouped by channel or flow id. An empty array when no cause links a vector of the model.**
+**200: The covering causes grouped by channel or flow id. The `relations` list is empty when no cause links a rule finding of the model.**
 
 ```json
-[
-  {
-    "relationId": "c-ot-it",
-    "causes": [
-      {
-        "laminaModelId": "example-risk-model",
-        "laminaModelName": "Example risk model",
-        "causeId": "C-001",
-        "causeLabel": "Remote access abused",
-        "vectorKey": "c-ot-it>z-it"
-      }
-    ]
-  }
-]
+{
+  "relations": [
+    {
+      "relationId": "c-ot-it",
+      "causes": [
+        {
+          "laminaModelId": "example-risk-model",
+          "laminaModelName": "Example risk model",
+          "causeId": "C-001",
+          "causeLabel": "Remote access abused",
+          "findingId": "example-rules/cross-zone-relation:example-ot-model/relationId=c-ot-it,zoneId=z-it"
+        }
+      ]
+    }
+  ]
+}
 ```
-**404 — No Tetra model has this id.**
+**404: No Tetra model has this id.**
 
 ```json
 {
   "error": "model not found: example-grid"
 }
 ```
-**409 — More than one Tetra model has this id.**
+**409: More than one Tetra model has this id.**
 
 ```json
 {
@@ -339,65 +380,9 @@ Scans every Lamina model in the workspace and returns, for each channel or flow 
 }
 ```
 
-## `GET /cross-app/models/{modelId}/vectors`
+## `GET /cross-app/models/{modelId}/tetra-scope`
 
-Loads the Tetra model and returns the Tetra Vectors it derives: one for each channel or flow that crosses into a zone. This is the read behind a Lamina cause's vector picker and vector links.
-
-| Parameter | In | Required | Type | Description |
-|---|---|---|---|---|
-| `modelId` | path | yes | string | The Tetra model's own id, the id that `/models` lists for it. It is not the Lamina model's id. |
-
-### Responses
-
-**200 — The model's vectors. An empty array when no relation crosses into a zone.**
-
-```json
-[
-  {
-    "key": "c-ot-it>z-it",
-    "relationId": "c-ot-it",
-    "relationKind": "channel",
-    "label": "Remote access link",
-    "nodeA": "d-ot-1",
-    "nodeB": "d-it-1",
-    "zoneId": "z-it",
-    "otherZoneId": "z-ot",
-    "ruleIds": [
-      "r-remote-access"
-    ],
-    "suggestedControls": []
-  }
-]
-```
-**404 — No Tetra model has this id.**
-
-```json
-{
-  "error": "model not found: example-grid"
-}
-```
-**409 — More than one Tetra model has this id.**
-
-```json
-{
-  "error": "model id example-grid names 2 models",
-  "reason": "ambiguous",
-  "candidates": [
-    {
-      "kind": "tetra",
-      "id": "example-grid"
-    },
-    {
-      "kind": "tetra",
-      "id": "example-grid"
-    }
-  ]
-}
-```
-
-## `GET /cross-app/models/{modelId}/vector-staleness`
-
-Compares the Tetra Vector snapshot that each cause of the Lamina model holds with the live vector it links to, in the Tetra models under the Lamina model's folder. `current` means the live vector matches the snapshot. `changed` means it differs, and `changes` names each differing field. `gone` means the key is no longer derived, or the named Tetra model is not loaded, and `reason` says which. A cause with no vector link or snapshot is not listed.
+Lists the Tetra models of the workspace, in any folder, each with the zone ids that it declares, sorted by model id. The Lamina model selects and authorises the read, and its own folder does not change the answer. The Model Properties drawer offers them as the choices for `tetraModel` and `tetraZones`. A zone that no relation enters has no vector and is still listed. A Tetra manifest with no `meta.id` is not a listed model and is left out.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -405,33 +390,29 @@ Compares the Tetra Vector snapshot that each cause of the Lamina model holds wit
 
 ### Responses
 
-**200 — One entry for each cause that links a Tetra Vector with a snapshot. An empty array when none does.**
+**200: The Tetra models of the workspace.**
 
 ```json
-[
-  {
-    "causeId": "C-001",
-    "key": "c-ot-it>z-it",
-    "modelId": "example-grid",
-    "state": "changed",
-    "changes": [
-      {
-        "field": "label",
-        "old": "Remote access link",
-        "new": "Remote access path"
-      }
-    ]
-  }
-]
+{
+  "models": [
+    {
+      "id": "example-grid",
+      "zoneIds": [
+        "z-it",
+        "z-ot"
+      ]
+    }
+  ]
+}
 ```
-**404 — No Lamina model has this id.**
+**404: No Lamina model has this id.**
 
 ```json
 {
   "error": "model not found: example-grid"
 }
 ```
-**409 — More than one Lamina model has this id.**
+**409: More than one Lamina model has this id.**
 
 ```json
 {
@@ -450,9 +431,9 @@ Compares the Tetra Vector snapshot that each cause of the Lamina model holds wit
 }
 ```
 
-## `GET /cross-app/models/{modelId}/vector-coverage`
+## `GET /cross-app/models/{modelId}/finding-links`
 
-Lists the Tetra Vectors in the zones that the Lamina manifest declares under `tetraZones`, in the Tetra models under its folder, that no cause links. A manifest that names a `tetraModel` limits the scan to that model. `state` is `no-tetra` when no Tetra model sits under the folder, `model-not-found` when the named model is absent, `no-scope` when the manifest declares no zones, and `ready` otherwise. `total` counts the vectors in the declared zones, covered or not.
+Compares the pin that each cause holds on a record link with the record now, and answers one entry for each record link. The pin (`accepted`) holds the data hash, the source hash and the values the record had. The eight states are `current`, `data-changed`, `source-changed`, `both-changed`, `new`, `closed`, `missing` and `unreadable`. `new` means the link has no accepted pin. `closed` means the record is no longer emitted. `missing` means no record answers to the id. `unreadable` means the register could not be read now. For a changed state, `explanation` names what moved, from the values in the pin or from the journal. A cause with no record link is not listed.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -460,45 +441,229 @@ Lists the Tetra Vectors in the zones that the Lamina manifest declares under `te
 
 ### Responses
 
-**200 — The coverage of the Lamina model.**
+**200: One entry for each record link in the model. The `links` list is empty when none exists.**
+
+```json
+{
+  "links": [
+    {
+      "causeId": "C-001",
+      "findingId": "example-rules/cross-zone-relation:example-grid/relationId=F1,zoneId=Z1",
+      "modelId": "example-grid",
+      "name": "Relation enters a zone: Z1, F1",
+      "state": "data-changed",
+      "closed": false,
+      "title": "Relation enters a zone: Z1, F1",
+      "dataHash": "1a2b3c4d5e6f7",
+      "sourceHash": "7f6e5d4c3b2a1",
+      "linkIds": [
+        "F1"
+      ],
+      "explanation": {
+        "data": [
+          {
+            "path": "type",
+            "old": "system",
+            "new": "security"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+
+```json
+{
+  "error": "This licence does not include Metron data in Tetra."
+}
+```
+**404: No Lamina model has this id.**
+
+```json
+{
+  "error": "model not found: example-grid"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
+## `GET /cross-app/models/{modelId}/causes/{causeId}/finding-links`
+
+Answers the same entries as the model-wide route, for one cause. The `links` list is empty when the cause links no record.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+| `causeId` | path | yes | string | The `id` of a cause in the Lamina model. |
+
+### Responses
+
+**200: The record links of the cause.**
+
+```json
+{
+  "links": [
+    {
+      "causeId": "C-001",
+      "findingId": "example-rules/cross-zone-relation:example-grid/relationId=F1,zoneId=Z1",
+      "modelId": "example-grid",
+      "name": "Relation enters a zone: Z1, F1",
+      "state": "data-changed",
+      "closed": false,
+      "title": "Relation enters a zone: Z1, F1",
+      "dataHash": "1a2b3c4d5e6f7",
+      "sourceHash": "7f6e5d4c3b2a1",
+      "linkIds": [
+        "F1"
+      ],
+      "explanation": {
+        "data": [
+          {
+            "path": "type",
+            "old": "system",
+            "new": "security"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+
+```json
+{
+  "error": "This licence does not include Metron data in Tetra."
+}
+```
+**404: No Lamina model has this id, or the Lamina model has no cause with this id.**
+
+```json
+{
+  "error": "cause not found: C-001"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
+## `GET /cross-app/models/{modelId}/finding-inbox`
+
+Lists the open records that their rule does not hide. The scope is the Tetra model that the Lamina manifest names under `tetraModel`, or every Tetra model the workspace lists when it names none. `findings` holds the Tetra records in the zones the manifest declares under `tetraZones`. `metron` holds the Metron findings of the same model scope, which need no zones. Each entry is marked `linked` when some cause of this Lamina model links it, so the answer to unlinked is per Lamina model.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+
+### Responses
+
+**200: The records in scope. `findings` is empty when `state` is not `ready`, and `metron` is empty only on `model-not-found`.**
 
 ```json
 {
   "state": "ready",
-  "zones": [
+  "findings": [
     {
-      "zoneId": "z-it",
-      "vectors": [
-        {
-          "key": "c-ot-it>z-it",
-          "relationId": "c-ot-it",
-          "relationKind": "channel",
-          "label": "Remote access link",
-          "nodeA": "d-ot-1",
-          "nodeB": "d-it-1",
-          "zoneId": "z-it",
-          "otherZoneId": "z-ot",
-          "ruleIds": [
-            "r-remote-access"
-          ],
-          "suggestedControls": [],
-          "modelId": "example-grid"
-        }
-      ]
+      "id": "example-rules/cross-zone-relation:example-grid/relationId=F1,zoneId=Z1",
+      "packageId": "example-rules",
+      "modelId": "example-grid",
+      "ruleId": "cross-zone-relation",
+      "title": "Relation enters a zone: Z1, F1",
+      "key": {
+        "relationId": "F1",
+        "zoneId": "Z1"
+      },
+      "zoneId": "Z1",
+      "linked": false,
+      "state": "current",
+      "dataHash": "1a2b3c4d5e6f7",
+      "sourceHash": "7f6e5d4c3b2a1"
     }
   ],
-  "total": 3,
-  "unknownZones": []
+  "metron": [
+    {
+      "id": "assessment-findings/assessment-gap:example-grid/entityId=z-1,legacyId=F-1,requirementId=R-1",
+      "packageId": "assessment-findings",
+      "modelId": "example-grid",
+      "ruleId": "assessment-gap",
+      "title": "Backups are untested",
+      "description": "No restore drill has been run.",
+      "severity": "high",
+      "key": {
+        "entityId": "z-1",
+        "legacyId": "F-1",
+        "requirementId": "R-1"
+      },
+      "linked": false,
+      "state": "current",
+      "dataHash": "1a2b3c4d5e6f7",
+      "sourceHash": "7f6e5d4c3b2a1"
+    }
+  ]
 }
 ```
-**404 — No Lamina model has this id.**
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+
+```json
+{
+  "error": "This licence does not include Metron data in Tetra."
+}
+```
+**404: No Lamina model has this id.**
 
 ```json
 {
   "error": "model not found: example-grid"
 }
 ```
-**409 — More than one Lamina model has this id.**
+**409: More than one Lamina model has this id.**
 
 ```json
 {
@@ -514,6 +679,13 @@ Lists the Tetra Vectors in the zones that the Lamina manifest declares under `te
       "id": "example-grid"
     }
   ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
 }
 ```
 
@@ -527,7 +699,7 @@ Returns the parsed assessment and a version. The version is a hash of the assess
 
 ### Responses
 
-**200 — The assessment and its version.**
+**200: The assessment and its version.**
 
 ```json
 {
@@ -547,21 +719,21 @@ Returns the parsed assessment and a version. The version is a hash of the assess
   }
 }
 ```
-**403 — The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
 
 ```json
 {
   "error": "This licence does not include Metron data."
 }
 ```
-**404 — No assessment has this id.**
+**404: No assessment has this id.**
 
 ```json
 {
   "error": "assessment not found: as-pump"
 }
 ```
-**409 — The id names more than one assessment. `reason` is `ambiguous` and `candidates` lists them.**
+**409: The id names more than one assessment. `reason` is `ambiguous` and `candidates` lists them.**
 
 ```json
 {
@@ -577,9 +749,9 @@ Returns the parsed assessment and a version. The version is a hash of the assess
 }
 ```
 
-## `POST /metron/assessments/{id}/ops`
+## `GET /metron/assessments/{id}/workspace`
 
-Applies the edits in `ops` in order and writes the assessment file once. The batch applies only when `baseVersion` matches the current version, so a stale write answers 409 with the current version instead of overwriting a newer edit. If any edit fails, nothing is written. The server stamps `by` and `at` on every log entry it writes, from the assessment's assessor and its own clock. A request cannot set them. The edit kinds are `applyAssessment`, `setPairState`, `revalidatePairs`, `reconcileBinding`, `archiveOrphan`, `setGeneralEvidence`, `setSharedAssessments`, `saveSlice` and `deleteSlice`.
+Returns the text of every file the assessment's window reads, so a browser that has no file system can open it. Paths are relative to the model root and no absolute path appears. A file that cannot be read is left out and the window reports the error itself.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -587,7 +759,45 @@ Applies the edits in `ops` in order and writes the assessment file once. The bat
 
 ### Responses
 
-**200 — The batch applied.**
+**200: The assessment's version, its entry and the files its window reads.**
+
+```json
+{
+  "version": "4be1...",
+  "entry": "plant-a/pump.assessment.yaml",
+  "modelEntry": "plant-a/blockdiagram.tetra.yaml",
+  "files": {
+    "plant-a/pump.assessment.yaml": "id: as-pump\n...",
+    "plant-a/blockdiagram.tetra.yaml": "id: bd-plant-a\n..."
+  }
+}
+```
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+
+```json
+{
+  "error": "This licence does not include Metron data."
+}
+```
+**404: No assessment has this id.**
+
+```json
+{
+  "error": "assessment not found: as-pump"
+}
+```
+
+## `POST /metron/assessments/{id}/ops`
+
+Applies the edits in `ops` in order and writes the assessment file once. The same commit also writes the assessment's own register: each pair's outcome, state and evidence is set as the `person` layer of its record, and a record is created for a pair that has none. A damaged register answers 400 and nothing is written. The batch applies only when `baseVersion` matches the current version, so a stale write answers 409 with the current version instead of overwriting a newer edit. If any edit fails, nothing is written. The server stamps `by` and `at` on every log entry it writes, from the assessment's assessor and its own clock. A request cannot set them. The edit kinds are `applyAssessment`, `setPairState`, `revalidatePairs`, `reconcileBinding`, `archiveOrphan`, `setGeneralEvidence`, `setSharedAssessments`, `saveSlice` and `deleteSlice`.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `id` | path | yes | string | The assessment's own id, the `id` that its `.assessment.yaml` file carries. It is not a model id from `/models`. |
+
+### Responses
+
+**200: The batch applied.**
 
 ```json
 {
@@ -598,7 +808,7 @@ Applies the edits in `ops` in order and writes the assessment file once. The bat
   ]
 }
 ```
-**400 — The body is malformed, an edit is invalid, or an edit failed. Nothing was written. `error` says which.**
+**400: The body is malformed, an edit is invalid, or an edit failed. Nothing was written. `error` says which.**
 
 ```json
 {
@@ -607,7 +817,7 @@ Applies the edits in `ops` in order and writes the assessment file once. The bat
   "error": "metronArchiveOrphan: no pair R9/E9 to archive"
 }
 ```
-**403 — The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
+**403: The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
 
 ```json
 {
@@ -616,14 +826,14 @@ Applies the edits in `ops` in order and writes the assessment file once. The bat
   "error": "This deployment is read-only."
 }
 ```
-**404 — No assessment has this id.**
+**404: No assessment has this id.**
 
 ```json
 {
   "error": "assessment not found: as-pump"
 }
 ```
-**409 — `baseVersion` is not the current version, with `reason` set to `conflict`. Also answers 409 with `reason` set to `ambiguous` when the id names more than one assessment.**
+**409: `baseVersion` is not the current version, with `reason` set to `conflict`. Also answers 409 with `reason` set to `ambiguous` when the id names more than one assessment.**
 
 ```json
 {
@@ -638,7 +848,7 @@ Applies the edits in `ops` in order and writes the assessment file once. The bat
 
 ## `POST /metron/assessments/{id}/run`
 
-Assesses every pair of a rule-assessed requirement that has no outcome yet, and writes the assessment file once. Each outcome lands as a draft. Only a requirement that opts in to automatic completion is also completed, and the log attributes that to the rule. Pairs that already hold an outcome are never changed. The request body is optional. When it carries `baseVersion`, the run applies only if that matches the current version, and a stale run answers 409 without writing. A run that changes nothing answers 200 with `filesChanged` empty and the current version.
+Assesses every pair of a rule-assessed requirement that has no outcome yet, and writes the assessment file once. Each outcome lands as a draft. Only a requirement that opts in to automatic completion is also completed, and the log attributes that to the rule. Pairs that already hold an outcome are never changed. The run also keeps the assessment's records, one for each requirement and in-scope entity, in the assessment's own register, and writes them in the same commit as the assessment file. Each record also carries its pair's outcome, state and evidence as its `person` layer. The request body is optional. When it carries `baseVersion`, the run applies only if that matches the current version, and a stale run answers 409 without writing. A run that changes nothing answers 200 with `filesChanged` empty and the current version.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -646,7 +856,7 @@ Assesses every pair of a rule-assessed requirement that has no outcome yet, and 
 
 ### Responses
 
-**200 — The run finished.**
+**200: The run finished.**
 
 ```json
 {
@@ -656,10 +866,16 @@ Assesses every pair of a rule-assessed requirement that has no outcome yet, and 
     "plant-a/pump.assessment.yaml"
   ],
   "assessedCount": 2,
-  "diagnostics": []
+  "diagnostics": [],
+  "records": {
+    "created": 2,
+    "changed": 0,
+    "closed": 0,
+    "returned": 0
+  }
 }
 ```
-**400 — The request body is malformed. Nothing was written.**
+**400: The request body is malformed. Nothing was written.**
 
 ```json
 {
@@ -668,7 +884,7 @@ Assesses every pair of a rule-assessed requirement that has no outcome yet, and 
   "error": "baseVersion: expected string"
 }
 ```
-**403 — The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
+**403: The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
 
 ```json
 {
@@ -677,14 +893,14 @@ Assesses every pair of a rule-assessed requirement that has no outcome yet, and 
   "error": "This deployment is read-only."
 }
 ```
-**404 — No assessment has this id.**
+**404: No assessment has this id.**
 
 ```json
 {
   "error": "assessment not found: as-pump"
 }
 ```
-**409 — `baseVersion` is not the current version, with `reason` set to `conflict`. Also answers 409 with `reason` set to `ambiguous` when the id names more than one assessment.**
+**409: `baseVersion` is not the current version, with `reason` set to `conflict`. Also answers 409 with `reason` set to `ambiguous` when the id names more than one assessment.**
 
 ```json
 {
@@ -696,7 +912,7 @@ Assesses every pair of a rule-assessed requirement that has no outcome yet, and 
   ]
 }
 ```
-**500 — The run failed before it wrote anything, for example because the bound model could not be loaded. `error` says why.**
+**500: The run failed before it wrote anything, for example because the bound model could not be loaded. `error` says why.**
 
 ```json
 {
@@ -706,37 +922,51 @@ Assesses every pair of a rule-assessed requirement that has no outcome yet, and 
 }
 ```
 
-## `POST /metron/assessments/{id}/promote`
+## `POST /metron/packages/{id}/assessments`
 
-Creates a finding from outcomes of one assessment, or appends outcomes to an existing finding. With `mode` `create` the server writes the finding into the findings register named by `register` and stamps its `id`, `createdAt`, `createdBy` and `status`. `createdBy` is the assessor recorded in the assessment. With `mode` `append` the server merges `refs` into the finding named by `findingId` and drops duplicates. A request that fails validation answers 400 and writes nothing.
+Applies one requirement package to one Tetra model. The server writes an empty assessment file beside the model, named for the model, the package and its version, and answers the new assessment's id. When that assessment already exists, the server writes nothing and answers its id with `created` false. The assessor is the authenticated user, or `anonymous` when the server has no authentication.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
-| `id` | path | yes | string | The assessment's own id, the `id` that its `.assessment.yaml` file carries. It is not a model id from `/models`. |
+| `id` | path | yes | string | The package's own id, the `meta.id` its manifest carries. |
+| `version` | query | no | integer | The package version. Required when the package exists in several versions. |
 
 ### Responses
 
-**200 — The finding was written.**
+**200: An assessment of this package version and model already exists. Nothing was written.**
 
 ```json
 {
   "ok": true,
-  "findingId": "F-A3K9Q6",
+  "id": "as-pump",
+  "locator": "plant-a/blockdiagram.pkg-grid-v2.assessment.yaml",
+  "created": false,
+  "filesChanged": []
+}
+```
+**201: The assessment was created.**
+
+```json
+{
+  "ok": true,
+  "id": "as-pump",
+  "locator": "plant-a/blockdiagram.pkg-grid-v2.assessment.yaml",
+  "created": true,
   "filesChanged": [
-    "findings/network.finding.yaml"
+    "plant-a/blockdiagram.pkg-grid-v2.assessment.yaml"
   ]
 }
 ```
-**400 — The request is malformed, a register path is not a valid findings register, `refs` is empty or invalid, `label` is blank, or `findingId` names no finding. Nothing was written.**
+**400: The body or the `version` query is malformed, or the package has no version. Nothing was written.**
 
 ```json
 {
   "ok": false,
   "reason": "invalid",
-  "error": "Promote requires at least one ref"
+  "error": "version must be an integer"
 }
 ```
-**403 — The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
+**403: The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
 
 ```json
 {
@@ -745,64 +975,31 @@ Creates a finding from outcomes of one assessment, or appends outcomes to an exi
   "error": "This deployment is read-only."
 }
 ```
-**404 — No assessment has this id.**
+**404: No requirement package or no Tetra model has this id.**
 
 ```json
 {
-  "error": "assessment not found: as-pump"
+  "error": "model not found: bd-plant-a"
 }
 ```
-**409 — The id names more than one assessment, with `reason` set to `ambiguous`.**
+**409: The id names several packages or models, with `reason` set to `ambiguous` and the `candidates`.**
 
 ```json
 {
-  "error": "assessment id as-pump names 2 assessments",
+  "error": "model id bd-plant-a names 2 models",
   "reason": "ambiguous",
-  "candidates": []
-}
-```
-**500 — The assessment file could not be read. `error` says why.**
-
-```json
-{
-  "ok": false,
-  "reason": "failed",
-  "error": "The assessment could not be read."
-}
-```
-
-## `POST /metron/findings/patches`
-
-Applies an ordered list of edits to existing findings and writes each touched findings register once. An edit sets any of `label`, `description`, `status`, `severity` and `tags`, and an edit with `refs` replaces the finding's refs wholesale. A field an edit leaves out keeps its value. The server checks every edit first. One invalid edit, or one `findingId` that names no finding, answers 400 and writes nothing.
-
-### Responses
-
-**200 — The edits were written.**
-
-```json
-{
-  "ok": true,
-  "filesChanged": [
-    "findings/network.finding.yaml"
+  "candidates": [
+    {
+      "kind": "tetra",
+      "id": "bd-plant-a",
+      "locator": "plant-a/blockdiagram.tetra.yaml"
+    },
+    {
+      "kind": "tetra",
+      "id": "bd-plant-a",
+      "locator": "plant-b/other.tetra.yaml"
+    }
   ]
-}
-```
-**400 — The request is malformed, an edit is invalid, or a `findingId` names no finding. Nothing was written.**
-
-```json
-{
-  "ok": false,
-  "reason": "invalid",
-  "error": "Unknown finding id: F-000000"
-}
-```
-**403 — The deployment refuses the write, or the file could not be written. Present when the server is configured with a write check.**
-
-```json
-{
-  "ok": false,
-  "reason": "forbidden",
-  "error": "This deployment is read-only."
 }
 ```
 
@@ -813,10 +1010,11 @@ Rolls up every assessment that is pinned to this package and its current version
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
 | `id` | path | yes | string | The package's own id, the `meta.id` that its `.metron.yaml` file carries. It is not a model id from `/models`. |
+| `version` | query | no | integer | The package version to roll up. A package can exist in several versions under one id, and without this parameter the route answers 409 for such a package. |
 
 ### Responses
 
-**200 — The roll-up.**
+**200: The roll-up.**
 
 ```json
 {
@@ -869,21 +1067,30 @@ Rolls up every assessment that is pinned to this package and its current version
   ]
 }
 ```
-**403 — The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+**400: `version` is not an integer.**
+
+```json
+{
+  "ok": false,
+  "reason": "invalid",
+  "error": "version must be an integer"
+}
+```
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
 
 ```json
 {
   "error": "This licence does not include Metron data."
 }
 ```
-**404 — No package has this id.**
+**404: No package has this id.**
 
 ```json
 {
   "error": "package not found: pkg-grid"
 }
 ```
-**409 — The id names more than one package. `reason` is `ambiguous` and `candidates` lists them.**
+**409: The id names more than one package. `reason` is `ambiguous` and `candidates` lists them.**
 
 ```json
 {
@@ -898,7 +1105,7 @@ Rolls up every assessment that is pinned to this package and its current version
   ]
 }
 ```
-**500 — The roll-up could not be built. `error` says why.**
+**500: The roll-up could not be built. `error` says why.**
 
 ```json
 {
@@ -914,17 +1121,18 @@ Returns the same roll-up as `/metron/packages/{id}/portfolio`, as a file. `forma
 |---|---|---|---|---|
 | `id` | path | yes | string | The package's own id, the `meta.id` that its `.metron.yaml` file carries. It is not a model id from `/models`. |
 | `format` | query | yes | string | `csv` or `json`. |
+| `version` | query | no | integer | The package version to roll up. A package can exist in several versions under one id, and without this parameter the route answers 409 for such a package. |
 
 ### Responses
 
-**200 — The file. `Content-Disposition` names it `<package id>-portfolio.<format>`.**
+**200: The file. `Content-Disposition` names it `<package id>-portfolio.<format>`.**
 
 ```csv
 model_id,model,assessor,package_id,package_version,requirement_id
 bd-plant-a,blockdiagram.tetra.yaml,assessor@example.test,pkg-grid,1,R1
 
 ```
-**400 — `format` is missing or is not `csv` or `json`.**
+**400: `format` is missing or is not `csv` or `json`, or `version` is not an integer.**
 
 ```json
 {
@@ -933,21 +1141,21 @@ bd-plant-a,blockdiagram.tetra.yaml,assessor@example.test,pkg-grid,1,R1
   "error": "format must be csv or json"
 }
 ```
-**403 — The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
+**403: The deployment refuses the read. The body carries the reason. Present only when the server is configured with a read check.**
 
 ```json
 {
   "error": "This licence does not include Metron data."
 }
 ```
-**404 — No package has this id.**
+**404: No package has this id.**
 
 ```json
 {
   "error": "package not found: pkg-grid"
 }
 ```
-**409 — The id names more than one package. `reason` is `ambiguous` and `candidates` lists them.**
+**409: The id names more than one package. `reason` is `ambiguous` and `candidates` lists them.**
 
 ```json
 {
@@ -962,10 +1170,355 @@ bd-plant-a,blockdiagram.tetra.yaml,assessor@example.test,pkg-grid,1,R1
   ]
 }
 ```
-**500 — The roll-up could not be built. `error` says why.**
+**500: The roll-up could not be built. `error` says why.**
 
 ```json
 {
   "error": "The package file could not be read."
+}
+```
+
+## `GET /folders`
+
+Lists the workspace root and its subfolders, with siblings sorted, as paths relative to the root (`.` is the root). It skips folders that start with a dot and `node_modules`. `truncated` is true when the list stopped at its cap. Use a value as `location` on `POST /models`, or as `parent` on `POST /folders`.
+
+### Responses
+
+**200: The folders.**
+
+```json
+{
+  "folders": [
+    ".",
+    "sites",
+    "sites/north"
+  ],
+  "truncated": false
+}
+```
+**403: The read was refused.**
+
+```json
+{
+  "error": "Reading Metron data is not permitted."
+}
+```
+
+## `POST /folders`
+
+Creates one folder under `parent`, a folder that `GET /folders` lists, so that a model or package can be created in it with `POST /models`. The server must be configured to create models. `name` is one path segment: it has no separator, does not start with a dot and is not `node_modules`. A folder that already exists answers 409 with `reason` set to `exists` and is left as it was.
+
+### Responses
+
+**201: The folder was created.**
+
+```json
+{
+  "folder": "sites/north"
+}
+```
+**400: The body is not JSON. `name` is missing or is not one path segment. `parent` is not a string, leaves the workspace or is not an existing folder.**
+
+```json
+{
+  "error": "name must not contain a path separator or control character"
+}
+```
+**403: The caller is authenticated as a reader. This is the answer only when the server requires authentication.**
+
+```json
+{
+  "error": "the editor role is required to write"
+}
+```
+**409: A folder with that name already exists under `parent`. Nothing is changed.**
+
+```json
+{
+  "ok": false,
+  "reason": "exists"
+}
+```
+**500: The folder could not be created.**
+
+```json
+{
+  "error": "the folder could not be created"
+}
+```
+
+## `GET /edit-grants`
+
+Reports, for the caller's token, whether saving is allowed in each app (`tetra`, `lamina`, `metron`) and why it is refused when it is not. A page uses it to disable Save before a write fails. The answer is affordance only: a write route still refuses what a grant would refuse. The route exists only on a server that gates editing, and answers 404 on one that does not.
+
+### Responses
+
+**200: One grant for each app.**
+
+```json
+{
+  "grants": [
+    {
+      "app": "tetra",
+      "allowed": true
+    },
+    {
+      "app": "lamina",
+      "allowed": false,
+      "reason": "This licence does not include editing in Lamina."
+    },
+    {
+      "app": "metron",
+      "allowed": true
+    }
+  ]
+}
+```
+
+## `GET /findings`
+
+Lists the records of every register in the workspace, each with its derived state. A record is Current, Data changed, Source changed or Both changed, relative to the values last accepted, and Open or Closed, relative to the latest run. Filters combine with AND. An empty result is `{ "records": [] }`. With no `domain` filter the list omits the records of a domain the deployment refuses, and answers 403 only when it refuses every domain present. A `domain` filter that the deployment refuses answers 403.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | query | no | string | Only the records of this model. |
+| `packageId` | query | no | string | Only the records of this rule package. |
+| `ruleId` | query | no | string | Only the records of this rule. |
+| `domain` | query | no | string | Only the records of this domain, such as `tetra`. |
+| `hide` | query | no | boolean | `true` for records whose rule hides them from consumer lists, `false` for the rest. |
+| `key.<part>` | query | no | string | Only records whose key has this part with this value, for example `key.zoneId=Z1`. Repeat for several parts. |
+| `links.id` | query | no | string | Only records that list a reference to this entity id. |
+
+### Responses
+
+**200: The matching records.**
+
+```json
+{
+  "records": [
+    {
+      "id": "example-rules/cross-zone-relation:example-grid/relationId=F1,zoneId=Z1",
+      "packageId": "example-rules",
+      "modelId": "example-grid",
+      "hide": true,
+      "record": {
+        "source": {
+          "ruleId": "cross-zone-relation",
+          "key": {
+            "zoneId": "Z1",
+            "relationId": "F1"
+          }
+        },
+        "domain": "tetra",
+        "data": {
+          "type": "network_ip"
+        },
+        "links": [
+          {
+            "id": "F1",
+            "version": 1
+          },
+          {
+            "id": "Z1",
+            "version": 1
+          }
+        ],
+        "title": "Relation enters a zone: F1, Z1",
+        "description": "",
+        "status": "open",
+        "severity": "medium",
+        "tags": []
+      },
+      "closed": false,
+      "state": "current",
+      "dataHash": "1a2b3c4d5e6f7",
+      "sourceHash": "7f6e5d4c3b2a1",
+      "registerVersion": "4f0c1d2e3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d"
+    }
+  ]
+}
+```
+**403: The deployment refuses the read: the `domain` filter names a domain it refuses, or it refuses every domain present.**
+
+```json
+{
+  "error": "Reading records is not permitted."
+}
+```
+**500: A register could not be read.**
+
+```json
+{
+  "error": "a message describing what went wrong"
+}
+```
+
+## `PATCH /folders/{folder}`
+
+Renames a folder of the workspace, keeping its parent. Every model below it keeps its id, so nothing that names a model's id is affected. It refuses, and renames nothing, for the workspace root, `findings` and anything under it, a folder inside a model's directory, and a folder that holds a Metron package.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `folder` | path | yes | string | The folder, relative to the workspace root, with `/` separators. Each segment is percent-encoded and the separators stay, so `sites/north` is `/folders/sites/north`. The workspace root cannot be addressed. |
+
+### Responses
+
+**200: The folder is renamed. `models` lists the models below it with their new locators.**
+
+```json
+{
+  "ok": true,
+  "folder": "sites/north-2026",
+  "models": [
+    {
+      "kind": "tetra",
+      "id": "plant-a",
+      "label": "Plant A",
+      "version": 1,
+      "locator": "sites/north-2026/plant-a/plant-a.tetra.yaml"
+    }
+  ]
+}
+```
+**400: The name is not valid, or the folder is the workspace root or is not a valid folder.**
+
+```json
+{
+  "error": "name must be one folder name of 1 to 200 characters, with no slash and not starting with a dot"
+}
+```
+**403: The caller may not write.**
+
+```json
+{
+  "error": "the editor role is required to write"
+}
+```
+**404: No folder has this path.**
+
+```json
+{
+  "error": "no folder sites/north"
+}
+```
+**409: The folder cannot be renamed. `reason` is `reserved` for `findings` and anything under it. It is `inside-model` with the `paths` of the model whose directory holds the folder. It is `holds-packages` with the `paths` of the Metron packages below it. It is `exists` when the destination is taken.**
+
+```json
+{
+  "error": "sites/north is inside the directory of the model sites/north/plant-a.tetra.yaml",
+  "reason": "inside-model",
+  "paths": [
+    "sites/north/plant-a.tetra.yaml"
+  ]
+}
+```
+
+## `DELETE /folders/{folder}`
+
+Removes a folder of the workspace. It refuses, and removes nothing, while the folder holds any file, which includes every model, finding register and package file, so a caller removes or moves those first. A tree of empty folders is removed whole. It also refuses the workspace root, `findings` and anything under it, and a folder inside a model's directory.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `folder` | path | yes | string | The folder, relative to the workspace root, with `/` separators. Each segment is percent-encoded and the separators stay, so `sites/north` is `/folders/sites/north`. The workspace root cannot be addressed. |
+
+### Responses
+
+**200: The folder is removed.**
+
+```json
+{
+  "ok": true
+}
+```
+**400: The folder is the workspace root or is not a valid folder.**
+
+```json
+{
+  "error": "the workspace root cannot be renamed, moved or deleted"
+}
+```
+**403: The caller may not write.**
+
+```json
+{
+  "error": "the editor role is required to write"
+}
+```
+**404: No folder has this path.**
+
+```json
+{
+  "error": "no folder sites/north"
+}
+```
+**409: The folder cannot be removed. `reason` is `not-empty` with the `paths` of the files it holds (up to 50), or `reserved`. It is `inside-model` with the `paths` of the model whose directory holds the folder.**
+
+```json
+{
+  "error": "sites/old still holds files: sites/old/readme.txt",
+  "reason": "not-empty",
+  "paths": [
+    "sites/old/readme.txt"
+  ]
+}
+```
+
+## `POST /folders/{folder}/move`
+
+Re-files a folder of the workspace under another folder, keeping its name. Every model below it keeps its id. It refuses, and moves nothing, for the workspace root, `findings` and anything under it, a folder inside a model's directory, a folder that holds a Metron package, a destination under `findings` or inside a model's directory, and a folder holding a model that reads a file outside the folder.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `folder` | path | yes | string | The folder, relative to the workspace root, with `/` separators. Each segment is percent-encoded and the separators stay, so `sites/north` is `/folders/sites/north`. The workspace root cannot be addressed. |
+
+### Responses
+
+**200: The folder is moved. `models` lists the models below it with their new locators.**
+
+```json
+{
+  "ok": true,
+  "folder": "archive/2026/north",
+  "models": [
+    {
+      "kind": "tetra",
+      "id": "plant-a",
+      "label": "Plant A",
+      "version": 1,
+      "locator": "archive/2026/north/plant-a/plant-a.tetra.yaml"
+    }
+  ]
+}
+```
+**400: The parent is not valid, or the folder is the workspace root or is not a valid folder.**
+
+```json
+{
+  "error": "a folder cannot move into itself"
+}
+```
+**403: The caller may not write.**
+
+```json
+{
+  "error": "the editor role is required to write"
+}
+```
+**404: No folder has this path.**
+
+```json
+{
+  "error": "no folder sites/north"
+}
+```
+**409: The folder cannot be moved. `reason` is `reserved` for `findings` and anything under it. It is `inside-model` with the `paths` of the model whose directory holds the folder. It is `holds-packages` with the `paths` of the Metron packages below it. It is `exists` when the destination is taken. It is `external-files` with the `paths` of the files that a model reads outside the folder.**
+
+```json
+{
+  "error": "sites/north holds models that read files outside it: shared/zones.yaml",
+  "reason": "external-files",
+  "paths": [
+    "shared/zones.yaml"
+  ]
 }
 ```

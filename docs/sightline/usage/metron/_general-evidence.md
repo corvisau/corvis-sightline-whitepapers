@@ -28,7 +28,7 @@ grid that follows the Worklist tab's editing model:
 
 Click any cell to edit it inline, as on the Worklist tab. The edit stages on
 blur or Enter, and the shared save bar shows an unsaved-changes indicator. The
-save bar appears whenever any Worklist, Findings, or Evidence edit is unsaved.
+save bar sits at the bottom of the assessment and appears whenever any Worklist, Findings, or Evidence edit is unsaved.
 Nothing writes to disk until you click **Save all**.
 
 Click **+ Add reference** to create a row with a new stable id. Click the **⌫**
@@ -134,9 +134,9 @@ drawer, the report or an export. It also clears the id from every
 generalEvidence:
   - id: ev-1
     kind: note
-    title: Kickoff meeting notes
-    retrievedAt: "2026-07-15"
-    comment: Scope agreed with security lead
+    title: Example policy review notes
+    retrievedAt: "2026-01-01"
+    comment: Reviewed with the system owner
 pairs:
   - requirementId: IAM-1
     entityId: d-1

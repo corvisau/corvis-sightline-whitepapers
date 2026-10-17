@@ -1,4 +1,4 @@
-Tetra uses **bonsai filter expressions** to project a full hydrated model into a narrowed view called a _data slice_. This page covers the filter language, the execution pipeline and the Tetra sentinel transforms (`cascade()`, `exclude()`). It also covers set-pipeline programs, the prune and shade display modes, and YAML-level member filtering.
+Tetra uses **bonsai filter expressions** to project the full model into a narrowed view called a _data slice_. This page covers the filter language, the execution pipeline and the Tetra sentinel transforms (`cascade()`, `exclude()`). It also covers set-pipeline programs, the prune and shade display modes, and YAML-level member filtering.
 
 ---
 
@@ -18,24 +18,42 @@ Tetra has no `aggregationId` field, and it ignores one on a slice pasted from La
 
 ### Creating, editing, and duplicating slices
 
-The toolbar's **Data slice** control appears in both the Diagram and the Table view. Its label reads **Data slice:** followed by the name of the active slice, or **None — full model** when no slice is active.
+The toolbar's **Data slice** control appears in the Diagram view only. A data slice narrows the diagram, and the Table view always lists the whole model. The active slice stays selected while the Table view is open. The control's label reads **Data slice:** followed by the name of the active slice.
 
-Click the control to open the slice popover. The popover lists **None — full model** and every slice. A slice that builds on a base slice appears indented under that base. Select the base itself from its own row. Click a slice to apply it and close the popover. The Up and Down arrow keys, Home and End move between the rows, and Escape closes the popover.
+Tetra draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. To view the whole model, create a slice with no filter.
+
+A slice saves its view perspective, orientation included. A slice that saved no orientation opens in rows. The **Layout** field in the model's properties does not change the diagram while a slice is active. On a model with no slices, it sets the orientation that the first new slice starts from.
+
+In the web shell, the active slice belongs to the browser tab. It survives a reload and is lost when you close the tab, so a new tab opens on the model's first slice. The VS Code extension keeps the choice per workspace.
+
+A model with no data slices shows no **Data slice** control. The Diagram view shows the message "This model has no data slices. Create one to draw it." and a **Create data slice** button, which opens the slice editor. The Table view lists the model as usual.
+
+A user who cannot edit the model sees the message "The model author hasn't created a data slice yet." instead, with no button. A web shell tab opened with a reader token is one example.
+
+Click the control to open the slice popover. The popover lists every slice. A slice that builds on a base slice appears indented under that base. Select the base itself from its own row. Click a slice to apply it and close the popover. The Up and Down arrow keys, Home and End move between the rows, and Escape closes the popover.
 
 Below the list, choose an action:
 
 - **New** opens an empty editor.
 - **Edit** opens the currently-active slice with every field pre-filled; its id never changes.
 - **Duplicate** opens the same editor pre-filled from the currently-active slice (name, filter, base slice, description) but under a fresh id. Saving creates an independent copy and leaves the source slice untouched.
-- **Delete** asks for confirmation, then removes the active slice.
+- **Delete** asks for confirmation, then removes the active slice. The first remaining slice becomes active. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
+
+A new or duplicated slice appears in the popover and becomes active as soon as you save the editor. It reaches the model file with your other unsaved changes when you click **Save all**.
+
+The **PNG**, **Legend (PNG)** and **Draw.io** exports capture the diagram. On a model with no data slices they are disabled until you create one. Reports stay available.
 
 Slice ids are opaque and generated; the editor does not derive them from the typed name.
 
-A **Show code** button in the top-right corner of the query builder reveals the exact bonsai program as read-only text. The program is the same statement list described below, and a **Copy** button copies it. Use it to debug a filter or to share it outside the editor.
+The editor shows the slice's query as read-only text, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
+
+A new slice has no query. A slice with no query shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`, because a statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**. A statement that does not add anything, such as a `remove()` or a `where()` without `add()`, then acts on an empty result. The `remove()` examples in this page start from `model |> add()` for the same reason.
+
+A **Show code** button in the top-right corner of the query builder, opened from **Edit query**, reveals the exact bonsai program as read-only text. The program is the same statement list described below, and a **Copy** button copies it. Use it to debug a filter or to share it outside the editor.
 
 ### Include related types
 
-The editor's Query Builder shows an **Include related** checkbox row above the filter builder. Ticking a type appends one combined statement to the program (`model |> where("item.kind |> oneOf('device', ...)") |> add()`), preceded by an auto-generated `// Pulling devices into the model` summary comment. Unticking a type removes it. Clearing every type removes the generated block entirely. The selectable types are `channel`, `flow`, `annotation`, `system`, `device`, `zone`, `network`, `group`, `information`.
+The query builder, opened from **Edit query**, shows an **Include related** checkbox row above the filter builder. Ticking a type appends one combined statement to the program (`model |> where("item.kind |> oneOf('device', ...)") |> add()`), preceded by an auto-generated `// Pulling devices into the model` summary comment. Unticking a type removes it. Clearing every type removes the generated block entirely. The selectable types are `channel`, `flow`, `annotation`, `system`, `device`, `zone`, `network`, `group`, `information`.
 
 ---
 
@@ -203,10 +221,10 @@ A filter takes a model and returns a narrowed copy. It never changes the origina
 
 ## Set-pipeline programs: the `follow` op
 
-The legacy path above compiles a bonsai _predicate_ and cascades. The opt-in
+The string filter above is a bonsai _predicate_ that selects entities and cascades. The opt-in
 `{ program: string[] }` filter shape instead runs an explicit **set-pipeline**.
 Each statement reshapes a working
-set, with tee ops (`add` / `remove` / `save`) writing to a result register:
+set, and `add()` and `remove()` write it into or out of the result:
 
 ```
 model |> where("item.kind == \"device\"") |> add()
@@ -215,11 +233,10 @@ model |> where("item.kind == \"device\"") |> add()
 ### Tree node inclusion — `information` badges follow the same rule as all other nodes
 
 Tree nodes (zones, devices, groups, and `information` badges) survive into the
-output only if their own id is present in the program's `result` register.
-They also survive when the automatic upward ancestor-scaffolding reaches them;
-it keeps each kept node's ancestors so the tree stays structurally valid. A kept device
+output only if they are in the program's result.
+They also survive as the ancestors of a kept node, so the tree stays structurally valid. A kept device
 does not automatically pull in its `information` badges. A badge must
-appear in `result` in its own right (for example via `follow("children")` or
+appear in the result in its own right (for example via `follow("children")` or
 `add()`) to survive. Therefore `remove()` can target `item.kind == 'information'`:
 
 ```
@@ -253,7 +270,7 @@ A |> follow("parent", 1) |> follow("children", 1) |> add()   # 1-hop neighbourho
 ### `removeRecursiveDown()` — remove a set and its whole children subtree
 
 A shorthand for the two-statement pattern below, scoped to a whole subtree instead of
-one entity type. Removes the piped set from `result`, then walks their
+one entity type. Removes the piped set from the result, then walks their
 `children` edge to fixpoint and removes every reached descendant too:
 
 ```
@@ -271,8 +288,7 @@ X |> follow("children") |> remove()
 
 It takes no arguments. Unlike `follow()`, the edge is always `children`,
 and there is no `hops` depth limit, so it always removes the full subtree.
-It always targets the reserved `result` register and has no `add()`- or
-`remove()`-style register argument. A subtree removal beyond this exact shape needs the
+A subtree removal beyond this exact shape needs the
 manual `follow("children")` + `remove()` form above.
 
 ### Including all of a flow's hop-nodes
@@ -333,13 +349,13 @@ In prune mode nothing is dimmed, so the Shade tab has no second layer to act on 
 
 ### Persistence and the no-slice case
 
-The mode and both category sets save onto the data slice. The tabs render only while a data slice is active. When `None` is selected, the popover shows the Prune set alone as one flat list, because both sets use the same nouns and would otherwise appear as five pairs of identical rows.
+The mode and both category sets save onto the data slice. The tabs render only while a data slice is active. On a model with no data slices, the popover shows the Prune set alone as one flat list. Both sets use the same nouns, so together they would appear as five pairs of identical rows.
 
 ---
 
 ## YAML-level member filtering
 
-Independent of data slice filters, individual container `members:` entries in YAML support two filtering forms resolved at hydration time.
+Independent of data slice filters, individual container `members:` entries in YAML support two filtering forms, resolved when the model loads.
 
 ### FilteredMemberRef — prune a resolved container's subtree
 
@@ -362,6 +378,6 @@ members:
   - expr: 'item.kind == "device" && item.tags |> hasAll("ami")'
 ```
 
-Evaluated against every entity in the model at hydration time. All matching entities are inserted as members. Useful for dynamic groupings that do not need explicit ID lists.
+Evaluated against every entity in the model when the model loads. All matching entities are inserted as members. Useful for dynamic groupings that do not need explicit ID lists.
 
 Schema: `{ expr: string }`.

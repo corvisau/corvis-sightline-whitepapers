@@ -1,6 +1,6 @@
-Tetra surfaces Metron's authored findings directly on the diagram, so an
+Tetra surfaces Metron's findings directly on the diagram, so an
 architect can see that a node is flagged without switching apps. See
-[Findings Tab](/docs/sightline/usage/metron/findings) for how findings are authored and
+[Findings Tab](/docs/sightline/usage/metron/findings) for how findings are created and
 reviewed in Metron itself. This page covers only how they appear here.
 
 ## The badge
@@ -18,8 +18,9 @@ The badges need a licence that names Metron data. Without one, the diagram loads
 and no badge appears. See [Licensing](/docs/sightline/usage/shared/licensing).
 
 Findings are fetched once per model load, and refetched on **Refresh Diagram**
-or an external file change. Tetra reads every `*.finding.yaml` in the workspace,
-wherever the author filed it.
+or an external file change. Tetra reads the findings registers of the
+workspace, and shows each finding that names an entity and a requirement of the
+open model.
 
 **Not covered: Overlay regions.** A finding can only be attached to an entity
 kind that Metron can bind an assessment to. Overlays are not one of them. They
@@ -50,8 +51,9 @@ entity: label, a severity dot (low, medium, high or critical), and status
 
 ## "View Findings on Diagram" command
 
-Running **Sightline: View Findings on Diagram** (command palette, or the
-toolbar button next to **Refresh Diagram**) narrows the whole canvas to just the
+Selecting **View Findings on Diagram** in the diagram's title bar, next to
+**Refresh Diagram**, or running **Sightline: View Findings on Diagram** from the
+command palette, narrows the whole canvas to just the
 entities any finding references. The slice is transient and never persisted;
 the **Data slice** picker shows it as `Findings (N entities)`. Picking any other
 slice (or **None**) from the same picker exits back to normal browsing; the

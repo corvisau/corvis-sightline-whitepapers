@@ -13,7 +13,7 @@ by entity id:
 
 | Key | Entity | Overridable fields |
 |---|---|---|
-| `channels` | Channel | `startEdge`, `endEdge`, `startStandoff`, `endStandoff`, `startPort`, `endPort`, `labelPositions`, `viaOffset` (slice-only — see below), and `hops.<hopNodeId>.{startEdge, endEdge, startStandoff, endStandoff, startPort, endPort, viaOffset}` |
+| `channels` | Channel | `startEdge`, `endEdge`, `startStandoff`, `endStandoff`, `startPort`, `endPort`, `labelPositions`, `viaOffset` (slice-only; see below), and `hops.<hopNodeId>.{startEdge, endEdge, startStandoff, endStandoff, startPort, endPort, viaOffset}` |
 | `flows` | Information flow | same as `channels` |
 | `containers` | Zone / group / device / network / information | `layout`, `marginTop`, `marginLeft`, `marginRight`, `minWidth`, `minHeight`, `matchSiblingSize`, `align`, `valign`, `annotationPosition`, `annotationPositionOffset`, `memberOrder` |
 | `annotations` | Annotation link, by index within its `links[]` array | `positionNode`, `positionLine`, `positionX`, `positionY`, `maxWidth`, `distance` |
@@ -81,8 +81,7 @@ The model names these fields from the hop rather than the line. A hop's `startEd
 (the line leaving toward the next one).
 
 > **Editing:** Shift+right-click the run of line you want on the canvas. The
-> segment nudge popover is the only editing surface for routing. The props
-> drawer's Advanced-layout fields, which wrote the model, are gone. The popover
+> segment nudge popover is the only editing surface for routing. The popover
 > speaks in segments and undoes the naming inversion above. The page
 > [Path segments and the segment nudge popover](/docs/sightline/usage/tetra/path-segments) explains which control lands in which
 > field. It also covers the cases (a `via`-routed relationship, a collapsed hop) where
@@ -117,10 +116,12 @@ drawer's Advanced section does not show them.
 **Annotation placement** has its own shift+right-click nudge panel (Side /
 Line / X / Y), shared with Lamina.
 
+Drag a panel by its title bar to move it off the diagram. See [Moving a nudge panel](/docs/sightline/usage/shared/annotations#moving-a-nudge-panel).
+
 All three panels edit the active slice's `overrides`. Nothing round-trips
-through the model file, whichever slice is active (see the section "None — full
-model" below). The canvas updates immediately, and the change is written on
-**Save** with the rest of the unsaved changes.
+through the model file, whichever slice is active (see the section "A model
+with no data slices" below). The canvas updates immediately, and the change is
+written on **Save** with the rest of the unsaved changes.
 
 ### Child order (`memberOrder`)
 
@@ -150,13 +151,13 @@ therefore changes the container's row and column structure.
 
 To reorder the model's authored `members` array itself, edit the YAML.
 
-### "None — full model"
+### A model with no data slices
 
-Selecting **None** in the Data slice picker views the raw, unsliced model.
-While **None** is active, nudging does not edit the model. Every field in the three nudge panels renders
-disabled with a "Select a data slice to edit" hint. The Children
-list's drag handles are disabled under the same rule, with the same hint.
-Select a real slice to make any layout or nudge field editable.
+Layout overrides belong to a data slice, so a model with no slices has nowhere
+to keep them. Its Diagram view shows an empty state instead of the canvas. A
+props drawer opened from the Table view disables the Children list's drag
+handles, with a "Create a data slice to edit the layout" hint. Create a data
+slice to make any layout field editable.
 
 ### Inherited vs. local (nudge panel hints)
 
@@ -169,10 +170,6 @@ When a slice is active, all three nudge panels and the Children list (for
   slice. Clicking it clears the local override, so the field falls back to whatever the
   base chain (or nothing) provides.
 - Neither: the field has no override anywhere in the chain, so the model value is in effect.
-
-When no data slice is active (**None**), every field is disabled instead.
-A single panel-wide "Select a data slice to edit" hint replaces the
-per-field ones.
 
 The Children list carries one hint for the whole list, because `memberOrder` is a single field describing the entire order. The hint reads `order inherited from <base>` when the order comes from an ancestor. A `Reset order to inherited` button appears when this slice sets it.
 
@@ -193,8 +190,6 @@ and whether any of it is local, not which specific field. An entity with
 both a local field and an inherited one shows filled, since a local
 override is present. For per-field or per-hop detail, use the nudge-panel
 hints above or the override inspector below.
-
-The toggle has no effect when no data slice is active (**None**).
 
 ### The override inspector
 
@@ -223,10 +218,12 @@ The inspector is read-only. It shows where a value lives and takes you there.
 Change a value in the nudge panel's own controls, or use **Reset to inherited** for the active slice's own
 override.
 
-With no data slice active there is no chain to inspect, so no Inspect button
-renders.
-
 ## Layout in model YAML
 
 Layout fields authored in `channels:`, `flows:` and container YAML still render.
 That layout is not slice-scoped.
+
+A model has no orientation of its own. The active data slice sets whether the
+top-level containers run in rows or columns, and the model properties drawer
+offers only the name and description. Older model files may still carry a
+`layout` key under `blockdiagram:`. Tetra ignores it. A migration tool converts a model in the earlier format. Ask Corvis for the tool that matches your release.

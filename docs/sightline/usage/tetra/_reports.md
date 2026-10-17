@@ -23,6 +23,8 @@ reports:
 
 A `docx` report with no `template` fails before anything is written.
 
+In VS Code, a finished report lands in the model's `outputs/` folder and opens in its default application.
+
 ## What the inventory contains
 
 Every report collects the same flat entity inventory, with one collection per block-diagram entity type: `zones`, `systems`, `groups`, `devices`, `networks`, `channels`, `information` and `flows`.
