@@ -100,20 +100,20 @@ The **Req** and **Entity** columns are never editable, inline or in the dialog. 
 Every staged edit lands in one pool that is keyed by pair. The edit can come from an inline grid cell, the bulk edit dialog or the Assess drawer. A field edited in the drawer and another field edited inline on the same pair count as one unsaved change to that row.
 
 - **Unsaved-change bar.** A bar appears above the worklist whenever anything is staged. It shows the count of unsaved changes, with the **Save all** and **Discard all** buttons.
-  - **Save all** writes every staged row. When everything has settled, it writes the assessment binding file once, however many pairs or fields you staged.
+  - **Save all** writes every staged row. When everything has settled, it saves the assessment binding once, however many pairs or fields you staged.
   - **Discard all** clears every staged edit and writes nothing. The cells and the drawer revert to their last-saved values.
-- **The Assess drawer.** The drawer has its own **Save** and **Discard** footer. The footer saves or clears only the pair that is open in the drawer. It does not touch other staged rows.
+- **The Assess drawer.** The drawer has its own **Save** and **Discard** footer. The footer saves or clears only the pair that is open in the drawer.
 - **Partial success.** If **Save all** includes a row that fails a gate, the other rows still save. An example is a done transition with no outcome. The failing row stays in the unsaved-change count. The reason shows near the worklist, so you can fix the row and save again.
 - **Editing without a status change.** Outcome, evidence and notes edits stay staged and savable on their own. An edit to those fields on a `draft` or `in-progress` pair is not lost.
 
 ### Fields
 
-| Field | Stored as | Notes |
-|---|---|---|
-| Assessment state | `state` | The options come from the `statuses` list of the package's assessment scheme. A package that does not customise them gets the three built-in fundamentals. |
-| Assessment outcome | `outcome` | The options come from the `outcomes` list of the assessment scheme. |
-| Outcome comment | `notes` | Free text. |
-| Shared assessment | `sharedRef` | Offered when the assessment has at least one [shared assessment](/docs/sightline/usage/metron/shared-assessments). Every record is offered, whatever the requirement. **None** unlinks the pair. |
+| Field | Notes |
+|---|---|
+| Assessment state | The options come from the statuses of the package's assessment scheme. A package that does not customise them gets the three built-in fundamentals. |
+| Assessment outcome | The options come from the outcomes of the assessment scheme. |
+| Outcome comment | Free text. |
+| Shared assessment | Offered when the assessment has at least one [shared assessment](/docs/sightline/usage/metron/shared-assessments). Every record is offered, whatever the requirement. **None** unlinks the pair. |
 
 State, outcome and comment are always available. Metron's assessment state and outcome are package-defined values that the assessment scheme sets. They are not fixed schema enums, so they do not depend on which pairs you select.
 

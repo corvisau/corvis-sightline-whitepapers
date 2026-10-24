@@ -51,8 +51,10 @@ entity: label, a severity dot (low, medium, high or critical), and status
 
 ## "View Findings on Diagram" command
 
+In the browser, select **Tools**, then **View findings on diagram**. The item is disabled when no authored finding references the model.
+
 Selecting **View Findings on Diagram** in the diagram's title bar, next to
-**Refresh Diagram**, or running **Sightline: View Findings on Diagram** from the
+**Refresh Diagram**, or running **Tetra: View Findings on Diagram** from the
 command palette, narrows the whole canvas to just the
 entities any finding references. The slice is transient and never persisted;
 the **Data slice** picker shows it as `Findings (N entities)`. Picking any other

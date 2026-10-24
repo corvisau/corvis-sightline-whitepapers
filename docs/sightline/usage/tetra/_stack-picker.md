@@ -7,7 +7,7 @@ the Tetra canvas, without zooming in or rerouting the diagram.
 edges overlap. A list of every item under the cursor appears, ordered
 front-to-back.
 
-(Shift+right-click is a different gesture. It opens the nudge popover directly
+(Alt+right-click is a different gesture. It opens the nudge popover directly
 for the item under the cursor. The Open Nudge Pane action in the Per-item
 flyout actions section is the stack-picker equivalent.)
 
@@ -19,11 +19,11 @@ holds two actions above that item's normal context menu, separated by a divider:
 | Action | What it does | Availability |
 |--------|--------------|---------------|
 | **Select** | Selects that specific item, same as clicking the row. Works for both nodes and edges. | Always enabled. |
-| **Open Nudge Pane** | Opens that item's nudge popover directly (the same panel Shift+right-click opens on the canvas): the +/- standoff controls for a channel/flow edge, or the position controls for an annotation. | Enabled for edges (channels and information flows) and annotation nodes. Disabled for devices, zones, groups, and networks - they have no nudge popover. |
+| **Open Nudge Pane** | Opens that item's nudge popover directly (the same panel Alt+right-click opens on the canvas): the +/- standoff controls for a channel/flow edge, or the position controls for an annotation. | Enabled for channels, information flows, annotations, devices, zones, groups, networks and information nodes. Containers open **Container Properties**. |
 
 Both actions close the stack picker after running.
 
-Shift+right-click is not available inside the picker, because you hold
+Alt+right-click is not available inside the picker, because you hold
 Cmd/Ctrl to keep the picker open. Open Nudge Pane takes its place.
 
 ## What the picker can see

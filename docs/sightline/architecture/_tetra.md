@@ -1,4 +1,4 @@
-Tetra models networks and systems as block diagrams. A Tetra model is a set of plain YAML files. The extension draws an interactive canvas, a Tabular Editor and a tree view over them.
+Tetra models networks and systems as block diagrams. A Tetra model is a set of files in a model directory. The extension draws an interactive canvas, a Tabular Editor and a tree view over them.
 
 ## What you model
 

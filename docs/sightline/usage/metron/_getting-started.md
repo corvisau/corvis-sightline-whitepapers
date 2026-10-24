@@ -9,33 +9,33 @@ This is the entry point. Each feature has its own guide, linked below.
 
 ## Creating a package
 
-Select **New…** on a folder in the Models tree and choose **Metron: New Package** to open the new-package form.
+Select **New…** on a folder in the Models tree and choose **Metron: New Requirement Package** to open the new-package form.
 
 | Field | What to enter |
 |---|---|
-| Location | The folder that receives the package. The form shows the folder you chose as text and cannot change it, so a package cannot be created outside the workspace. The form shows the manifest it will create in this folder as you type the name |
-| Name | The package name. Metron slugifies it into the manifest file name and stores it at `meta.id` |
-| Description | Optional text for the manifest |
+| Location | The folder that receives the package. The form shows the folder you chose as text and cannot change it, so a package cannot be created outside the workspace. The form shows the package it will create in this folder as you type the name |
+| Name | The package label, as free text on one line |
+| Id | The package id. It names the package. The Id fills in from the Name as you type, until you edit it. It has at most 64 characters: lowercase letters, digits and single hyphens. It must differ from the id of every other model in the workspace, and it does not change after Metron creates the package |
+| Description | Optional text for the package |
 
-Metron writes the package directly in the Location, with no folder of its own:
+Metron creates the package directly in the Location, with no folder of its own, and adds a starter requirement.
 
-| File | Holds |
-|---|---|
-| `<slug>.metron.yaml` | The manifest |
-| `general.req.yaml` | A starter requirement |
+A requirement package authors no rule and no scheme of its own. Its **Packages**
+tab starts empty, and the rule and scheme packages it uses are packages you create
+or import. Read the [Component packages](/docs/sightline/usage/metron/component-packages) guide for how an
+entry on the Packages tab resolves.
 
-A requirement package authors no rule and no scheme of its own. Its `uses:` list
-starts empty, and the rule and scheme packages it uses are packages you create or
-import. Read the [Component packages](/docs/sightline/usage/metron/component-packages) guide for how a
-`uses:` entry resolves.
+A new package opens on a built-in scheme with a Pass outcome and a Fail outcome.
+To use your own outcomes, add a scheme package on the **Packages** tab. Then select
+its scheme in the **Scheme** picker on the **Package meta** tab.
 
-A new package does not open until its `uses:` list names a scheme package. Add one
-to the `uses:` list in the manifest. The error that Metron shows names the
-available scheme ids.
-
-One folder holds one package. Metron writes nothing when the Location already holds
-a Sightline manifest, or a file that the package would write. Files that are not
-part of a model do not stop the create.
+One folder holds one Metron package, and it can also hold a Tetra model or a Lamina
+model. Metron creates nothing when the Location already holds a Metron package, or a
+file that the new package would need. Files that are not part of a model do not stop
+the create. Each file of a new package is named after its id, for example
+`my-pack.metron.yaml` and `my-pack.req.yaml`. Sightline cannot move or delete a model
+whose folder holds another model. See
+[Rename, move and delete models and folders](/docs/sightline/usage/shared/manage-models-and-folders#when-sightline-refuses).
 
 A workspace often holds several packages, one per site or project. Select **New…**
 on the folder the package belongs in. To make a folder for it, use **New folder…**
@@ -106,7 +106,7 @@ from the outcome you picked.
 | Track the work | The coverage join over findings | [Coverage](/docs/sightline/usage/metron/coverage) |
 | Narrow what you see | Worklist filters and slices | [Worklist Filtering, Grouping, and Slices](/docs/sightline/usage/metron/worklist-filtering) · [Requirements Filtering and Column Visibility](/docs/sightline/usage/metron/requirements-filtering) |
 | Automate outcomes | Bonsai query rules | [Rules](/docs/sightline/usage/metron/rules) |
-| Share rules, attribute sets or schemes across packages | Standalone component packages, named in `uses:` | [Component packages](/docs/sightline/usage/metron/component-packages) |
+| Share rules, attribute sets or schemes across packages | Standalone component packages, added on the Packages tab | [Component packages](/docs/sightline/usage/metron/component-packages) |
 | Bring in outside data | Audit exports, attestation feeds | [External data](/docs/sightline/usage/metron/external-data) |
 
 Also here: [Licensing](/docs/sightline/usage/shared/licensing) (what edit-gating applies) and
@@ -120,7 +120,7 @@ Both behaviours are deliberate.
 
 A finding does not point at a live pair. It records a copy, stamped with
 the requirement and entity versions it was raised against, plus the outcome at
-that moment. Change the model afterwards and the finding still says what it said.
+that moment.
 
 That is what makes a finding an **assertion** rather than a live query. It also
 means Metron has to tell you when the model has changed under a finding. It does

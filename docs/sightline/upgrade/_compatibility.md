@@ -2,19 +2,38 @@ This page lists which versions of a model, a template and a command work togethe
 
 A migration tool converts a model in the earlier format. Ask Corvis for the tool that matches your release.
 
+This page is migration reference for the person who upgrades a model directory. The app does not show it, and the commands run from a shell.
+
 ## Lamina schema versions
 
 A Lamina manifest carries a `schemaVersion`.
 
 | Version | Shape | Status |
 |---|---|---|
-| 0, or absent with an older shape in the manifest | An older shape that Tetra no longer converts. | Does not open |
-| Absent, with no older shape in the manifest | Read as version 1. | Opens |
-| 1 | The shape that **Tetra: New Model** writes. | Current |
+| 0 or 1, or absent with an older shape in the manifest | An older shape that Tetra no longer converts. | Does not open |
+| Absent, with no older shape in the manifest | Read as version 2. | Opens |
+| 2 | The shape that **Tetra: New Model** writes. | Current |
 
-A model with no `schemaVersion` opens when its manifest holds none of the older shapes. Tetra does not add the key when it saves such a model, because a saved model can still hold older shapes in its entity files.
+A model with no `schemaVersion` opens when its manifest holds none of the older shapes. Tetra does not add the key when it saves such a model.
 
-A model whose manifest holds an older shape does not open. The message names each older shape that the manifest holds and the conversion that applies to it.
+A model whose manifest holds an older shape does not open. The message names each older shape that the manifest holds and the conversion that applies to it. A manifest that says version 1 does not open either, because version 2 is the lowest that Tetra opens.
+
+A model file can also hold an older shape that the manifest does not show. Tetra does not open a model while any of its files holds one. The message names each file and shape and gives the command that converts it. Run these commands on the model folder, then stamp the model:
+
+| Older shape | Command |
+|---|---|
+| A zone with a `zoneId` field | `pnpm --filter @sightline/tools-tetra-zone-trust-migration run migrate --model-dir <model folder>` |
+| A device with a `channels` or `networks` field | `pnpm --filter @sightline/tools-tetra-connections-migration run migrate --model-dir <model folder>` |
+| An annotation with a `position`, `distance`, `maxWidth`, `positionOffset` or `severity` field, or a link with a `position` or `positionOffset` field | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
+| A channel or flow with a `portOffset` field or a `showLabel` of `true` or `false` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
+| A zone, group, device, network or data slice with a `layout` of `horizontal` or `vertical` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
+| A data slice program or a member `expr` that selects the kind of entity with `item.type`, such as `item.type == 'zone'`, in place of `item.kind` | `pnpm --filter @sightline/tools-item-kind-migration run migrate --model-dir <model folder>` |
+
+The field command moves an annotation bubble that has a corner position, such as `bottom-left`, to the middle of that side. It changes a `layout` of `horizontal` to `columns` and `vertical` to `rows`.
+
+After the conversions, run `pnpm --filter @sightline/tools-tetra-schema-stamp run migrate --model-dir <model folder>`. The command checks the whole model, writes `schemaVersion: 2` to the manifest, and lists the conversions that remain when it finds an older shape.
+
+Tetra accepts any id made of letters, digits, dots, underscores and hyphens for a new group, device, network, information or system. An id such as `dev-erp-prod-app` needs no change.
 
 A model whose `schemaVersion` is higher than this build supports does not open. The message says that the model is newer than the installed build and asks you to update Sightline. A `schemaVersion` that is not a whole number of 0 or higher also stops the model from opening, and the message names the value.
 
@@ -51,6 +70,24 @@ Migrate a model directory once with the migration for this change.
 The migration removes `meta.title` from every `*.metron.yaml` manifest under the directory. A manifest with no name takes its title as its name, or its id when it has no title. A title that differs from the name is reported, so you can move wording into the name before you keep the result. The migration changes only those lines, and a second run changes nothing. A dry run lists the files without writing them.
 
 A report template variable `packageTitle` keeps its name and now holds the package name.
+
+## Assessment pairs
+
+An assessment file (`*.assessment.yaml`) holds no `pairs`. The assessment's register holds each pair's state, outcome, evidence and notes, and Metron reads them from there. An assessment file that still holds `pairs` shows no outcomes, and the Problems panel warns about the list. Saving and running that assessment are refused, with a message that asks for the migration. The refusal protects the pairs, because a save would delete them.
+
+Migrate a workspace once with the migration for this change.
+
+The migration writes each pair into the register of its assessment and then removes `pairs` from the file. Run it on the workspace root, the folder that holds `findings/`. An assessment whose register is damaged is skipped with a warning, and its file keeps its pairs. The migration rewrites an assessment file in the standard layout, so comments in that file are not kept. A second run changes nothing. A dry run lists the files without writing them.
+
+## Moving old assessments to the shared register
+
+An assessment file that still holds a `sharedAssessments` list is not read for it. The Problems panel warns about the list, and Metron refuses to save the file so the list is not lost. The app has no action for this move. Run the backfill command once on the workspace root, the folder that holds `findings/`:
+
+```bash
+pnpm --filter @sightline/tools-metron-pairs-records-backfill run backfill --model-dir <workspace root>
+```
+
+The command moves each shared assessment into the register of its assessment and removes the list from the file. Add `--dry-run` to list the files it would write without changing them. An assessment whose register is damaged is skipped with a warning, and its file keeps its list. A second run changes nothing.
 
 ## Report templates
 

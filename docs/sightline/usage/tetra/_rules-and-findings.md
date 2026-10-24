@@ -1,16 +1,16 @@
-The Rules panel of Tetra lists the rules of the packages a model uses. It edits a rule and tests it before the rule is saved. It adds, removes and pins the packages the model uses. It also lists the records of the model. A model produces records only from the packages in its `uses:` list. See [Rule packages](/docs/sightline/usage/tetra/rule-packages).
+The Rules panel of Tetra lists the rules of the packages a model uses. It edits a rule and tests it before the rule is saved. It adds, removes and pins the packages the model uses. It also lists the records of the model. A model produces records only from the packages it uses. See [Rule packages](/docs/sightline/usage/tetra/rule-packages).
 
 ## Open the Rules panel
 
 Select **Rules** in the Tetra toolbar, or run **Tetra: Edit Rules**. The panel opens for the model of the active diagram. Each model has one panel, and a second request reveals the open one.
 
-The button is disabled in a window that does not allow edits. The browser version of Tetra does not show it.
+The button is disabled in a window that does not allow edits. In the browser, it opens the Rules panel in its own web shell tab. The diagram and its unsaved changes stay open. A Rules tab opened with a reader token has its editing controls disabled.
 
 The panel has three tabs, **Rules**, **Packages** and **Records**.
 
 ## The Rules tab
 
-The tab lists one row for each rule of each package in `uses:`. Two packages that define the same rule id give two rows.
+The tab lists one row for each rule of each package the model uses. Two packages that define the same rule id give two rows.
 
 | Column | Content |
 |---|---|
@@ -25,7 +25,7 @@ The tab lists one row for each rule of each package in `uses:`. Two packages tha
 
 The grid starts with the package, rule, title, mode and records columns. Use **Columns** to show the others. The panel remembers your choice.
 
-A `uses:` entry that matches no package, or more than one, appears above the grid as a problem. The entry adds no rule.
+A package entry that matches no installed package, or more than one, appears above the grid as a problem. The entry adds no rule.
 
 The records column of a diagnostic rule counts the records the rule created. See [Write a diagnostic rule](/docs/sightline/usage/tetra/rule-packages#write-a-diagnostic-rule).
 
@@ -44,7 +44,7 @@ Select a row to open the rule in a drawer at the side of the grid. The Close but
 
 ## The Packages tab
 
-The tab edits the `uses:` list of the model without a text editor. It lists one row for each entry.
+The tab edits the list of packages the model uses. It lists one row for each entry.
 
 | Column | Content |
 |---|---|
@@ -70,9 +70,9 @@ Select **Remove** in the row of the package. A package that has stored records a
 
 ### How the tab saves
 
-Each change writes the `uses:` list of the model manifest at once. The comments and the other keys of the manifest keep their text.
+Each change saves the list at once. The rest of the model definition stays as it was.
 
-The tab does not overwrite a manifest that changed outside the panel after the panel loaded it. The panel reloads the list and shows a message. Repeat the change.
+The tab does not overwrite a model definition that changed outside the panel after the panel loaded it. The panel reloads the list and shows a message. Repeat the change.
 
 ## Edit a rule
 
@@ -80,25 +80,33 @@ The drawer edits one rule. The rule id is fixed once the rule exists.
 
 | Field | Content |
 |---|---|
-| Title | The title of the rule |
+| Title | The title of the rule. A rule needs a title, and the drawer refuses a blank one. |
 | Description | A sentence that says what the rule finds |
-| Mode | `generator`, `manual` or `transform` |
+| Mode | `generator`, `manual` or `transform`. The line under the select says what the chosen mode does. |
 | Hide from consumer lists | Whether the records of the rule stay out of consumer lists such as the Lamina inbox. A rule shows its records unless this is set. |
 | Input | `model` for a rule that reads the entities of the model, or `records` for a rule that reads the records of other rules. Only a `generator` rule has an input. |
-| Depends on | The rules whose records this rule reads or must run after, separated by commas. Write a rule of the same package as `rule-id`, and a rule of another package as `package-id/rule-id`. |
-| Key parts | The names, separated by commas, that identify one record of the rule |
-| Data fields | One `name:type` pair on each line |
+| Depends on | A list with one row for each rule whose records this rule reads or must run after. Write a rule of the same package as `rule-id`, and a rule of another package as `package-id/rule-id`. The row offers the rules of the model as suggestions. |
+| Key parts | A list with one row for each name that identifies one record of the rule. The order of the rows is the order of the key. The row offers the names that the `emitRecord` key of the program uses. |
+| Data fields | A list with one row for each field of the record. Each row has a name and a type. The row offers `text` and `number` as types, accepts any other type, and saves `text` when the type is empty. |
 | Program | The program as read-only text, with an **Edit query** button that opens the query builder in a dialog, for a `generator` or a `transform` rule |
+
+Select **Add dependency**, **Add key part** or **Add data field** to add a row to a list. Select **×** at the end of a row to remove it. To move a row, drag the handle at its start. To move a row with the keyboard, focus the handle and press Space. Press an arrow key to move the row. Press Space to drop it.
+
+The drawer leaves an empty row out when it saves. The drawer refuses a name that appears twice in a list, and shows which name. **Test rule** and **Save** stay disabled until you change it.
+
+A help icon beside each field opens a short explanation on hover and when you tab to it. A message under a field names the problem with that field. A line above the buttons says why **Save** and **Test rule** are off.
 
 A line above the program reads **(no query)**, **1 statement** or the number of statements. The drawer shows each statement of the program, including statements that use `emitRecord` and `groupBy`. Select **Edit query** to edit a statement in the query builder. **Apply** returns the edited program to the drawer, and **Test rule** and **Save** use it. **Cancel** keeps the program as it was. Escape closes only the dialog.
 
 A manual rule has no program. Switch the mode to `manual` and save, and the saved rule loses its program. A `generator` rule needs a program, and the drawer refuses to save one without it.
 
-The last statement of a program must end in the call that its mode needs. A `generator` rule ends in `emitRecord`, and a `transform` rule ends in `save(result)`. When the last statement ends in another call, the drawer shows a message and disables **Save**.
+The last statement of a program must end in the call that its mode needs. A `generator` rule ends in `emitRecord`, and a `transform` rule ends in `save(result)`. When the last statement ends in another call, the drawer shows a message under the program and disables **Save**. The message names the call that the program ends in. It offers two fixes: change the mode, or end the program with the call that the mode needs.
 
 `emitRecord` takes the key first. The data, links and props arguments are optional, so `emitRecord("{ zoneId: item.id }")` creates a record with no data and no links. The fourth argument sets `hide` on the records of that statement, for example `"{ hide: true }"`. It accepts no other key.
 
-Switch a manual rule to `generator` or `transform`, and the program reads **(no query)**. **Edit query** then opens the builder on one starter statement for the mode: a `generator` rule over the model starts from a `where` step that ends in `emitRecord`, a `generator` rule over records starts from a `groupBy` rollup, and a `transform` rule starts from a `where` step that ends in `save(result)`. The drawer writes nothing until you select **Apply**, so **Cancel** leaves the rule without a program. A rule that already has a program opens on that program.
+Switch a manual rule to `generator` or `transform`, and the program reads **(no query)**. **Edit query** then opens the builder on one starter statement for the mode. A `generator` rule over the model starts from a `where` step that ends in `emitRecord`. A `generator` rule over records starts from a `groupBy` rollup. A `transform` rule starts from a `where` step that ends in `save(result)`. The drawer writes nothing until you select **Apply**, so **Cancel** leaves the rule without a program. A rule that already has a program opens on that program.
+
+A `generator` rule can start from a built-in template. **Edit query** opens on the built-in templates while the program is still the starter, and **Insert** replaces the starter with the template you choose. See [Rule templates](/docs/sightline/usage/shared/rule-templates).
 
 ## Make a rule a diagnostic rule
 
@@ -113,7 +121,7 @@ A diagnostic rule is a `generator` rule with **Hide from consumer lists** switch
 
 Choose `transform` in **Mode** for a rule that selects rows or computes one value and creates no record. A transform ends in `save(result)`. The drawer hides **Hide from consumer lists**, **Input**, **Depends on**, **Key parts** and **Data fields**, because a transform has none of them.
 
-A run does not execute a transform. **Test rule** runs it over the model and reports the number of rows that `save(result)` took, or the value when it took one that is not a set of rows. The test writes no record and no journal entry.
+A run does not execute a transform. **Test rule** runs it over the model. It reports the number of rows that `save(result)` took, or the value when it took one that is not a set of rows. The test writes no record and no journal entry.
 
 Two program features serve a transform. The `set(field, expression)` step writes a field on each row and keeps the `id` of the row. A step such as `count()` produces a value, and `save(result)` keeps that value as the result.
 
@@ -148,7 +156,7 @@ Select **Test rule** to run the edited rule against the model without saving it.
 
 A record is identified by the key parts of its rule. When an edit changes the key parts, the existing records of the rule no longer match. They are closed, and the run creates new ones. The panel then reads, for example, **2 existing records change identity**.
 
-When the program has an error, the panel shows the diagnostic and lists no records. **Save** stays disabled until a test runs without an error. Any edit clears the last result.
+When the program has an error, the panel shows the diagnostic and lists no records. **Save** stays disabled until a test runs without an error, and the line above the buttons says so. Any edit clears the last result, so the failed test no longer blocks **Save**.
 
 ## Save a rule
 
@@ -175,8 +183,8 @@ The **State** column filter, or a condition on the state field in **Filter**, li
 
 Select **Run rules** to see what a run would do. The panel shows the number of new and closed records, for example **3 new, 1 closed**. Select **Confirm** to run the rules and write the records. Select **Cancel** to write nothing.
 
-A run never deletes a record and never changes the fields a person owns. A run does refresh the links of manual records: when the version of a linked entity moved, the record shows Changed, and its data stays as the person set it.
+A run never deletes a record and never changes the fields a person owns. A run does refresh the links of manual records. When the version of a linked entity moved, the record shows Changed, and its data stays as the person set it.
 
 ### Accepting a record
 
-The Records tab changes no record. A person accepts a record in the app that uses it: in Metron's **Findings** tab for a finding, and on the link of a Lamina cause for a cause. A record that a person accepts as a record, such as a Metron finding, returns to Current. A record that only a cause links stays Changed here, because the cause keeps its own accepted state. See [Record links](/docs/sightline/usage/lamina/finding-links).
+The Records tab changes no record. A person accepts a record in the app that uses it. For a finding, that app is Metron's **Findings** tab; for a cause, it is the link of a Lamina cause. A record that a person accepts as a record, such as a Metron finding, returns to Current. A record that only a cause links stays Changed here, because the cause keeps its own accepted state. See [Record links](/docs/sightline/usage/lamina/finding-links).

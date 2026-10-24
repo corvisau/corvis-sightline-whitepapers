@@ -15,9 +15,8 @@ one layer onto the next:
 
 1. **A colliding name overrides; it does not duplicate.** If a requirement
    declares `documented` and a set it attaches also declares `documented`, you
-   get one attribute, not two. This is the override mechanism.
-   Merging is per-property, so a layer supplying only `owner` keeps the earlier
-   layer's `type`.
+   get one attribute, not two. Merging is per-property, so a layer supplying
+   only `owner` keeps the earlier layer's `type`.
 2. **An attribute with no `type` is never assessable.** The Assess drawer lists
    only attributes carrying a `type`. An attribute without one is descriptive
    (a `mil` level, a `progression-area`) and has no current state to find. If
@@ -39,28 +38,27 @@ The later layer wins a name collision, so attachment order is precedence order.
 ## 1. Author a reusable set in an attribute-set package
 
 You author attribute sets in an **attribute-set package**, on its **Attribute
-sets** tab. A requirement package uses them by naming that package in its
-`uses:` list. See the [Component packages](/docs/sightline/usage/metron/component-packages) page.
+sets** tab. A requirement package uses them when you add that package on its
+**Packages** tab. See the [Component packages](/docs/sightline/usage/metron/component-packages) page.
 
 | Column | Meaning |
 |---|---|
-| id | What `attributeSetRefs` points at. Immutable once created. |
+| id | What each attachment points at. Fixed once created. |
 | name | Human label, shown wherever the set is offered. Optional. |
 | attributes | How many attributes the set carries. |
 | used by | How many requirements attach it, across every requirement package that uses this one. |
 
 - **+ Add attribute set** opens the **props drawer** as a create surface. Fill
   the id and an optional name. Add attribute rows. Then select **Create**.
-- To edit a set, right-click its row. Select **Open**. The same menu carries
+- To edit a set, right-click its row. Select **Edit**. The same menu carries **Duplicate** and
   **Delete**. A left-click on a row does nothing.
 - The id is read-only once created. Every attachment points at it, and a
   rename in place would silently orphan them. To change an id, delete the set.
   Then add the set again.
-- Each attribute row carries the full set of properties: name, value, label,
-  type, owner, description.
-
-A new set joins the package's first fragment file, or
-`attributes/<packageId>.attributes.yaml` when the package has none.
+- Each set expands into its attributes in the grid. Right-click a set and select
+  **Add attribute** to add one. Right-click an attribute to select **Edit**,
+  **Duplicate** or **Remove**. The attribute drawer carries the value, label,
+  type, owner and description.
 
 ### Deleting a set
 
@@ -77,12 +75,12 @@ drawer, and no delete.
 
 - The **source** column names the attribute-set package each set comes from.
 - To change a set, right-click it. Select **Open package**. The attribute-set
-  package opens in its own editor. The [Component packages](/docs/sightline/usage/metron/component-packages)
-  page describes attribute-set packages.
+  package opens in its own editor. See the [Component packages](/docs/sightline/usage/metron/component-packages)
+  page for how attribute-set packages work.
 - The **used by** column counts requirements in this package only.
 
-When two attribute-set packages define the same id, the later `uses:` entry
-supplies the set.
+When two attribute-set packages define the same id, the package that comes later
+in the list on the **Packages** tab supplies the set.
 
 ## 2. Attach a set to a requirement
 

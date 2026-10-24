@@ -8,7 +8,7 @@ Reload VS Code when it asks you to.
 
 ## Roll back a model
 
-A model is a set of plain YAML files in a model directory. Keep the model directory under version control, or make a copy before you upgrade Sightline. To roll back, restore the files from the version control system or from the copy.
+A model is a set of files in a model directory. Keep the model directory under version control, or make a copy before you upgrade Sightline. To roll back, restore the files from the version control system or from the copy.
 
 ## Related
 

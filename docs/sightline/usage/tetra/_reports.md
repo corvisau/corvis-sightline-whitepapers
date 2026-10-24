@@ -1,27 +1,15 @@
-Tetra generates an entity inventory as an `.xlsx` or `.docx` file from the `reports` entries of a manifest. Choose **Export ▾** in the toolbar, then **Reports…**.
+Tetra generates an entity inventory as an Excel workbook or a Word document. Choose **Export ▾** in the toolbar, then **Reports…**. You cannot declare a report in the app yet.
 
 Lamina and Metron use the same report generator pipeline. Tetra adds two built-in generators, one for Excel workbooks and one for Word documents.
 
-## Manifest authoring
+## Run a report
 
-Add one entry per report under the manifest's `reports:` array.
+1. Choose **Export ▾** in the toolbar.
+2. Choose **Reports…**.
+3. Select a report in the **Run Report** dialog.
+4. Choose **Run**.
 
-```yaml
-reports:
-  - id: inventory-xlsx
-    name: Entity Inventory
-    format: xlsx
-```
-
-| Field | Required | What it does |
-|---|---|---|
-| `id` | yes | Unique within the manifest. Identifies the report in the Reports picker. |
-| `name` | yes | Human-readable label shown in the picker. Also the source of the output filename when `template` is absent. Each run of non-alphanumeric characters becomes `-`. |
-| `format` | yes | `xlsx` or `docx`. Selects the Excel generator or the Word generator. |
-| `dataSlice` | no | A `manifest.dataSlices[].id` to filter the model before the inventory is collected. Absent means the full model. |
-| `template` | no | Path, relative to the manifest file, to a user-supplied template. An `xlsx` report without one gets a fresh multi-sheet workbook. A `docx` report requires one. |
-
-A `docx` report with no `template` fails before anything is written.
+**Reports…** offers a report only when the model declares one. A report can filter the model through a data slice before it collects the inventory. Without a data slice, the report covers the full model.
 
 In VS Code, a finished report lands in the model's `outputs/` folder and opens in its default application.
 
@@ -29,26 +17,19 @@ In VS Code, a finished report lands in the model's `outputs/` folder and opens i
 
 Every report collects the same flat entity inventory, with one collection per block-diagram entity type: `zones`, `systems`, `groups`, `devices`, `networks`, `channels`, `information` and `flows`.
 
-A device row also carries its resolved `connections` ids, which are the ids under the device's `connections:` field.
-
-A channel row carries `nodeA` and `nodeB`.
+A device row also carries the ids of its resolved connections. A channel row carries `nodeA` and `nodeB`.
 
 The inventory lists only the entities you authored.
 
-## Excel report
+## Template reference
 
-The Excel report renders the inventory to an `.xlsx` workbook. Without a `template`, it writes a fresh multi-sheet workbook. With a `template`, it stamps the template.
+This section is reference material for people who prepare their own report templates. It describes the placeholders that the generators accept.
 
-Select the Excel generator with the `xlsx` format:
+### Excel report
 
-```yaml
-reports:
-  - id: inventory-xlsx
-    name: Entity Inventory
-    format: xlsx
-```
+The Excel report renders the inventory to an Excel workbook. Without a template, it writes a fresh multi-sheet workbook. With a template, it stamps the template.
 
-### Excel templates
+#### Excel templates
 
 The report stamps a template sheet when both conditions hold:
 
@@ -57,19 +38,11 @@ The report stamps a template sheet when both conditions hold:
 
 The report leaves any other sheet, such as a cover page, untouched. Columns inside the block use token placeholders such as `{{ id }}` and `{{ label }}`.
 
-## Word report
+### Word report
 
-The Word report fills a manifest-supplied `.docx` template with the inventory. Tetra ships no template of its own, so every `docx` report needs a `template` on its manifest entry.
+The Word report fills a template with the inventory. Tetra ships no template of its own, so every Word report needs one. A Word report with no template fails before anything is written.
 
-```yaml
-reports:
-  - id: inventory-docx
-    name: Entity Inventory
-    format: docx
-    template: reports/inventory.docx
-```
-
-### Word templates
+#### Word templates
 
 Placeholders use `{...}` delimiters. A table body repeats with `FOR` and `END-FOR` over an inventory collection.
 
@@ -88,5 +61,5 @@ A shorter form prints only the id of each device:
 A failed report shows an error message and writes no partial file. The message names the cause:
 
 - An unknown report id
-- An unresolved `dataSlice`
+- An unresolved data slice
 - A missing or absent template

@@ -13,7 +13,7 @@ A **Restore unsaved changes?** dialog opens when the model loads. It states how 
 
 The dialog has no close button. Choose one action to continue editing.
 
-When the model changed after the browser saved the changes, the dialog says so. Restoring puts your changes over the latest version. Where both versions changed the same field, your value is the one that saves. Read the list in Save all before you save. See [Changes made elsewhere](/docs/sightline/usage/shared/concurrent-edits).
+When the model changed after the browser saved the changes, the dialog says so. Restoring puts your changes over the latest version. Where both versions changed the same field, your value is the one that saves. Read the **Journal** before you select **Save all**. See [Changes made elsewhere](/docs/sightline/usage/shared/concurrent-edits).
 
 ## What the browser keeps
 

@@ -30,66 +30,59 @@ values underneath, whichever custom labels a package uses.
 A package never authors these lists; they are fixed. A package authors its
 own **custom labels**, each tagged with the fundamental it maps to.
 
-## Authoring custom labels — the assessment scheme
+## Custom labels: the assessment scheme
 
-Every requirement package (`*.metron.yaml`) selects an assessment scheme by id
-(`schemeRef`). The scheme carries both axes:
+Every requirement package selects one assessment scheme in the **Scheme** picker on
+its **Package meta** tab. The scheme carries both axes: its outcomes and its
+statuses. Each outcome and each status has an id, a label and the fundamental it
+maps to.
 
-```yaml
-id: compliance
-outcomes:
-  - id: pass
-    label: Compliant
-    fundamental: yes
-  - id: fail
-    label: Non-compliant
-    fundamental: no
-  - id: na-out-of-scope
-    label: N/A — Out of Scope
-    fundamental: not-applicable
-  - id: na-below-threshold
-    label: N/A — Below Threshold
-    fundamental: not-applicable
-statuses:
-  - id: draft
-    label: Draft
-    fundamental: draft
-  - id: in-progress
-    label: In Progress
-    fundamental: in-progress
-  - id: waiting-review
-    label: Waiting for Internal Review
-    fundamental: in-progress
-  - id: done
-    label: Done
-    fundamental: done
-```
+For example, a package can label a `yes` outcome "Compliant" and a `no` outcome
+"Non-compliant". It can add two not-applicable variants, "N/A — Out of Scope" and
+"N/A — Below Threshold", that both map to `not-applicable`. It can add a status
+"Waiting for Internal Review" that maps to `in-progress`.
 
-### Outcomes — `outcomes[]`
+### Outcomes
 
-Every outcome is an ordinary entry with a **required** `fundamental`
-field. There is no limit on how many outcomes map to the same fundamental.
-This is how a package expresses multiple not-applicable variants
-(`na-out-of-scope` and `na-below-threshold` above).
+Every outcome maps to exactly one of the five fundamental outcomes. Any number of
+outcomes can map to the same fundamental. This is how a package expresses
+multiple not-applicable variants.
 
-The scheme has no weighted scoring and no rollup method.
-`outcomes[].fundamental` is the sole compliance signal: the user picks an
-outcome (or a Bonsai query emits one), and that outcome's fundamental is the
-compliance result. See the section "Rollup: a distribution, not a score" below
-for how the Dashboard tab counts outcomes.
+The scheme has no weighted scoring and no rollup method. The fundamental of the
+chosen outcome is the sole compliance signal. The user picks an outcome, or an
+assessment rule returns one, and that outcome's fundamental is the compliance
+result. See the section "Rollup: a distribution, not a score" below for how the
+Dashboard tab counts outcomes.
 
-### Status labels — `statuses[]` (optional)
+### Status labels
 
-`statuses[]` holds the per-package custom status labels. When a package omits
-it, the package gets the 3 built-in fundamental statuses (id equal to the
-fundamental, Title Case label).
+A scheme can define its own status labels. When it defines none, the package gets
+the three built-in fundamental statuses, with a Title Case label each.
 
-When present, `statuses[]` must cover all 3 fundamentals at least once.
-Several custom statuses can share a fundamental, as outcomes can:
-`in-progress` and `waiting-review` above both map to fundamental
-`in-progress`.
+A custom status list must cover all three fundamentals at least once. Several
+custom statuses can share a fundamental, as outcomes can. Within one list, no two
+entries share an id.
 
-Both `outcomes[]` and `statuses[]` reject duplicate `id`s.
+### Requirement statuses
+
+A requirement can have its own status list. The list replaces the scheme's
+statuses for that requirement's pairs. A requirement without one uses the scheme's
+list, and a scheme without one uses the three built-in statuses. The same rules
+apply: the list covers all three fundamentals and has no repeated id.
+
+A new pair starts in the first status of the list whose fundamental is `draft`.
+A rule never moves a pair to a status whose fundamental is `done`.
+
+In the requirement drawer, the **Statuses** field has a **Customize statuses**
+toggle. Turn it on to give the requirement its own list, which starts from the 3
+built-in statuses, and rename, add or remove rows. Turn it off to return to the
+scheme's list. Metron refuses to save a list that does not cover all 3
+fundamentals or that repeats an id, and the commit dialog gives the reason. A
+pair whose status the list no longer defines reads as Draft until you pick a
+status that exists. The State column of the worklist offers the
+statuses of every requirement, and a pair takes only a status that its own
+requirement defines. A bulk edit that sets a status the requirement of a pair
+does not define skips that pair and gives the reason.
 
 ## Authoring in the scheme editor
 
@@ -98,19 +91,21 @@ requirement package's **Scoring scheme** tab renders read-only and names the
 scheme package that supplies the scheme. See the [Component packages](/docs/sightline/usage/metron/component-packages) page
 for how to create a scheme package and select one of its schemes.
 
-Each outcome row in the Scheme Editor shows an **id**, a **label** and a
-**Fundamental** dropdown with 5 options. A **Customize statuses** toggle
-reveals a second, separately editable list. The first time you turn it on, the
-editor seeds the 3 built-in statuses as a starting point to rename or extend.
-Turn it off to clear the override back to the built-in defaults.
+In a scheme package, select **+ Add scheme**, or open a scheme from the Schemes
+grid. The scheme drawer lists the outcomes. Each outcome row has an **id**, a
+**label** and a **Fundamental** dropdown with 5 options. Select **+ Add outcome**
+to add a row. A **Customize statuses** toggle reveals a second, separately
+editable list. The first time you turn it on, the editor seeds the 3 built-in
+statuses as a starting point to rename or extend. Turn it off to clear the
+override back to the built-in defaults.
 
 ## Assessing a pair
 
 The **Outcome Picker** and **Status Picker** are dropdowns. Every outcome,
 including each not-applicable variant, is an ordinary entry.
 
-The Status Picker's dropdown lists every status the scheme defines (or the 3
-built-in defaults). A `done`-fundamental status renders as a disabled option
+The Status Picker's dropdown lists every status the requirement defines, or the scheme defines, or the 3
+built-in defaults. A `done`-fundamental status renders as a disabled option
 until an outcome is chosen. If the pair is currently `done`-fundamental, any
 status you pick opens a confirm dialog first.
 
@@ -121,13 +116,13 @@ things:
 
 | Column | What it shows | Source |
 |--------|--------------|--------|
-| **State** | Workflow progress: is the pair still being assessed, or finished? | The pair's `status` field mapped through `statuses[]` to a fundamental (`draft` / `in-progress` / `done`) |
-| **Outcome** | Compliance result: what did the assessment find? | The pair's `outcome` field mapped through `outcomes[]` to a fundamental (`yes` / `no` / `partial` / `indeterminate` / `not-applicable`) |
+| **State** | Workflow progress: is the pair still being assessed, or finished? | The pair's status, mapped through the status list to a fundamental (`draft` / `in-progress` / `done`) |
+| **Outcome** | Compliance result: what did the assessment find? | The pair's outcome, mapped through the scheme's outcomes to a fundamental (`yes` / `no` / `partial` / `indeterminate` / `not-applicable`) |
 
 The two axes are independent. A pair can be `done` (workflow complete) with
-any outcome, or still `draft`/`in-progress` with an outcome already picked (a
-Bonsai-assessed pair, for example, may have an `outcome` before the pair is
-marked `done`). The fundamental outcome the user or a Bonsai query picked is
+any outcome, or still `draft`/`in-progress` with an outcome already picked. A
+Bonsai-assessed pair, for example, may have an outcome before the pair is
+marked `done`. The fundamental outcome the user or a Bonsai query picked is
 the canonical compliance signal, and nothing computes a pass/fail verdict from
 it.
 
@@ -138,8 +133,8 @@ but does not restrict promotion. A user can promote a `yes` outcome too, for
 example to record a positive finding for audit purposes.
 
 The **Filter** popover's **Outcome** field (see [Worklist Filtering, Grouping, and Slices](/docs/sightline/usage/metron/worklist-filtering)) lets you
-narrow the worklist to specific fundamental outcomes directly, for example
-`Outcome = no OR Outcome = partial` for everything that needs attention.
+narrow the worklist to specific fundamental outcomes directly. For example,
+`Outcome = no OR Outcome = partial` surfaces everything that needs attention.
 
 ## Rollup: a distribution, not a score
 
@@ -157,9 +152,9 @@ Per-attribute assessment (see [Per-attribute assessment](/docs/sightline/usage/m
 records, for each practice, whether each typed attribute is `met`, `partial`
 or `not-met`, for example "Documented" or "Approved by management". It is not
 a second compliance signal layered on top of the fundamental outcome this page
-describes. A pair's `attributeAssessments` never resolves to a
-`fundamentalOutcome` or `fundamentalState`, never appears in the Dashboard
-rollup distribution above, and never affects promote-eligibility.
+describes. A pair's attribute states never resolve to a
+fundamental outcome or fundamental state. They do not appear in the
+Dashboard rollup distribution above, and they do not affect promote-eligibility.
 
 ## Formal record vs live signal
 
@@ -187,52 +182,45 @@ Meeting an attribute never retires a gap row and never contributes to
 scoring. Retiring the row would let live working state overwrite a formal
 assertion, and would promote attributes into a scored role they do not have.
 
-Resolution is tracked at two grains:
-
-- **Pair grain**: the outcome-changed check fires
-  when a pair's live outcome differs from what was stamped on the ref at
-  promote time. The Findings tab shows it as the **Stale** column. It appears
-  only in the app and never reaches the report envelope or a generated
-  document, for the same formal-record reason as attribute satisfaction. A
-  consumer can derive it from the envelope.
-- **Attribute grain**: whether one specific flagged attribute was met, which
-  the pair's outcome cannot answer. The Coverage tab shows it as the
-  **Attribute met** column.
+Resolution is tracked at the pair grain. A member of a finding shows as changed
+when the outcome or the attribute states of its pair differ from the pinned
+state. The pin is set when the member is added. The Findings tab shows it in the **Stale** column. It appears only in the app
+and never reaches a generated document, for the same
+formal-record reason as attribute satisfaction.
 
 ## Where the fundamental values show up
 
 - **Worklist state pill**: shows the pair's custom status label as text. The
-  pill's `data-state` attribute and colour follow the fundamental value, a
-  stable hook independent of which custom label a package uses.
+  pill's colour follows the fundamental value, independent of which custom label
+  a package uses.
 - **Worklist Reval column**: a `⚠` indicator, visible by default, on any
   `done` pair whose assessed requirement or entity version has drifted.
   It is the same `requiresRevalidation` flag that
   promotion checks. Right-click a drifted pair (single or
-  bulk-selected) for a **Revalidate** action. The action rolls the
-  assessed-version stamps forward to the current live version, behind a
+  bulk-selected) for a **Revalidate** action. The action accepts the
+  current requirement, entity and shared assessment, behind a
   confirm dialog, and leaves the outcome, evidence and notes untouched. The
   **Filter** popover's **Needs revalidation** condition narrows the worklist
   to flagged pairs (see [Worklist Filtering, Grouping, and Slices](/docs/sightline/usage/metron/worklist-filtering)).
   A pair linked to a [shared assessment](/docs/sightline/usage/metron/shared-assessments) is also
-  flagged when its stamped shared version falls behind the record's version.
+  flagged when the content of its shared assessment changes. The flag applies
+  when that change happens after the pair was completed or last revalidated.
 - **Coverage bar and state filter chips**: 4 buckets (`draft`, `in-progress`,
   `done` and `n/a`), assigned by fundamental. A pair in a custom status mapped
   to `in-progress` counts in the same bucket as a pair with the plain "In
   Progress" status. "Waiting for Internal Review" is an example of such a
   custom status.
 - **CSV export**: includes `state_fundamental` and `outcome_fundamental`
-  columns alongside the raw `state` and `outcome` columns. A spreadsheet can
+  columns alongside the `state` and `outcome` columns. A spreadsheet can
   filter or pivot on the shared fundamental axis across packages with
   different custom labels.
-- **Report envelope** (pull API): every pair in
-  `assessment.pairs[]` carries `fundamentalState` and `fundamentalOutcome`
-  alongside the raw `state` and `outcome`.
-- **Finding staleness**: a promoted finding stamps the `fundamentalOutcome`
-  assessed at promote time. Metron
-  recomputes staleness when the live pair's fundamental outcome no longer
-  matches the stamp, or when the live entity version advances past the ref's
-  pinned version. The Findings tab shows an **Accept** action on
-  stale-badged rows. The action pins the current live version and outcome
-  as the new baseline for each affected ref. It runs behind a confirm dialog
-  and leaves the finding's review status unchanged. A row whose
-  entity no longer resolves in the live model (deleted or re-scoped) keeps its stale badge and offers no Accept.
+- **Report data**: every assessed pair in a generated report carries its
+  fundamental state and fundamental outcome beside its custom labels.
+- **Finding staleness**: each member of a finding pins the entity version, the
+  requirement version and the outcome of its pair when the member is added.
+  Metron marks the finding stale when the pair's outcome or either version
+  moves past the pin. The Findings tab shows an **Accept** action on
+  stale-badged rows. The action pins the current state of every member as the new
+  baseline. It runs behind a confirm dialog and leaves the finding's review status
+  unchanged. A member whose record no longer exists keeps its stale badge and has
+  no pin to move.

@@ -35,6 +35,7 @@ The storage server has no authentication unless the operator configures it. When
 | `PATCH /models/{modelId}/findings/{findingId}` | [Model routes](/docs/sightline/reference/api/models) |
 | `GET /models/{modelId}/findings/{findingId}/journal` | [Model routes](/docs/sightline/reference/api/models) |
 | `GET /models/{modelId}/findings/{findingId}/usages` | [Model routes](/docs/sightline/reference/api/models) |
+| `GET /models/{modelId}/findings/{findingId}/members` | [Model routes](/docs/sightline/reference/api/models) |
 | `POST /models/{modelId}/findings` | [Model routes](/docs/sightline/reference/api/models) |
 | `GET /models/{modelId}/rule-packages` | [Model routes](/docs/sightline/reference/api/models) |
 | `PUT /models/{modelId}/rule-packages/{packageId}/rules/{ruleId}` | [Model routes](/docs/sightline/reference/api/models) |
@@ -61,12 +62,17 @@ The storage server has no authentication unless the operator configures it. When
 | `GET /cross-app/models/{modelId}/tetra-scope` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /cross-app/models/{modelId}/finding-links` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /cross-app/models/{modelId}/causes/{causeId}/finding-links` | [Discovery routes](/docs/sightline/reference/api/discovery) |
+| `GET /cross-app/models/{modelId}/risks` | [Discovery routes](/docs/sightline/reference/api/discovery) |
+| `GET /cross-app/models/{modelId}/control-templates/{templateId}/impact` | [Discovery routes](/docs/sightline/reference/api/discovery) |
+| `GET /cross-app/models/{modelId}/causes/{causeId}/controls/{controlId}/impact` | [Discovery routes](/docs/sightline/reference/api/discovery) |
+| `GET /cross-app/models/{modelId}/outcomes/{outcomeId}/controls/{controlId}/impact` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /cross-app/models/{modelId}/finding-inbox` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /metron/assessments/{id}` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /metron/assessments/{id}/workspace` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `POST /metron/assessments/{id}/ops` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `POST /metron/assessments/{id}/run` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `POST /metron/packages/{id}/assessments` | [Discovery routes](/docs/sightline/reference/api/discovery) |
+| `POST /metron/packages/{id}/versions` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /metron/packages/{id}/portfolio` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /metron/packages/{id}/portfolio/export` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /folders` | [Discovery routes](/docs/sightline/reference/api/discovery) |

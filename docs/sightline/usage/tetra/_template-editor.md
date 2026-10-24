@@ -1,11 +1,10 @@
-A panel for authoring the templates your entities inherit from, so you can edit
-`*.template.yaml` files without opening them by hand. The YAML side of templates
-is covered in the [Tetra templates](/docs/sightline/usage/tetra/templates) page.
+A panel for authoring the templates your entities inherit from. How templates
+behave is covered in the [Tetra templates](/docs/sightline/usage/tetra/templates) page.
 
 ## Opening it
 
 Select **Templates** in the toolbar of an open Tetra diagram. You can also run
-**Tetra: Edit Templates** from the command palette with a `.tetra.yaml` model
+**Tetra: Edit Templates** from the command palette with a Tetra model
 open. The toolbar button is disabled in a read-only view, because the editor
 writes to the model. The command opens the editor in a read-only view too, with
 every control disabled.
@@ -16,40 +15,35 @@ that model its own panel. Close it like any editor tab.
 
 If no Tetra model is open, the command tells you so and does nothing.
 
+In the browser, select **Templates** to open an editor tab in the web shell. The diagram keeps its unsaved changes while you use the editor. A reader token opens the editor with every editing control disabled. A standalone Tetra page opens the editor in another browser tab.
+
 ## What it lists
 
-Every template declared across every file in the manifest's `templates:` list,
-one row per template:
+In the browser, **Import file…** asks for the path of an existing YAML file relative to the model directory on the server. This registers that file as a template file. **Create file…** creates a new file in the same model directory.
+
+Every template in every template file the model registers, one row per
+template:
 
 | Column | Meaning |
 |---|---|
 | id | The template id (`tpl-device-plc`) |
-| label | Its `label:` field, when it has one |
+| label | Its label, when it has one |
 | type | The entity type the template applies to |
-| source file | The `*.template.yaml` file it is authored in |
+| source file | The template file it is authored in |
 
-Two dropdowns narrow the list: **File** (one declared template file, or all of
+Two dropdowns narrow the list: **File** (one template file, or all of
 them) and **Type** (one entity type, or all of them).
 
-### How the panel types a template
+The type is one of the eight templatable types that the [Tetra templates](/docs/sightline/usage/tetra/templates) page lists: zone,
+group, device, network, information, channel, flow, system. The recommended id
+form is `tpl-<type>-<slug>` (`tpl-device-plc`), and it is what the panel seeds
+for templates you add here. A template named any other way is listed and
+edited exactly like the rest. A template whose type the panel cannot work out
+is left out of the list.
 
-A template's type comes from the top-level YAML key it is authored under.
-An entry in `devices:` is a device template, one in `zones:` a zone template.
-The eight templatable types are the same eight that the [Tetra templates](/docs/sightline/usage/tetra/templates) page lists: zone,
-group, device, network, information, channel, flow, system.
-
-The id is the fallback. When the panel cannot read the key an entry sits under,
-it parses the id as `tpl-<type>-<slug>` instead (`tpl-device-plc`; the plural
-form `tpl-devices-plc` works too). That form is still the recommended way to
-name a template, and it is what the panel mints for templates you add here.
-A template named any other way, such as a bare `tpl-plc` under `devices:`,
-is listed and edited exactly like the rest.
-
-A template is left out of the panel only when neither answers. Its entry
-sits under a key that is not one of the eight, and its id does not parse.
-Such a template still works everywhere else: the loader resolves any id for
-`template:` inheritance and for `{{> tpl-plc.field}}` partials. Move it under
-the right key, or rename it to `tpl-<type>-<slug>`, to edit it here.
+A model that registers no template file shows **No template files declared in
+this manifest.** with **Import existing template file…** and **Create new
+template file…**. They work as **Import file…** and **Create file…** below.
 
 ## Editing a template
 
@@ -65,8 +59,8 @@ from the dropdown is not committed.
 
 A field edit in the drawer stays pending. Select **Close** to keep the edit pending and return to the list. Select **Save all** on the save bar at the bottom of the editor to write every pending edit. **Undo** and **Discard all** on the same bar revert pending edits.
 
-Edits go back to the template file the row came from. The other declared
-template files stay byte-for-byte unchanged, even when several are open in the list.
+Edits go back to the template file the row came from. The other template
+files stay unchanged, even when several are open in the list.
 
 ## Adding, deleting and reordering
 
@@ -76,32 +70,34 @@ template files stay byte-for-byte unchanged, even when several are open in the l
   complete the rest (`tpl-device-vendor-plc`). It is checked against every
   template id already in use, so a clash is refused before the write. When more
   than one template file is declared, the drawer also asks which file to write
-  to.
-- While a part-filled new template is open, a click on a row or a filter change
-  makes the drawer ask before it discards your input.
+  to. An optional template selector lists the templates of the chosen type.
+  Pick one to create the new template as a sub-template of it, or leave it
+  empty.
+- A part-filled new template can be left open. A click on a row or a filter
+  change then makes the drawer ask before it discards your input.
 - **Delete** on a row first checks the model for entities that inherit from that
   template. If any do, the confirmation lists them and the button becomes
-  **Force delete**. Deleting anyway leaves those entities with a `template:`
-  ref that no longer resolves, which the loader reports as a warning.
-- **Drag a row** to reorder templates inside a file. Reordering rewrites the
-  YAML order, so it is only available once you have narrowed to a single file
-  and a single type.
+  **Force delete**. Deleting anyway leaves those entities pointing at a
+  template that no longer exists, which Tetra reports as a warning.
+- **Drag a row** to reorder templates inside a file. Reordering is only
+  available once you have narrowed to a single file and a single type.
 
 ## Managing template files
 
-The toolbar's file controls change the manifest's `templates:` list:
+The toolbar's file controls change which template files the model registers:
 
-- **Import file…** picks an existing `.yaml` / `.yml` file inside the model
-  directory and adds it to `templates:`.
-- **Create file…** writes a new empty `*.template.yaml` and adds it.
+- **Import file…** picks an existing template file inside the model
+  directory and registers it.
+- **Create file…** opens the **Create new template file** dialog. Enter a file
+  name relative to the model directory. **Create** stays disabled until the name
+  is valid. The dialog creates an empty template file and registers it.
 - **Remove from manifest** (shown once you have selected a single file)
-  de-registers that file. It does not delete the file from disk. The
-  templates in it stop loading until you add it back.
+  unregisters that file. It does not delete the file from disk. The
+  templates in it stop loading until you register it again.
 
-Files outside the model directory are rejected, including via a symlink.
+The editor rejects files outside the model directory.
 
 ## Constants
 
-Template files may carry a top-level `const:` block. Tetra loads and applies
-those constants. For the editor, see the
-[Tetra Constants Editor](/docs/sightline/usage/tetra/constants-editor) page.
+Template files can also carry constants that templates reference. For the
+editor, see the [Tetra Constants Editor](/docs/sightline/usage/tetra/constants-editor) page.

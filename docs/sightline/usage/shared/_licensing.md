@@ -24,7 +24,7 @@ When a licence is valid but does not name an app, the licence badge in that app 
 
 Tetra reads Metron findings and coverage to draw the findings badges and the coverage overlay. This read needs a licence that carries the `view:metron` grant. A licence that lacks it leaves Tetra fully usable. The findings badges do not load, and the coverage overlay shows a notice that gives the reason.
 
-The Rules panel reads Metron rule packages and Metron records with the same grant. Without it, the panel lists no Metron package and no Metron record. Where a read is refused, the **Add** control on the **Packages** tab is disabled and gives the reason, and the **Rules** and **Records** tabs show the same reason in place of their empty message. Tetra rule packages and Tetra records need no `view:metron`, as [Rule packages](#rule-packages) explains.
+The Rules panel reads Metron rule packages and Metron records with the same grant. Without it, the panel lists no Metron package and no Metron record. Where a read is refused, the **Add package** control on the **Packages** tab is disabled and gives the reason. The **Rules** and **Records** tabs show the same reason in place of their empty message. Tetra rule packages and Tetra records need no `view:metron`, as [Rule packages](#rule-packages) explains.
 
 The grant covers the read only. It does not unlock editing in any app.
 
@@ -54,7 +54,7 @@ The first pending change shows a banner: `Editing is not licensed. You can make 
 
 ## Where the licence is checked
 
-The app checks the licence again when a change is written, whatever the panel shows. The check covers every write to a model file, a data slice or a query template. Changes that wait in the pending pool commit together, so one **Save** is one licence check.
+The app checks the licence again when a change is written, whatever the panel shows. The check covers every write to a model, a data slice or a query template. Changes that wait in the pending pool commit together, so one **Save** is one licence check.
 
 ## When a save is refused
 
@@ -63,6 +63,10 @@ A refused save reports its reason where you asked for it, and the refused change
 A write that fails on a disk error or a validation refusal reports itself the same way. The pool save bar shows the reason beside its own button.
 
 ## Managing your licence
+
+In the web shell, the bottom-right badge shows **Saving allowed by server** or **Saving unavailable**. It follows the server's permission for your account in the current app. Your server administrator manages the licence and your access permissions. There is no licence paste dialog in the web shell.
+
+In VS Code, you manage the licence on your machine.
 
 Select the licence badge in the bottom-right corner to paste, view or clear the licence string. The apps on a machine share one licence, so pasting it in one app puts it in force in the others.
 
@@ -101,7 +105,7 @@ A VS Code panel always opens editable. A web shell tab opens with editing off wh
 
 ## Revocation
 
-A licence can be revoked. A revoked licence blocks editing for the rest of that VS Code session. The activation ping that runs beside this check is described in [Telemetry](/docs/sightline/usage/shared/telemetry).
+A licence can be revoked. A revoked licence blocks editing for the rest of that VS Code session. [Telemetry](/docs/sightline/usage/shared/telemetry) describes the activation ping that runs beside this check.
 
 ## Leaving with changes pending
 
@@ -123,15 +127,17 @@ Tetra and Lamina share these controls.
 
 Staging a new change after an undo drops whatever Redo would have restored.
 
-**Journal** is a section of the Sightline sidebar, below Model Tree. It starts collapsed and appears once you open a model. Expand it to see every staged change in the order you made it, beside the props drawer rather than behind it. An undone entry stays listed, struck through, so you can see what you stepped back past. The journal has its own **Undo** and **Redo** buttons. It follows the editor you are looking at, and its buttons act on that model. The journal clears when you commit.
+**Journal** is a section of the Sightline sidebar, below Model Tree. It starts collapsed and appears once you open a model. Expand it to see every staged change in the order you made it, beside the props drawer rather than behind it. Each entry is a row of three columns: the **Entity** it changed, the **Operation** (`created`, `deleted`, or a field and what happened to it, such as `name changed`), and the new **Value**. A created, deleted or moved entry has no value, so that cell stays empty. A long cell is cut short, and hovering over it shows the whole text. An undone entry stays listed, struck through, so you can see what you stepped back past. The journal has its own **Undo** and **Redo** buttons. It follows the editor you are looking at, and its buttons act on that model. The journal clears when you commit.
 
 Undo reaches only what is staged. Recover an earlier commit with git.
+
+In a Tetra browser tab, select **Tools**, then **Staged changes journal**. Its **Undo** and **Redo** controls act on that tab. Close the panel and open it again to see the current staged changes. A reader token disables both controls.
 
 ## Structural changes wait for Save
 
 Structural changes wait in the pending pool with your field edits, and the unsaved count includes them. A change is visible at once, although nothing has reached disk. A new entity appears on the canvas, in the Tabular Editor and in the drawer as soon as you create it. A deleted entity disappears as soon as you delete it.
 
-In the Tabular Editor, a row with any pending change shows the unsaved highlight across the whole row, and each changed field's cell shows it too when its column is shown. A field edit in a hidden column still marks its row. **Undo** and **Discard all** clear the highlight.
+In the Tabular Editor, a row with any pending change shows the unsaved highlight across the whole row. Each changed field's cell shows it too when its column is shown. A field edit in a hidden column still marks its row. **Undo** and **Discard all** clear the highlight.
 
 **Save** in the **Save changes** dialog performs every pending change. A refused change stays staged. The app sections below list which actions wait.
 
@@ -214,7 +220,7 @@ The banner shows at the top of the editor. **Save all** appears in the pool save
 
 **Structural changes.** A create or a delete stages the same way as a field edit. This applies to a requirement, a rule, an attribute set and a scheme. A new entry appears in its grid at once, and a deleted entry leaves the grid at once. Neither reaches disk until you select **Save** in the **Save changes** dialog.
 
-Package meta, the scoring-scheme picker and the `uses:` list also wait for **Save**. They appear in the **Save changes** dialog as `Package meta` and `Packages`, and they commit with the rest of the batch under one licence check. A commit that carries a meta edit and a `uses:` change writes both or neither.
+Package meta, the scoring-scheme picker and the list on the **Packages** tab also wait for **Save**. They appear in the **Save changes** dialog as `Package meta` and `Packages`, and they commit with the rest of the batch under one licence check. A commit that carries a meta edit and a change to the **Packages** tab saves both or neither.
 
 **Read-only view.** The row `Edit` actions in all four package editors stay available with the licence off and with the read-only setting on.
 

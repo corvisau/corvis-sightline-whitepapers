@@ -1,4 +1,4 @@
-Lamina models risk as bow-tie diagrams. A Lamina model is a set of plain YAML files. The extension draws an interactive canvas, a Tabular Editor, a Template Editor and a report pipeline over them.
+Lamina models risk as bow-tie diagrams. A Lamina model is a set of files in a model directory. The extension draws an interactive canvas, a Tabular Editor, a Template Editor and a report pipeline over them.
 
 ## What you model
 

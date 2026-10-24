@@ -1,17 +1,17 @@
 A Markdown field in the props drawer can link to another object in the same model. Clicking the link opens that object in the drawer. Tetra and Lamina both support the feature, each over its own objects. Metron does not.
 
-An annotation with `type: markdown` renders its `value` as Markdown on the canvas, and a link in it works the same way. See the [Annotations](/docs/sightline/usage/shared/annotations) page for the annotation types.
+An annotation of type `markdown` renders its value as Markdown on the canvas, and a link in it works the same way. See the [Annotations](/docs/sightline/usage/shared/annotations) page for the annotation types.
 
 ## Syntax
 
-Write the object's id after `sightline:` as the link target.
+Type the object's id after `sightline:` as the link target, for example `[the historian](sightline:d-hist-1)`.
 
-- The id is the object's own `id` value, matched exactly and case-sensitively.
-- The link carries the id only. It has no type prefix, so `sightline:O002` finds whichever object owns `O002`.
+- The id is the object's own id, matched exactly and case-sensitively.
+- The link carries the id only, with no type prefix.
 - Write a space in an id as `%20`.
-- A target with no id, a `/`, a `?`, a `#`, or a malformed escape is not an object link. It renders as a link with no target.
+- A target with no id, or with a `/`, a `?` or a `#`, is not an object link. It renders as a link with no target.
 
-Each app section below shows an example and lists the objects it can link to.
+The picker below writes the link for you. Each app section lists the objects it can link to.
 
 ## Insert a link from the picker
 
@@ -55,7 +55,7 @@ An object you created and have not saved yet is linkable. An object you have sta
 
 A `sightline:` link in a `markdown` annotation uses the same syntax and shows the same three states as a link in a drawer field. Clicking a resolved link opens the object in the drawer.
 
-An annotation with `type: text` shows the link syntax literally, because that type applies no Markdown.
+An annotation of type `text` shows the link syntax literally, because that type applies no Markdown.
 
 To write the link, edit the annotation's Value field in the drawer and use the picker. The canvas bubble is read-only.
 
@@ -70,46 +70,26 @@ A PNG export shows the link text with no link styling.
 
 A Tetra link targets a zone, group, device, network, information item, system, channel, flow or annotation.
 
-```markdown
-Fed from [the historian](sightline:d-hist-1).
-Isolated by [the control zone](sightline:z-control).
-See also [the commissioning note](sightline:ann-comm).
-```
-
 An information item uses its composite id, such as `d-plc-1.i-func`.
 
-| Object | Where the link resolves |
-|---|---|
-| Zone, group, device, network | The containment tree, at any depth |
-| Information item | The device that owns it |
-| System | The `systems` list |
-| Channel, flow | The `channels` and `flows` lists |
-| Annotation | The `annotations` list |
+The picker inserts a link such as `[PLC 1](sightline:d-plc-1)`. It lists objects in this order: zones, groups, devices, networks, information items, systems, channels, flows, annotations. A blank or multi-line selection is replaced with the object's label, or with its id when the object has no label.
 
-The picker inserts a link such as `[PLC 1](sightline:d-plc-1)`. It lists objects in the order of the table above. A blank or multi-line selection is replaced with the object's label, or with its id when the object has no label.
-
-The picker also leaves out a synthetic channel and an orphans bucket, which the loader creates and you did not write.
+The picker also leaves out a synthetic channel and an orphans bucket, which Tetra creates and you did not add.
 
 Tetra ids are unique within a type, not across types, so a device and a flow can share an id. A link to that id renders as broken. Rename one of the two ids to link to either object.
 
-The description of an existing object and an annotation's Value are the common cases for a link in the props drawer.
+The description of an existing object and an annotation's **Value** are the common cases for a link in the props drawer.
 
-A create form is different. Its Description field, and an annotation's Text field, are plain text with no picker. They accept the link syntax, and the link renders once you create the object and open it in the drawer.
+A create form differs: its **Description** field, and an annotation's **Text** field, are plain text with no picker. They accept the link syntax, and the link renders once you create the object and open it in the drawer.
 
 ## Lamina
 
 A Lamina link targets a cause, event, outcome or control.
 
-```markdown
-Driven by [the unpatched host](sightline:C001).
-Stopped by [the patch policy](sightline:K001).
-Escalates to [the outage outcome](sightline:O002).
-```
-
 A control id needs no parent, because control ids are unique across the model. A space in an id looks like `sightline:ic%20cause`.
 
 The picker inserts a link such as `[Cause One](sightline:C001)`. The list shows causes, then events, outcomes and controls. To link to either of two objects that share an id, rename one of the two ids.
 
-The `description` field on the cause, event, outcome and control forms is the common case for a link.
+The **Description** field on the cause, event, outcome and control forms is the common case for a link.
 
 Clicking a resolved link in an annotation bubble does not select the bubble, so the drawer shows the linked object rather than the annotation. Clicking the bubble's other text selects the annotation as before.

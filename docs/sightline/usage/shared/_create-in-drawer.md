@@ -1,4 +1,4 @@
-Creating an entity in Tetra or Lamina opens the props drawer in a new-entity mode. No separate dialog opens. The fields that you fill in on create are the fields that you see on a later edit, in the same order, with the same widgets.
+Creating an entity in Tetra or Lamina opens the props drawer in a new-entity mode. No separate dialog opens. The fields that you fill in on create are the fields that you see on a later edit. The order and the widgets are the same.
 
 ## What the form shows
 
@@ -18,7 +18,7 @@ For the style, colour and icon fields, see [Annotation styling](/docs/sightline/
 
 **Create** is the only way to commit a new entity. Nothing is written until you click it.
 
-Closing the drawer without creating leaves the model untouched. The drawer asks first, and offers **Discard** or **Cancel**. An untouched create request closes at once, because nothing is lost.
+Closing the drawer without creating leaves the model untouched. The drawer asks first, and offers **Discard** or **Cancel**. An untouched create request closes at once.
 
 ## Tetra
 
@@ -46,15 +46,15 @@ Every entry point opens the same drawer.
 
 Three controls surround the form. **Parent** sits above it. **Create as inline member** and **Destination file** sit together below it, because the checkbox decides whether the file control shows.
 
-- **Parent** chooses the container that the entity lands under. It is the same control as the **Parent** field in the Edit drawer, and it sits in the same place, above **ID** and **Label**. The Edit drawer of a zone, group or device shows it, and choosing a different container there moves the entity. Type to filter the containers, or select **Browse…** to pick one from a tree. The field shows the container's name. It starts with the place where you began the create: right-clicking a zone pre-selects that zone, and starting from an empty part of the canvas or the toolbar **New** menu selects the model root, shown as **(root: model name)**. In a Tetra model with a hidden root group, **(root: model name)** is that group, so the entity lands at the top level of the canvas, and the group does not appear a second time in the list. Choose a different container to place the entity under it at creation. Zones, groups, devices, networks and information items show this control. Information items can be placed under a device or a zone. The other types can be placed under a zone or a group. Systems are stored on their own, and channels and flows are relationships, so they do not show it. **Add to New Group** does not show it either, because the group lands beside the members that you selected.
-- **Create as inline member** nests the entity inside its parent's YAML. Without it, the entity gets a typed entry of its own. Containers (zones and groups) default to inline. Leaves (devices and networks) default to a standalone entry. Turning the option on hides the destination file, because an inline member has no file of its own.
-- **Destination file** chooses the `*.tetra.yaml` file that receives the definition. It defaults to the file where the entity's would-be siblings already live. It falls back to the parent's own file or the manifest, shown as **Store with parent**. You can also create a new file or import an existing file without leaving the drawer. When Sightline refuses a new or imported file, for example because the model already has a file of that name, the dialog stays open and shows the reason above its buttons.
+- **Parent** chooses the container that the entity lands under. It is the same control as the **Parent** field in the Edit drawer, and it sits in the same place, above **ID** and **Label**. The Edit drawer of a zone, group or device shows it, and choosing a different container there moves the entity. Type to filter the containers, or select **Browse…** to pick one from a tree. The field shows the container's name. It starts with the place where you began the create. Right-clicking a zone pre-selects that zone. Starting from an empty part of the canvas or the toolbar **New** menu selects the model root, shown as **(root: model name)**. In a Tetra model with a hidden root group, **(root: model name)** is that group. The entity lands at the top level of the canvas, and the group does not appear a second time in the list. Choose a different container to place the entity under it at creation. Zones, groups, devices, networks and information items show this control. Information items can be placed under a device or a zone. The other types can be placed under a zone or a group. Systems are stored on their own, and channels and flows are relationships, so they do not show it. **Add to New Group** does not show it either, because the group lands beside the members that you selected.
+- **Create as inline member** stores the entity as part of its parent. Without it, the entity is stored on its own. Containers (zones and groups) default to inline. Leaves (devices and networks) default to a standalone entity. Turning the option on hides the destination file, because an inline member has no file of its own.
+- **Destination file** chooses the file that receives the entity. It defaults to the file where the entity's would-be siblings already live. It falls back to the parent's own file or the model's main file, shown as **Store with parent**. You can also create a new file or import an existing file without leaving the drawer. When Sightline refuses a new or imported file, for example because the model already has a file of that name, the dialog stays open. It shows the reason above its buttons.
 
-An information item created under an owner becomes a per-owner inline badge. Its stored id carries the owner as a prefix, for example `dev-a.I-3KNT7`. The form shows only the bare tag.
+An information item created under an owner becomes a per-owner inline badge. The form shows only the bare tag.
 
 ### Finishing
 
-**Create** stages the entity and closes the drawer. To edit the new entity, open it again. When you start a create from a device's drawer, with **+ New channel**, **+ New flow** or **+ Add information**, the drawer returns to that device instead of closing.
+**Create** stages the entity and closes the drawer. To edit the new entity, open it again. When you start a create from a device's drawer, with **+ New channel**, **+ New flow** or **+ Add information**, the drawer returns to that device. It does not close.
 
 The drawer asks for **Discard** or **Cancel** when you close it, open a different entity, start another create, or switch surface or data slice.
 
@@ -97,4 +97,4 @@ Creating an entity stages it. It does not write to disk until you save. In the T
 
 ### Where the entity lands
 
-The **Destination file** picker below the form chooses the YAML file that receives the new entity. A control has no picker. Lamina always writes a control inline under the cause or outcome that owns it.
+The **Destination file** picker below the form chooses the file that receives the new entity. A control has no picker. Lamina always writes a control inline under the cause or outcome that owns it.

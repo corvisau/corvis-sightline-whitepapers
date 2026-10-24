@@ -2,7 +2,7 @@ Lamina and Tetra open each other at the object that a record concerns. A cause t
 
 ## From a cause to Tetra
 
-The props drawer of a cause has a **Records** section with one block for each link. A block that names a Tetra model has an **Open in Tetra** button.
+The props drawer of a cause has a Records section with one block for each link. A block that names a Tetra model has an **Open in Tetra** button.
 
 Select **Open in Tetra**. Tetra opens the model and selects the first channel or flow among the links of the record. It opens the props drawer of that object and centres the diagram on it. A model that is already open keeps its tab.
 
@@ -21,7 +21,7 @@ The props drawer of a channel or flow has a Causes section. It lists each Lamina
 
 A cause covers a channel or flow when its vector links a record that has the channel or flow among its links. A link that names a Tetra model counts for that model only. A link with no model counts for any model that holds the record.
 
-Tetra reads every `*.bowtie.yaml` manifest in the workspace, wherever the author filed it, and the files each one lists. The link stays on the cause. Tetra works out the list on each load and stores nothing, so **Refresh Diagram** and an external file change both update it.
+Tetra reads every Lamina model in the workspace, wherever it is filed. The link stays on the cause. Tetra works out the list on each load and saves nothing, so **Refresh Diagram** and an external file change both update it.
 
 ### Cause badges
 

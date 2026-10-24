@@ -594,6 +594,614 @@ Answers the same entries as the model-wide route, for one cause. The `links` lis
 }
 ```
 
+## `GET /cross-app/models/{modelId}/risks`
+
+A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a Risk by the events it names, and a Risk can be narrowed to named causes and outcomes. Without narrowing, a Risk takes every cause that lists its events and every outcome those events list. A model whose manifest defines no Risks answers one Risk for each event. A path can sit in several Risks. The answer carries no rating. `issues` lists the definitions that the read could not fully honour, and `problems` lists the files that could not be read.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+
+### Responses
+
+**200: The Risks of the model.**
+
+```json
+{
+  "mode": "authored",
+  "risks": [
+    {
+      "id": "R001",
+      "name": "Station outage",
+      "source": "authored",
+      "eventIds": [
+        "E-001",
+        "E-002"
+      ],
+      "paths": [
+        {
+          "causeId": "C-001",
+          "eventId": "E-001",
+          "outcomeId": "O-001"
+        },
+        {
+          "causeId": "C-002",
+          "eventId": "E-001",
+          "outcomeId": "O-001"
+        },
+        {
+          "causeId": "C-001",
+          "eventId": "E-002",
+          "outcomeId": "O-002"
+        }
+      ]
+    },
+    {
+      "id": "R002",
+      "name": "Remote cause, one outcome",
+      "source": "authored",
+      "eventIds": [
+        "E-001"
+      ],
+      "paths": [
+        {
+          "causeId": "C-002",
+          "eventId": "E-001",
+          "outcomeId": "O-002"
+        }
+      ]
+    }
+  ],
+  "uncoveredEventIds": [
+    "E-003"
+  ],
+  "issues": [
+    {
+      "riskId": "R003",
+      "kind": "unknown-event",
+      "id": "E-009"
+    }
+  ],
+  "problems": []
+}
+```
+**404: No Lamina model has this id.**
+
+```json
+{
+  "error": "model not found: example-grid"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
+## `GET /cross-app/models/{modelId}/control-templates/{templateId}/impact`
+
+Collects every control in the model that names the template, and answers the events those controls reach. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each event they reach a gap risk. Not Applicable on either rating is never a gap. An event is a critical risk when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A preventative control reaches the events of its cause, and a mitigative control reaches the events that list its outcome. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. A template the model defines but no control names answers an empty result. A control is reused by template, so this is the way to ask about "the control" across causes and outcomes.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+| `templateId` | path | yes | string | The id of a control template (`tpl-control-…`), as a control's `template` field names it. |
+| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`, else its owner's. The answer is empty, not an error, when none match. |
+
+### Responses
+
+**200: The matched controls, the events they reach, and a summary.**
+
+```json
+{
+  "control": {
+    "templateId": "tpl-access-local",
+    "label": "Local access control",
+    "controlType": "Preventative",
+    "category": "Technology",
+    "group": "IAM"
+  },
+  "instances": [
+    {
+      "controlId": "K-001",
+      "ownerKind": "cause",
+      "ownerId": "C-001",
+      "templateId": "tpl-access-local",
+      "zones": [
+        "Z-STATION"
+      ],
+      "targetEffRating": "Partial",
+      "currentEffRating": "None",
+      "critical": true,
+      "state": "gap",
+      "currentEffDetail": "Field devices have default or no credentials.",
+      "eventIds": [
+        "E-001",
+        "E-002"
+      ]
+    },
+    {
+      "controlId": "K-002",
+      "ownerKind": "cause",
+      "ownerId": "C-002",
+      "templateId": "tpl-access-local",
+      "zones": [
+        "Z-STATION"
+      ],
+      "targetEffRating": "Partial",
+      "currentEffRating": "Full",
+      "critical": true,
+      "state": "met",
+      "eventIds": [
+        "E-002"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "eventId": "E-001",
+      "label": "Breakers opened",
+      "causes": [
+        {
+          "id": "C-001",
+          "label": "Physical access",
+          "inherentLikelihood": 2,
+          "currentLikelihood": 2
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "O-001",
+          "label": "Station blackout"
+        }
+      ],
+      "instanceIds": [
+        "K-001"
+      ],
+      "gap": true,
+      "critical": true
+    },
+    {
+      "eventId": "E-002",
+      "label": "Configurations wiped",
+      "causes": [
+        {
+          "id": "C-001"
+        },
+        {
+          "id": "C-002"
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "O-002",
+          "label": "Equipment damage"
+        }
+      ],
+      "instanceIds": [
+        "K-001",
+        "K-002"
+      ],
+      "gap": true,
+      "critical": true
+    }
+  ],
+  "summary": {
+    "instanceCount": 2,
+    "riskCount": 2,
+    "gapRiskIds": [
+      "E-001",
+      "E-002"
+    ],
+    "criticalRiskIds": [
+      "E-001",
+      "E-002"
+    ],
+    "byState": {
+      "gap": 1,
+      "met": 1,
+      "unassessed": 0,
+      "not-applicable": 0
+    }
+  },
+  "problems": []
+}
+```
+**404: No Lamina model has this id, or the model neither defines nor uses the template. The `error` text names which.**
+
+```json
+{
+  "error": "template not found: tpl-access-local"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
+## `GET /cross-app/models/{modelId}/causes/{causeId}/controls/{controlId}/impact`
+
+Answers for the control `controlId` that the cause `causeId` owns, which is a preventative control. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each event they reach a gap risk. Not Applicable on either rating is never a gap. An event is a critical risk when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A preventative control reaches the events of its cause, and a mitigative control reaches the events that list its outcome. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. With `scope=template` the answer widens to every control that names the same template.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+| `causeId` | path | yes | string | The `id` of a cause in the Lamina model. |
+| `controlId` | path | yes | string | The `id` of a control the cause owns. |
+| `scope` | query | no | string | `instance` (the default) answers the one control. `template` answers every control that names the same template as this one; a control that names no template answers itself alone. |
+| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`, else its owner's. The answer is empty, not an error, when none match. |
+
+### Responses
+
+**200: The matched controls, the events they reach, and a summary.**
+
+```json
+{
+  "control": {
+    "templateId": "tpl-access-local",
+    "label": "Local access control",
+    "controlType": "Preventative",
+    "category": "Technology",
+    "group": "IAM"
+  },
+  "instances": [
+    {
+      "controlId": "K-001",
+      "ownerKind": "cause",
+      "ownerId": "C-001",
+      "templateId": "tpl-access-local",
+      "zones": [
+        "Z-STATION"
+      ],
+      "targetEffRating": "Partial",
+      "currentEffRating": "None",
+      "critical": true,
+      "state": "gap",
+      "currentEffDetail": "Field devices have default or no credentials.",
+      "eventIds": [
+        "E-001",
+        "E-002"
+      ]
+    },
+    {
+      "controlId": "K-002",
+      "ownerKind": "cause",
+      "ownerId": "C-002",
+      "templateId": "tpl-access-local",
+      "zones": [
+        "Z-STATION"
+      ],
+      "targetEffRating": "Partial",
+      "currentEffRating": "Full",
+      "critical": true,
+      "state": "met",
+      "eventIds": [
+        "E-002"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "eventId": "E-001",
+      "label": "Breakers opened",
+      "causes": [
+        {
+          "id": "C-001",
+          "label": "Physical access",
+          "inherentLikelihood": 2,
+          "currentLikelihood": 2
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "O-001",
+          "label": "Station blackout"
+        }
+      ],
+      "instanceIds": [
+        "K-001"
+      ],
+      "gap": true,
+      "critical": true
+    },
+    {
+      "eventId": "E-002",
+      "label": "Configurations wiped",
+      "causes": [
+        {
+          "id": "C-001"
+        },
+        {
+          "id": "C-002"
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "O-002",
+          "label": "Equipment damage"
+        }
+      ],
+      "instanceIds": [
+        "K-001",
+        "K-002"
+      ],
+      "gap": true,
+      "critical": true
+    }
+  ],
+  "summary": {
+    "instanceCount": 2,
+    "riskCount": 2,
+    "gapRiskIds": [
+      "E-001",
+      "E-002"
+    ],
+    "criticalRiskIds": [
+      "E-001",
+      "E-002"
+    ],
+    "byState": {
+      "gap": 1,
+      "met": 1,
+      "unassessed": 0,
+      "not-applicable": 0
+    }
+  },
+  "problems": []
+}
+```
+**400: `scope` is neither `instance` nor `template`.**
+
+```json
+{
+  "error": "scope must be \"instance\" or \"template\": all"
+}
+```
+**404: No Lamina model has this id, the model has no such cause, or the cause owns no such control. A control of another owner does not match. The `error` text names which.**
+
+```json
+{
+  "error": "control not found: K-001"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
+## `GET /cross-app/models/{modelId}/outcomes/{outcomeId}/controls/{controlId}/impact`
+
+Answers for the control `controlId` that the outcome `outcomeId` owns, which is a mitigative control. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each event they reach a gap risk. Not Applicable on either rating is never a gap. An event is a critical risk when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A preventative control reaches the events of its cause, and a mitigative control reaches the events that list its outcome. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. With `scope=template` the answer widens to every control that names the same template.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+| `outcomeId` | path | yes | string | The `id` of an outcome in the Lamina model. |
+| `controlId` | path | yes | string | The `id` of a control the outcome owns. |
+| `scope` | query | no | string | `instance` (the default) answers the one control. `template` answers every control that names the same template as this one; a control that names no template answers itself alone. |
+| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`, else its owner's. The answer is empty, not an error, when none match. |
+
+### Responses
+
+**200: The matched controls, the events they reach, and a summary.**
+
+```json
+{
+  "control": {
+    "templateId": "tpl-access-local",
+    "label": "Local access control",
+    "controlType": "Preventative",
+    "category": "Technology",
+    "group": "IAM"
+  },
+  "instances": [
+    {
+      "controlId": "K-001",
+      "ownerKind": "cause",
+      "ownerId": "C-001",
+      "templateId": "tpl-access-local",
+      "zones": [
+        "Z-STATION"
+      ],
+      "targetEffRating": "Partial",
+      "currentEffRating": "None",
+      "critical": true,
+      "state": "gap",
+      "currentEffDetail": "Field devices have default or no credentials.",
+      "eventIds": [
+        "E-001",
+        "E-002"
+      ]
+    },
+    {
+      "controlId": "K-002",
+      "ownerKind": "cause",
+      "ownerId": "C-002",
+      "templateId": "tpl-access-local",
+      "zones": [
+        "Z-STATION"
+      ],
+      "targetEffRating": "Partial",
+      "currentEffRating": "Full",
+      "critical": true,
+      "state": "met",
+      "eventIds": [
+        "E-002"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "eventId": "E-001",
+      "label": "Breakers opened",
+      "causes": [
+        {
+          "id": "C-001",
+          "label": "Physical access",
+          "inherentLikelihood": 2,
+          "currentLikelihood": 2
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "O-001",
+          "label": "Station blackout"
+        }
+      ],
+      "instanceIds": [
+        "K-001"
+      ],
+      "gap": true,
+      "critical": true
+    },
+    {
+      "eventId": "E-002",
+      "label": "Configurations wiped",
+      "causes": [
+        {
+          "id": "C-001"
+        },
+        {
+          "id": "C-002"
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "O-002",
+          "label": "Equipment damage"
+        }
+      ],
+      "instanceIds": [
+        "K-001",
+        "K-002"
+      ],
+      "gap": true,
+      "critical": true
+    }
+  ],
+  "summary": {
+    "instanceCount": 2,
+    "riskCount": 2,
+    "gapRiskIds": [
+      "E-001",
+      "E-002"
+    ],
+    "criticalRiskIds": [
+      "E-001",
+      "E-002"
+    ],
+    "byState": {
+      "gap": 1,
+      "met": 1,
+      "unassessed": 0,
+      "not-applicable": 0
+    }
+  },
+  "problems": []
+}
+```
+**400: `scope` is neither `instance` nor `template`.**
+
+```json
+{
+  "error": "scope must be \"instance\" or \"template\": all"
+}
+```
+**404: No Lamina model has this id, the model has no such outcome, or the outcome owns no such control. A control of another owner does not match. The `error` text names which.**
+
+```json
+{
+  "error": "outcome not found: O-001"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
 ## `GET /cross-app/models/{modelId}/finding-inbox`
 
 Lists the open records that their rule does not hide. The scope is the Tetra model that the Lamina manifest names under `tetraModel`, or every Tetra model the workspace lists when it names none. `findings` holds the Tetra records in the zones the manifest declares under `tetraZones`. `metron` holds the Metron findings of the same model scope, which need no zones. Each entry is marked `linked` when some cause of this Lamina model links it, so the answer to unlinked is per Lamina model.
@@ -751,7 +1359,7 @@ Returns the parsed assessment and a version. The version is a hash of the assess
 
 ## `GET /metron/assessments/{id}/workspace`
 
-Returns the text of every file the assessment's window reads, so a browser that has no file system can open it. Paths are relative to the model root and no absolute path appears. A file that cannot be read is left out and the window reports the error itself.
+Returns the text of every file the assessment's window reads, so a browser that has no file system can open it. The set is what the assessment's loaders read: the assessment, the model it is bound to, its package, the assessment's own register and the external-data tables. Paths are relative to the model root and no absolute path appears. A file that cannot be read is left out and the window reports the error itself.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -789,7 +1397,7 @@ Returns the text of every file the assessment's window reads, so a browser that 
 
 ## `POST /metron/assessments/{id}/ops`
 
-Applies the edits in `ops` in order and writes the assessment file once. The same commit also writes the assessment's own register: each pair's outcome, state and evidence is set as the `person` layer of its record, and a record is created for a pair that has none. A damaged register answers 400 and nothing is written. The batch applies only when `baseVersion` matches the current version, so a stale write answers 409 with the current version instead of overwriting a newer edit. If any edit fails, nothing is written. The server stamps `by` and `at` on every log entry it writes, from the assessment's assessor and its own clock. A request cannot set them. The edit kinds are `applyAssessment`, `setPairState`, `revalidatePairs`, `reconcileBinding`, `archiveOrphan`, `setGeneralEvidence`, `setSharedAssessments`, `saveSlice` and `deleteSlice`.
+Applies the edits in `ops` in order and writes the assessment file once. The same commit also writes the assessment's own register: each pair's outcome, state and evidence is set as the `person` layer of its record, a pair's shared assessment is a manual link on its record, the versions a done pair was assessed at are the `accepted` pins of its record's links, and a record is created for a pair that has none. The shared assessments and the general evidence are records of the same register. A damaged register answers 400 and nothing is written. Answers 400 invalid when the assessment file still holds `pairs`, `sharedAssessments` or `generalEvidence`, or when the register still holds a record in an earlier shape; run the backfill first. The batch applies only when `baseVersion` matches the current version, so a stale write answers 409 with the current version instead of overwriting a newer edit. If any edit fails, nothing is written. The server stamps `by` and `at` on every log entry it writes, from the assessment's assessor and its own clock. A request cannot set them. The edit kinds are `applyAssessment`, `setPairState`, `acceptPairs`, `reconcileBinding`, `archiveOrphan`, `setGeneralEvidence`, `setSharedAssessments`, `saveSlice` and `deleteSlice`.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -848,7 +1456,7 @@ Applies the edits in `ops` in order and writes the assessment file once. The sam
 
 ## `POST /metron/assessments/{id}/run`
 
-Assesses every pair of a rule-assessed requirement that has no outcome yet, and writes the assessment file once. Each outcome lands as a draft. Only a requirement that opts in to automatic completion is also completed, and the log attributes that to the rule. Pairs that already hold an outcome are never changed. The run also keeps the assessment's records, one for each requirement and in-scope entity, in the assessment's own register, and writes them in the same commit as the assessment file. Each record also carries its pair's outcome, state and evidence as its `person` layer. The request body is optional. When it carries `baseVersion`, the run applies only if that matches the current version, and a stale run answers 409 without writing. A run that changes nothing answers 200 with `filesChanged` empty and the current version.
+Assesses every pair of a rule-assessed requirement that has no outcome yet, and writes the assessment file once. Each outcome lands as a draft, and a rule never completes a pair. Pairs that already hold an outcome are never changed. The run also keeps the assessment's records, one for each requirement and in-scope entity, in the assessment's own register, and writes them in the same commit as the assessment file. Each record also carries its pair's outcome, state and evidence as its `person` layer. The request body is optional. When it carries `baseVersion`, the run applies only if that matches the current version, and a stale run answers 409 without writing. A run that changes nothing answers 200 with `filesChanged` empty and the current version. Answers 400 invalid when the assessment file still holds `pairs`, `sharedAssessments` or `generalEvidence`, or when the register still holds a record in an earlier shape; run the backfill first.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1000,6 +1608,78 @@ Applies one requirement package to one Tetra model. The server writes an empty a
       "locator": "plant-b/other.tetra.yaml"
     }
   ]
+}
+```
+
+## `POST /metron/packages/{id}/versions`
+
+Scaffolds version N+1 of one requirement package as a sibling directory. The server copies the files the package loads, rewrites the manifest with the next `meta.version` and a matching `-vN` in the directory, file and `meta.name`, and answers the files it wrote. It never copies or changes an assessment or a finding. The source package is not changed. The request has no body.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `id` | path | yes | string | The package's own id, the `meta.id` its manifest carries. |
+| `version` | query | no | integer | The version to copy from. Required when the package exists in several versions. |
+
+### Responses
+
+**201: The new version was written.**
+
+```json
+{
+  "ok": true,
+  "id": "pkg-grid",
+  "fromVersion": 1,
+  "toVersion": 2,
+  "locator": "pkg-grid-v2/pkg-grid-v2.metron.yaml",
+  "filesChanged": [
+    "pkg-grid-v2/pkg-grid-v2.metron.yaml",
+    "pkg-grid-v2/requirements/general.req.yaml"
+  ],
+  "warnings": [],
+  "notes": []
+}
+```
+**400: The `version` query is not an integer. Nothing was written.**
+
+```json
+{
+  "ok": false,
+  "reason": "invalid",
+  "error": "version must be an integer"
+}
+```
+**403: The deployment refuses the write. Present when the server is configured with a write check.**
+
+```json
+{
+  "ok": false,
+  "reason": "forbidden",
+  "error": "This deployment is read-only."
+}
+```
+**404: No requirement package has this id.**
+
+```json
+{
+  "error": "package not found: pkg-grid"
+}
+```
+**409: The package exists in several versions and no `version` was given (`reason` is `ambiguous`), or the new version cannot be created (`reason` is `refused`): its directory already exists and holds files, the package folder holds a nested component package, or another manifest already has the new identity. `error` says which. Nothing was written.**
+
+```json
+{
+  "ok": false,
+  "reason": "refused",
+  "error": "pkg-grid-v2 already exists and is not empty. Move it or delete it, then re-run."
+}
+```
+**500: The new version could not be written completely. Delete any partial directory beside the package, then try again.**
+
+```json
+{
+  "ok": false,
+  "reason": "write-failed",
+  "error": "The new version could not be written. Delete any partial directory beside the package, then try again."
 }
 ```
 

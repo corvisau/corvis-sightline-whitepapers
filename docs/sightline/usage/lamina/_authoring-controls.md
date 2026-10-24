@@ -1,148 +1,125 @@
-A cause or an outcome owns its controls. You write each control inline, in the
-parent's `controls:` list. Reuse comes from a template.
+A cause or an outcome owns its controls. Each control belongs to one parent, and
+reuse comes from a template.
 
-This page covers the control fields a model author writes by hand. For the
+This page covers how to add a control, reuse a template, set the elements a
+control covers and read where an inherited value came from. For the
 effectiveness ratings and the zone rules that colour a control's element badges,
 see [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices).
 
-## A control is always inline
+## Add a control
 
-Write the control inside the cause or the outcome that owns it:
+A control always belongs to the cause or the outcome that owns it. Two parents
+never share one control.
 
-```yaml
-causes:
-  - id: C-0001
-    label: Example cause
-    controls:
-      - id: K-MMM44
-        label: Network segregation
-        category: Technology
-        controlType: Preventative
-        currentEffRating: Full
-```
+1. Right-click the cause or the outcome on the canvas.
+2. Select **Add control**.
+3. Fill in the **Label** and the other required fields in the drawer that opens.
 
-Every control needs an `id`. The id must be unique across the whole model,
-because two parents never share one control. Use the `K-#####` form for a new
-control.
+A control on a cause is preventative. A control on an outcome is mitigative.
 
-An outcome takes the same shape. Its controls carry `controlType: Mitigative`
-instead.
+The context menu offers **Add control** on the canvas only. The Tabular Editor
+has no equivalent, and a control row there cannot be duplicated.
+
+Two relationships are references and not owned objects. A cause points at the
+events it can lead to, and an event points at the outcomes it can produce.
+Several causes can point at one event, and several events at one outcome.
+
+## Conditional modifiers
+
+A conditional modifier is a barrier on a consequence line that counts only when a stated condition holds. An example is "applies only if the isolation valve is closed". Only an outcome can own one.
+
+A conditional modifier is one of three kinds of control:
+
+| Kind | Where it sits | What it records |
+|---|---|---|
+| Assessed control | Cause or outcome | Effectiveness ratings, elements and zones. It always applies. |
+| Inherent control | Cause or outcome | A baseline control that is valid or not valid |
+| Conditional modifier | Outcome | A free-text condition for when the barrier counts |
+
+To add a conditional modifier:
+
+1. Select the outcome on the canvas to open the props drawer.
+2. In the **Inherent and Conditional Controls** list, select **+ Add**.
+3. Select **Edit →** beside the new row.
+4. Enter the **Label** and the **Condition**.
+
+A control template whose control type is `Conditional` can also be added from the **Suggested controls** section of an outcome. A cause never offers one.
+
+The condition is plain text. Lamina does not evaluate it, and a conditional modifier never changes the residual rating. It has no effectiveness rating, elements or zones.
+
+On the canvas, a conditional modifier has a dotted border, the category **Conditional** and a **Condition** row. It sits between the assessed controls and the inherent controls on the consequence line. Select **Edit** on its context menu, or double-click it, to open its form in the drawer. Dragging reorders it among the conditional modifiers only.
+
+The PowerPoint risk report lists each conditional modifier and its condition under **Conditional Modifiers** in the **Outcomes** table. See [Risk report (PowerPoint)](/docs/sightline/usage/lamina/risk-report-pptx).
 
 ## Reuse comes from a template
 
-Put the shared part of a control in a template, then point each instance at it:
+A template holds the shared part of a control. Each control that uses it
+stores only the fields that differ.
 
-```yaml
-# controls.template.yaml
-controls:
-  - id: tpl-control-generic-edr
-    label: Endpoint detection and response
-    category: Technology
-    controlType: Preventative
-```
+1. Select the control on the canvas to open the props drawer.
+2. In the **Template** field, type part of a template name, or select **Browse** to pick from the tree.
+3. Set the fields that differ for this control, such as the current effectiveness rating.
 
-```yaml
-# causes.yaml
-    controls:
-      - id: K-PMKH3
-        template: tpl-control-generic-edr
-        currentEffRating: Partial
-```
+The control takes every other value from the template. A field that the control
+sets wins over the template's value. Set only the fields that differ, because a
+control that repeats the template's own values no longer follows a later change
+to the template.
 
-The loader merges the template under the instance. The instance wins on any
-field it sets, so `currentEffRating` above overrides the template's value and
-`label` comes from the template.
+Select **Edit** beside the **Template** field to open that template in the
+Template Editor.
 
-Keep the instance sparse. Write only the fields that differ from the template.
-An instance that repeats the template's own values is harder to change later,
-because a template edit no longer reaches it.
+## Elements: the IT/OT elements a control covers
 
-## What still uses an id reference
+A control's **Elements** field names the assets it protects. Each row holds an
+element id and an optional zone narrow.
 
-Two fields hold a reference rather than an object:
+- A row with no zone covers that element in every zone.
+- A row with one zone covers the element in that zone only.
+- A row with several zones covers the element in those zones only.
 
-- `cause.events` names the events a cause can lead to
-- `event.outcomes` names the outcomes an event can produce
+Select **+ Add element** to append a row, then type the element id and add any
+zones. Select **×** to remove a row.
 
-Several causes point at one event, and several events point at one outcome.
-Those are shared nodes, so they stay references.
+A row can carry extra detail, such as a name and a description. The drawer keeps
+that detail when you edit the row, but it shows only the id and the zones.
 
-## Elements — the IT/OT elements a control covers
-
-A control's `elements` field names the assets it protects. Each entry is one
-of three shapes:
-
-```yaml
-controls:
-  - id: K-MMM44
-    label: Network segregation
-    elements:
-      - IAM-1                      # wildcard: covers this element in every zone
-      - [IAM-2, Z-SCADA]            # narrowed to one zone
-      - [IAM-3, [Z-SCADA, Z-FIELD]] # narrowed to several zones
-```
-
-An entry can also be a full object (`{ id: IAM-4, name: ..., description: ... }`)
-when you need to record detail beyond the id. The drawer preserves that detail
-on round-trip, but the editor only exposes the id and the zone narrow.
-
-The props drawer's Elements field lists one row per entry: an id and its zone
-narrow (blank means every zone). **+ Add element** appends a row and **×**
-removes one.
-
-### Zone ids name tetra zones
+### Zone ids name Tetra zones
 
 A zone id on a cause, outcome, exposure, objective, control, element narrow or
-vector `sourceZones` is the id of a zone in your tetra model. Lamina accepts any
-non-empty string. Lamina has no `Zone` entity of its own.
+vector source zone names a zone in your Tetra model. Lamina accepts any
+non-empty string and has no zone of its own.
 
-Lamina checks zone ids when it opens a `*.bowtie.yaml` manifest, and again when
-you save a yaml file in the workspace. It adds a Problems-panel warning
-(`unresolved-zone-ref`) to the manifest for each zone id that no tetra model
-defines.
+Lamina checks zone ids when it opens a model, and again when you save a file in
+the workspace. It adds a Problems-panel warning to the model for each zone id
+that no Tetra model defines.
 
-The check reads every tetra model that the workspace lists, in any folder, with
-the files each model lists. A tetra model needs a `meta.id` to be listed. The
-check gives no warning for a manifest that the workspace does not list.
+The check reads every Tetra model that the workspace lists, in any folder. A
+Tetra model needs an id to be listed. The check gives no warning for a model
+that the workspace does not list.
 
 ## A template can derive from another template
 
-Reuse is hierarchical. Write the shared part once, then derive the specific
-case from it:
+Reuse is hierarchical: define the shared part once, then derive the specific
+case from it. A control that uses the specific template takes the shared values
+from the generic template and the specific values from the specific one. Each
+level overrides the one above it, and a chain can be any depth.
 
-```yaml
-# controls.template.yaml
-controls:
-  - id: tpl-control-generic-edr
-    label: Generic EDR control
-    category: Technology
-    controlType: Preventative
+In the Template Editor, select **+ New template** to create a template. The
+create drawer has an optional **Template** selector under the label field. Pick
+the parent there to create a sub-template, or leave it empty for a top-level
+template. The selector lists the templates of the chosen type, and changing the
+type clears a parent of the old type.
 
-  - id: tpl-control-edr-zone-x
-    template: tpl-control-generic-edr
-    label: EDR product A used in Zone X
-    currentEffRating: Full
-```
+To re-parent a template, open its row and change the **Template** selector in
+the drawer. Clear it to make the template top-level.
 
-An instance points at the specific template and inherits through the whole
-chain:
-
-```yaml
-    controls:
-      - id: K-PMKH3
-        template: tpl-control-edr-zone-x
-```
-
-That control takes `category` and `controlType` from the generic template,
-`label` and `currentEffRating` from the specific one, and each level overrides
-the one above it. A chain can be any depth.
-
-Author the hierarchy in YAML. The Template Editor edits a template's own
-fields; it does not create or re-parent a sub-template.
+The Template Editor refuses a save that would make a template derive from
+itself. A template cannot be its own parent or the child of one of its own
+sub-templates. The save bar shows the reason, and nothing is saved.
 
 ## Where an inherited value came from
 
-The props drawer marks an inherited field with an `inherited` badge. Hover the
+The props drawer marks an inherited field with an **inherited** badge. Hover the
 row to see which templates the value came through:
 
 ```
@@ -150,8 +127,8 @@ Generic EDR control -> EDR product A used in Zone X -> this control
 ```
 
 The chain reads left to right, from the template that introduced the value to
-the control in front of you. A field the nearest template overrides names only
-that template.
+the control in front of you. A field that the nearest template overrides names
+only that template.
 
 The picker's **Browse** button shows the same hierarchy as a tree, with each
 sub-template under its parent. Typing in the field filters the tree and keeps a
@@ -164,6 +141,6 @@ not appear where you expect it.
 
 ## Open the Template Editor and the Constants Editor
 
-The diagram toolbar has an **Edit Templates** button and an **Edit Constants** button. In VS Code each opens an editor panel beside the diagram. Both buttons are disabled in a read-only view, because both editors write to the model. The **Sightline: Edit Templates** and **Sightline: Edit Constants** commands open each editor in a read-only view too, with every control disabled.
+The diagram toolbar has a **Templates** button and a **Constants** button. In VS Code each opens an editor panel beside the diagram. Both buttons are disabled in a read-only view, because both editors write to the model. The **Lamina: Edit Templates** and **Lamina: Edit Constants** commands open each editor in a read-only view too, with every control disabled.
 
 In the web shell each button opens its editor in a tab of its own, named after the model. Select the button again to return to the tab that is open. The editor saves to the model, and the diagram tab shows the saved change. A Lamina page opened outside the web shell has no shell to open a tab in, so it shows neither button.

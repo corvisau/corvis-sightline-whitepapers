@@ -1,22 +1,10 @@
-Tetra uses **bonsai filter expressions** to project the full model into a narrowed view called a _data slice_. This page covers the filter language, the execution pipeline and the Tetra sentinel transforms (`cascade()`, `exclude()`). It also covers set-pipeline programs, the prune and shade display modes, and YAML-level member filtering.
+Tetra uses **bonsai filter expressions** to project the full model into a narrowed view called a _data slice_. This page covers the filter language, the execution pipeline and the Tetra sentinel transforms (`cascade()`, `exclude()`). It also covers set-pipeline programs, the prune and shade display modes, and the member filter fields of a zone or group.
 
 ---
 
-## DataSlice schema
+## Creating, editing, and duplicating slices
 
-A Tetra `DataSlice` has these fields:
-
-| Field | Type | Notes |
-|---|---|---|
-| `id` | `string` | Opaque generated id (`s-xxxxx`) for new/duplicated slices; unchanged when editing an existing slice |
-| `name` | `string` | Human-readable label |
-| `description` | `string?` | Optional prose description |
-| `filter` | `string \| string[] \| undefined` | Bonsai expression(s); absent/empty = full model |
-| `viewOptions` | `DataSliceViewOptions?` | Saved view perspective (zoom, pan, display settings) |
-
-Tetra has no `aggregationId` field, and it ignores one on a slice pasted from Lamina.
-
-### Creating, editing, and duplicating slices
+A data slice has a name, an optional description, an optional query and a saved view perspective (zoom, pan and display settings). A slice with no query shows the whole model.
 
 The toolbar's **Data slice** control appears in the Diagram view only. A data slice narrows the diagram, and the Table view always lists the whole model. The active slice stays selected while the Table view is open. The control's label reads **Data slice:** followed by the name of the active slice.
 
@@ -30,9 +18,9 @@ A model with no data slices shows no **Data slice** control. The Diagram view sh
 
 A user who cannot edit the model sees the message "The model author hasn't created a data slice yet." instead, with no button. A web shell tab opened with a reader token is one example.
 
-Click the control to open the slice popover. The popover lists every slice. A slice that builds on a base slice appears indented under that base. Select the base itself from its own row. Click a slice to apply it and close the popover. The Up and Down arrow keys, Home and End move between the rows, and Escape closes the popover.
+Click the control to open the slice menu. A row of four buttons stays at the top of the menu: **New**, **Edit**, **Duplicate** and **Delete**. Below the buttons, the menu lists the slices and scrolls when the list is long, so the buttons never scroll out of view. A slice that builds on a base slice opens a submenu to the side. The first entry of the submenu is the base slice itself, followed by the slices that build on it. Click a slice to apply it and close the menu. The Up and Down arrow keys, Home and End move between the entries. The Right arrow key opens a submenu, the Left arrow key closes it, and Escape closes the menu.
 
-Below the list, choose an action:
+The buttons at the top of the menu do these actions:
 
 - **New** opens an empty editor.
 - **Edit** opens the currently-active slice with every field pre-filled; its id never changes.
@@ -43,17 +31,25 @@ A new or duplicated slice appears in the popover and becomes active as soon as y
 
 The **PNG**, **Legend (PNG)** and **Draw.io** exports capture the diagram. On a model with no data slices they are disabled until you create one. Reports stay available.
 
-Slice ids are opaque and generated; the editor does not derive them from the typed name.
+The editor shows the slice's query under a **Query** label as read-only text, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
 
-The editor shows the slice's query as read-only text, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
-
-A new slice has no query. A slice with no query shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`, because a statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**. A statement that does not add anything, such as a `remove()` or a `where()` without `add()`, then acts on an empty result. The `remove()` examples in this page start from `model |> add()` for the same reason.
+A new slice has no query. A slice with no query shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`. A statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**. A statement that does not add anything, such as a `remove()` or a `where()` without `add()`, then acts on an empty result. The `remove()` examples in this page start from `model |> add()` for the same reason.
 
 A **Show code** button in the top-right corner of the query builder, opened from **Edit query**, reveals the exact bonsai program as read-only text. The program is the same statement list described below, and a **Copy** button copies it. Use it to debug a filter or to share it outside the editor.
 
-### Include related types
+A statement in the query builder can be disabled and enabled again with the round button at the right of its row. A slice whose statements are all disabled shows the whole model, as a slice with no query does. See [Disabling a statement](/docs/sightline/usage/shared/tabular-filtering#disabling-a-statement).
 
-The query builder, opened from **Edit query**, shows an **Include related** checkbox row above the filter builder. Ticking a type appends one combined statement to the program (`model |> where("item.kind |> oneOf('device', ...)") |> add()`), preceded by an auto-generated `// Pulling devices into the model` summary comment. Unticking a type removes it. Clearing every type removes the generated block entirely. The selectable types are `channel`, `flow`, `annotation`, `system`, `device`, `zone`, `network`, `group`, `information`.
+### Filtering by kind
+
+The **+ step** menu in the query builder, opened from **Edit query**, lists two steps under **Filters** that select items by kind. `includeKinds("zone", "flow")` keeps only the items of the listed kinds. `excludeKinds("information")` drops them and keeps everything else. Each step opens an editor with a checkbox for every kind: `channel`, `flow`, `annotation`, `system`, `device`, `zone`, `network`, `group` and `information`. Like `where()`, a kind step filters the current set, so end the statement in `add()`, `remove()` or `save()`:
+
+```
+model |> includeKinds("device", "zone") |> add()
+model |> add()
+model |> excludeKinds("information") |> remove()
+```
+
+`includeKinds("zone")` is the same as `where("item.kind |> oneOf('zone')")`. A slice saved with the former **Include related** checkboxes keeps working: the generated statement and its comments stay in the program as written, and the builder no longer edits them.
 
 ---
 
@@ -101,17 +97,11 @@ item.system == "AMI" && item.tags |> hasAny("ext")
 
 The `|>` operator pipes the left-hand value into the right-hand transform as its first argument. All comparison and logical operators (`==`, `!=`, `&&`, `||`, `!`) work normally.
 
+A tag filter matches the tag exactly, including its case. `hasAny("ami")` does not match a tag written `AMI`. To keep tags consistent, use the **Tags** field in the props drawer. As you type, the field lists the tags that other elements in the model already use. Matching ignores case, and tags already on the element are left out. Pick a suggestion to add it. To add a tag that no element uses yet, type it and press Enter.
+
 ### Multi-line filters (AND semantics)
 
-When `filter` is an array of strings, or when the edit dialog has multiple lines, the lines are AND-joined at evaluation time.
-
-```yaml
-filter:
-  - item.tags |> hasAny("ami")
-  - item.kind == "device"
-```
-
-Equivalent to `item.tags |> hasAny("ami") && item.kind == "device"`. Use multiple lines for readability; use `&&` within a single line to AND conditions that share a prefix.
+When a slice's filter has more than one line, the lines are AND-joined at evaluation time. For example, the two lines `item.tags |> hasAny("ami")` and `item.kind == "device"` are equivalent to `item.tags |> hasAny("ami") && item.kind == "device"`. Use multiple lines for readability; use `&&` within a single line to AND conditions that share a prefix.
 
 ### OR semantics
 
@@ -143,7 +133,7 @@ The bonsai stdlib also provides string transforms such as `startsWith`, `endsWit
 
 ### Address-semantic transforms
 
-All three take a network's `addressing` list as the piped value and read both entry forms: the bare CIDR string and the `{ range, … }` object. `item.addressing` itself is the authored YAML, so `anyOf(.range == …)` matches object entries only. See [Network Addressing](/docs/sightline/usage/tetra/network-addressing#raw-entries).
+All three take a network's `addressing` list as the piped value and read both entry forms: the bare CIDR string and the `{ range, … }` object. `item.addressing` itself holds each entry as it was entered, so `anyOf(.range == …)` matches object entries only. See the [Network Addressing](/docs/sightline/usage/tetra/network-addressing#raw-entries) section for how the two entry forms are represented.
 
 | Transform | Signature | Description |
 |---|---|---|
@@ -183,7 +173,7 @@ Matched nodes are kept; unmatched nodes are pruned. Ancestor containers of kept 
 item.tags |> hasAny("ami") |> cascade()
 ```
 
-When appended to a line, `cascade()` also pulls in every entity directly connected to the matched entities through `nodeA`, `nodeB`, `path`, `connections` or `devices`, one hop deep. The `connections` field on a device lists the networks, channels and flows the device takes part in.
+When appended to a line, `cascade()` also pulls in every entity directly connected to the matched entities, one hop deep. It reaches them through `nodeA`, `nodeB`, `path`, `connections` or `devices`. The `connections` field on a device lists the networks, channels and flows the device takes part in.
 
 > **Tetra caveat:** Tetra always pulls in the channels, flows and networks directly connected to a kept node, so `|> cascade()` has no effect in Tetra. In Lamina it selects the chains to expand. The auto-cascade toggle appends it for compatibility with Lamina.
 
@@ -266,6 +256,10 @@ A |> follow("parent", 1) |> follow("children", 1) |> add()   # 1-hop neighbourho
 > name and an optional numeric depth. Several edge names, such as
 > `follow("nodeA", "nodeB", "path")`, do not work. To follow several fields, see
 > the Including all of a flow's hop-nodes section below.
+
+### `includeKinds()` and `excludeKinds()` — filter by entity kind
+
+`includeKinds("a", "b")` keeps the items whose `item.kind` is one of the listed kinds. `excludeKinds("a", "b")` keeps the items whose kind is none of them, including an item with no kind. Both take quoted kind names. `includeKinds()` with no kinds keeps nothing, and `excludeKinds()` with no kinds keeps everything. Neither adds to the result by itself.
 
 ### `removeRecursiveDown()` — remove a set and its whole children subtree
 
@@ -353,31 +347,20 @@ The mode and both category sets save onto the data slice. The tabs render only w
 
 ---
 
-## YAML-level member filtering
+## Member filters on a zone or group
 
-Independent of data slice filters, individual container `members:` entries in YAML support two filtering forms, resolved when the model loads.
+Independent of data slice filters, a zone or group can carry two filters of its own. Tetra resolves them when it loads the model. Both fields are in the Advanced section of the zone or group props drawer.
 
-### FilteredMemberRef — prune a resolved container's subtree
+### Member Filter: prune a container's subtree
 
-```yaml
-members:
-  - id: z-it
-    filter: 'item.tags |> hasAny("ami")'
-```
+**Member Filter** takes a bonsai expression, for example `item.tags |> hasAny("ami")`. Only the nodes in that container that match the expression survive. The canvas shows a **funnel badge** (⊻ icon) on the container node to indicate that a subtree filter applies. Hover over the badge to see the expression.
 
-Resolves the container `z-it` by ID, then prunes its subtree using the bonsai expression. Only nodes matching the filter survive within that container. The UI renders a **funnel badge** (⊻ icon) on the container node to indicate that a subtree filter applies. Hover over the badge to see the expression.
+### Include by expression: add members dynamically
 
-Schema: `{ id: string, filter: string }`; both fields are required.
+**Include by expression** takes a bonsai expression, for example `item.kind == "device" && item.tags |> hasAll("ami")`. Tetra evaluates it against every entity in the model when the model loads and inserts every match as a member. It suits dynamic groupings that do not need an explicit list of members.
 
-The Edit drawer's **Member Filter** field, in a zone's or group's Advanced section, takes the same expression.
+Enter an expression and save to add every matching item to the container. Clear the field and save to remove the rule. Tetra refuses an expression it cannot compile and changes nothing.
 
-### ExprRef — resolve members dynamically by expression
+The field edits one expression. A container with several such rules shows them in the field, read-only, joined by ` ; `, and keeps all of them when you save other changes. Editing those rules needs the model file, because the drawer offers no control for it.
 
-```yaml
-members:
-  - expr: 'item.kind == "device" && item.tags |> hasAll("ami")'
-```
-
-Evaluated against every entity in the model when the model loads. All matching entities are inserted as members. Useful for dynamic groupings that do not need explicit ID lists.
-
-Schema: `{ expr: string }`.
+Tetra does not store the matched items as members, because the expression adds them again on load.

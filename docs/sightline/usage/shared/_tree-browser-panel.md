@@ -41,7 +41,9 @@ VS Code owns the section. It remembers whether you left it collapsed or expanded
 
 ## Tetra
 
-The Models section above the tree lists the workspace's `*.tetra.yaml` files. Select one to open it, and the tree below shows its entities.
+In the browser, select **Tools**, then **Model tree** in the Tetra toolbar. The tree opens beside that model's editor and provides the same selection, filtering and editing actions. Close it with the panel's close button. The browser panel has a fixed width; the extension uses the size of the VS Code sidebar section.
+
+The Models section above the tree lists the Tetra models in the workspace. Select one to open it, and the tree below shows its entities.
 
 The tree shows containment: zones, groups, devices, networks and information nodes, each under its parent. Channels, flows and annotations are relations rather than tree members.
 
@@ -93,7 +95,7 @@ A selection made in the table does not select nodes on the diagram.
 
 ## Lamina
 
-The Models section above the tree lists the workspace's `*.bowtie.yaml` files. Select one to open it, and the tree below shows its entities.
+The Models section above the tree lists the Lamina models in the workspace. Select one to open it, and the tree below shows its entities.
 
 The tree groups the model by entity type. Causes, events and outcomes each sit under a group header. Flows between causes, events and outcomes do not appear as rows.
 
@@ -102,7 +104,7 @@ A control belongs to the cause or the outcome that carries it. It renders under 
 Two groups collect the controls that cannot nest:
 
 - **Shared controls.** More than one line references the control. Lamina lets you paste a control as a reference. Both lines then carry the same canonical id, so the tree cannot file it under either one.
-- **Unattached controls.** No cause or outcome references the control. It is either an entry in the top-level `controls:` list that nothing uses, or a reference that does not resolve. Both are usually worth fixing in the model.
+- **Unattached controls.** No cause or outcome uses the control, or a reference to it does not resolve. Both are usually worth fixing in the model.
 
 A shared control has a node on every line that carries it. Selecting its row centres the viewport on all of them together.
 

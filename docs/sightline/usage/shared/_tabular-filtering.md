@@ -24,6 +24,16 @@ The **Filter** and **Group** toolbar buttons open the shared query popovers. Lam
 
 The grid has no per-column text boxes under the header. Filter and Group replace them.
 
+### Disabling a statement
+
+The query builder switches a statement off without deleting it. A disabled statement lets you test what a filter returns without that step, or park a step to finish later.
+
+To disable a statement, select the round button at the right of its row. The row dims and the button changes shape. Select the button again to enable the statement.
+
+A disabled statement keeps its steps and stays editable. The query does not run it, and the builder does not check it for errors. A register that a disabled statement saves does not exist for the statements after it. **Show code** lists a disabled statement with `//!` at the start of the line. A statement with no steps has nothing to disable. The summary beside **Edit query** counts disabled statements separately, for example `2 statements, 1 disabled`.
+
+When every statement is disabled, the query behaves like one that holds only comments. Tetra and Lamina data slices then show the whole model, and Metron filters match nothing. The [Tetra](#tetra) and [Lamina](#lamina) sections and the Metron [worklist](/docs/sightline/usage/metron/worklist-filtering) page repeat this for their own filters.
+
 ### Available Basic-tab filter fields
 
 Every filterable column is a Basic-tab field. The column set defines the fields. Operators follow the field type.
@@ -47,28 +57,24 @@ Group offers only low-cardinality attributes. ID, Label and Description are near
 In Lamina and Metron, the **Saved filters** button names and saves the current filter program. In Tetra, **Saved filters** is a section at the bottom of the **Filter** popover, and there is no separate button. You can re-apply or delete a saved filter later. Saved filters have these properties:
 
 - Personal. The app stores them in your own VS Code, scoped to this toolbar. Each app keeps its own list, independent of the lists in the other apps.
-- Never part of the model. The app writes them to no model YAML file and does not share them with other users.
+- Never part of the model. The app saves them nowhere in the model and does not share them with other users.
 - Named once. There is no rename or edit action. To change a saved filter, save a new one, or delete and re-save it, under the program you want.
-
-The storage key for each app is in the [Tetra](#tetra) and [Lamina](#lamina) sections.
 
 ## Column visibility
 
 The **Edit columns** toolbar button (**Columns** in Tetra, at the right of the table header) opens a popover that shows, hides and reorders columns. This is a different axis from the row-narrowing mechanisms above: it controls which of the available columns render. Every Metron grid with an **Edit columns** button has the same picker.
 
 - Checking or unchecking a column in the popover shows or hides it in the grid immediately.
-- Column order and visibility are personal and local. The app stores them in your own VS Code, independent of the other apps, and writes them to no model YAML file.
-- Dragging the handle at the left of a column header moves that column. To use the keyboard, focus the handle, press Space to pick the column up, press the left or right arrow key to move it, and press Space again to drop it. The popover list shows the same order, and the app saves it the same way. Dragging a header never sorts the column. In Metron, the always-on columns that the picker does not list (such as the row actions) have no handle and stay after the others.
+- Column order and visibility are personal and local. The app stores them in your own VS Code, independent of the other apps, and never saves them in the model.
+- Dragging the handle at the left of a column header moves that column. To use the keyboard, focus the handle and press Space to pick the column up. Press the left or right arrow key to move it, and press Space again to drop it. The popover list shows the same order, and the app saves it the same way. Dragging a header never sorts the column. In Metron, the always-on columns that the picker does not list (such as the row actions) have no handle and stay after the others.
 - Dragging a column resize handle saves its width the same way. Reopening the panel restores the resized width instead of the default.
 - The column set never changes with the entity type filter, Filter or Group. A cell of a row type that does not declare a given field renders blank.
-
-The storage keys for each app are in the [Tetra](#tetra) and [Lamina](#lamina) sections.
 
 ---
 
 ## Tetra
 
-Tetra has five mechanisms: Filter, Group, the column header filter, and column visibility with Saved filters, plus the Tree view, which changes how the grid lays out the rows that remain.
+Tetra has five mechanisms: Filter, Group, the column header filter, column visibility with Saved filters, and the Tree view. The Tree view changes how the grid lays out the rows that remain.
 
 In the Table view, **Columns**, **Filter**, **Tree** and **Group** sit at the far right of the table header row. They stay in view when the table scrolls. **New** sits in the top toolbar, in place of the **View** menu. The **View** menu and the diagram **New** menu show only in the Diagram view.
 
@@ -78,11 +84,11 @@ The table opens with every entity type visible: the eight entity types plus `ann
 
 ### Source file
 
-A Tetra model can span several `.tetra.yaml` files. The grid shows the rows of every file by default, and no toolbar button selects files. The `sourceFile` column filters like any other column. Open its header filter, or add a `sourceFile` condition in **Filter** > Basic, to keep only some files.
+A Tetra model can span several files. The grid shows the rows of every file by default, and no toolbar button selects files. The `sourceFile` column filters like any other column. Open its header filter, or add a `sourceFile` condition in **Filter** > Basic, to keep only some files.
 
-The `sourceFile` popout opens with **(Blanks)** ticked. An entity that you created and have not yet saved to a file has no source file, and it stays in the grid while you untick files. Untick **(Blanks)** to hide those rows. Like every program-backed header filter, the `sourceFile` button leaves the header while the Advanced tab holds a hand-edited query. Filter on `item.sourceFile` in the query instead.
+The `sourceFile` popout opens with **(Blanks)** ticked. An entity that you created and have not yet saved to a file has no source file. It stays in the grid while you untick files. Untick **(Blanks)** to hide those rows. Like every program-backed header filter, the `sourceFile` button leaves the header while the Advanced tab holds a hand-edited query. Filter on `item.sourceFile` in the query instead.
 
-The `sourceFile` condition composes (AND) with the `type` column filter and with every other condition of **Filter**. Lamina has no equivalent, because its models are always single-file.
+The `sourceFile` condition composes (AND) with the `type` column filter and with every other condition of **Filter**. Lamina has no equivalent.
 
 ### Advanced tab traversals
 
@@ -107,7 +113,7 @@ The `type` column is the exception. Its header popout selects the entity types i
 
 The `value`, `linked to` and `addressing` columns have no filter button. Their cells show a flattened summary of a compound field (annotation values, annotation links, network address ranges). A chosen summary string has no equivalent condition on the underlying field.
 
-The header filter is available only while the program is Basic-representable. After you edit the query by hand in the Advanced tab, the header buttons leave the program-backed columns, because the app cannot rewrite the part of the query for one column without discarding your own Bonsai.
+The header filter is available only while the program is Basic-representable. After you edit the query by hand in the Advanced tab, the header buttons leave the program-backed columns. The app cannot rewrite the part of the query for one column without discarding your own Bonsai.
 
 A multi-value condition that you set from a column header (`is one of`, `has any`) shows its values as removable chips. Remove one chip to narrow the condition, and remove the last chip to drop the condition. Build such a condition from the header popout. The Basic tab is where you see and prune it.
 
@@ -120,7 +126,7 @@ The tree opens with its first level expanded. Expansion resets when you leave th
 Two kinds of row have no containing node in the tree:
 
 - A row whose containing node is not in the model, such as a device in the orphaned devices group, shows at the top level.
-- Channels, flows, systems and annotations have no containing node. Each type that has rows sits under one folder row at the end of the tree, for example **Channels (12)**. A folder row is a label. It has no checkbox, no context menu and no editable cell.
+- Channels, flows, systems and annotations have no containing node. Each type that has rows sits under one folder row at the end of the tree, for example **Channels (12)**. A folder row is a label, with no checkbox, context menu or editable cell.
 
 A filter keeps the structure around each match. Suppose a row passes the type filter, a column filter or **Filter**, but the nodes that contain it do not. The grid still shows those nodes in muted italic text, and the tree expands to reveal every match. A muted row is a context row. It has no checkbox, and the select-all checkbox in the header skips it. A click on a context row opens its properties instead of selecting it. A context row still edits and still opens its context menu.
 
@@ -148,7 +154,7 @@ Three metadata columns are off by default. Enable them from the **Columns** popo
 
 - **parent** (group `Common`): the id of the immediate containing node of the row. The cell is blank for a top-level row and for `channel`, `flow`, `system` and `annotation` rows, which have no tree parent.
 - **children** (group `Container`): the direct member ids of a `device`, `zone`, `group` or `network` row, comma-joined. The cell is blank for every other row type.
-- **status** (group `Container`): `pruned`, `orphan` or `ok` for a `device`, `zone`, `group` or `network` row, shown as a coloured pill. The value is `pruned` when the `{ id, filter }` claim filter of the row excluded it. A pruned row stays editable and is hidden from the canvas by default. The value is `orphan` when the row is defined but unreachable from the diagram tree, and `ok` otherwise. The cell is blank for every other row type. The column is read-only. Edit the tree position of a row from the canvas or the props drawer, not from this column.
+- **status** (group `Container`): `pruned`, `orphan` or `ok` for a `device`, `zone`, `group` or `network` row, shown as a coloured pill. The value is `pruned` when the member filter of the row excluded it. A pruned row stays editable and is hidden from the canvas by default. The value is `orphan` when the row is defined but unreachable from the diagram tree, and `ok` otherwise. The cell is blank for every other row type. The column is read-only. Edit the tree position of a row from the canvas or the props drawer, not from this column.
 
 ---
 
@@ -158,7 +164,7 @@ Lamina has four mechanisms: the entity type chips, Filter, Group, and column vis
 
 ### Entity type chips
 
-The chip row at the left of the toolbar has the chips Causes, Events, Outcomes and Controls, plus **all** and **none** links. Metron has a compliance slice that folds into its **Filter**, but Lamina has no equivalent. The entity type chips therefore stay their own control.
+The chip row at the left of the toolbar has the chips Causes, Events, Outcomes and Controls, plus **all** and **none** links. Metron has a compliance slice that folds into its **Filter**, but Lamina has no equivalent.
 
 ### Advanced tab traversals
 
@@ -177,4 +183,4 @@ Both stay reachable from the Advanced tab, for example with `item.state |> hasAn
 
 ### Group-by fields
 
-Lamina offers only **Type** (cause, event, outcome or control). ID, Template, Label and Description are near-unique or high-cardinality per row, so Group does not offer them. Lamina models are always single-file, so there is no File option.
+Lamina offers only **Type** (cause, event, outcome or control). ID, Template, Label and Description are near-unique or high-cardinality per row, so Group does not offer them. Lamina has no File option.

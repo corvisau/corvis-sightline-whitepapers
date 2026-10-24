@@ -8,7 +8,7 @@ This page lists how the layers of the Tetra canvas stack, from bottom to top. It
 4. Device boxes
 5. Information badges on devices and zones
 6. System overlays
-7. Overlay regions (the shaded regions authored in YAML; see [Overlays](/docs/sightline/usage/shared/overlays))
+7. Overlay regions (the shaded regions that mark an area of the diagram; see [Overlays](/docs/sightline/usage/shared/overlays))
 8. Channels and information flows
 9. Edge label pills
 10. Findings badges and coverage badges, on edges and on nodes

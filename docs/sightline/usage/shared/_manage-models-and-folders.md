@@ -1,5 +1,7 @@
 The **Models** tree in the **Sightline** view, and the sidebar of the web shell, rename, move and delete Tetra models, Lamina models and folders. Metron packages and assessments do not offer these entries.
 
+Sightline finds models in every folder of the workspace except hidden folders, whose names start with a dot (such as `.git` or `.venv`), and `node_modules`. A model in one of those folders does not open. Move it to a visible folder.
+
 ## Rename, move and delete from the menu
 
 1. Select **Sightline** in the activity bar.

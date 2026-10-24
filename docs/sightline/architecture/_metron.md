@@ -10,7 +10,7 @@ An outcome stays editable until you mark it complete. When the requirement or th
 
 Metron can define rules that run against the bound Tetra model. A rule is a query over the architecture. A requirement names a rule to narrow its scope or to suggest an outcome. See [Rules](/docs/sightline/usage/metron/rules).
 
-A finding is a record that a person creates by promoting assessed pairs. See [Findings](/docs/sightline/usage/metron/findings).
+A finding is a record that a person creates over assessed pairs, which are its members. See [Findings](/docs/sightline/usage/metron/findings).
 
 ## Closing the loop to risk
 

@@ -6,9 +6,11 @@ the Metron pages for how assessments are authored.
 ## Switching it on
 
 The overlay is off by default. Select the coverage button in the diagram's
-title bar, beside **View Findings on Diagram**, or run **Sightline: Toggle
+title bar, beside **View Findings on Diagram**, or run **Tetra: Toggle
 Coverage Overlay (this diagram)** from the command palette. Select the button
 again to hide the overlay.
+
+In the browser, select **Tools**, then **Show coverage overlay**. Select **Hide coverage overlay** in the same menu to switch it off.
 
 The overlay reads Metron data, which needs a licence that names Metron data. See [Licensing](/docs/sightline/usage/shared/licensing).
 
@@ -70,7 +72,7 @@ loads at version 1.
 
 The figures follow Metron's rules and match its worklist and the
 [Portfolio Roll-Up](/docs/sightline/usage/metron/portfolio-rollup). Tetra resolves every
-`*.assessment.yaml` binding for the diagram's model against the current model.
+assessment binding for the diagram's model against the current model.
 An entity that came into a requirement's scope since the last save counts as
 draft. A pair whose requirement has been removed is left out. The read writes
 nothing.

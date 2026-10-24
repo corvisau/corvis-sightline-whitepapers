@@ -1,38 +1,37 @@
-A client risk-matrix definition (`manifest.riskMatrixDef`) declares `likelihood.probability`/`likelihood.thresholds` per key. This doc covers what those values mean and how to combine more than one cause's likelihood into an aggregated value.
+A client risk matrix rates likelihood on a scale of keys, such as A to E. This page covers what the scale values mean and how to combine more than one cause's likelihood into an aggregated value.
+
+Editing the scale itself (its keys, labels, probabilities and thresholds) is not available in the UI. Lamina shows the scale wherever a likelihood appears.
 
 ---
 
-## `probability` / `thresholds` value range
+## What the scale values mean
 
-Despite the field name, `likelihood.probability` (and the optional `likelihood.thresholds`) is not required to be a `0-1` probability. It only needs to be non-negative. Use whichever convention matches how your organisation rates likelihood:
+A scale does not have to use a 0 to 1 probability. A value only needs to be non-negative. Use whichever convention matches how your organisation rates likelihood:
 
-- **Probability** (`0-1`, e.g. the built-in A-E default scale: `A: 0.0032` ... `E: 0.89`).
-- **Per-annum frequency** (events/year, unbounded above, e.g. `a: 0.05, b: 0.5, c: 2, d: 5, e: 10, f: 20`).
+- **Probability**, from 0 to 1. The built-in A to E default scale runs from 0.0032 for A to 0.89 for E.
+- **Per-annum frequency**, in events a year and unbounded above. An example is 0.05, 0.5, 2, 5, 10 and 20 for six keys.
 
-`probability` is the representative point value per key (e.g. a band's midpoint); `thresholds` is the bucket's upper bound, used to convert an aggregated value back to a key. Both accept the same range.
+The probability of a key is its representative point value, such as the midpoint of a band. The threshold of a key is the upper bound of its bucket. Lamina uses the thresholds to convert an aggregated value back to a key. Both accept the same range.
 
-## `likelihood.formulaVersion` — combining more than one cause
+## Combine more than one cause
 
-When a view's aggregation config combines more than one cause's likelihood (`simple-damped-union`, `exposure-grouped`, `exposure-vector-grouped`), the def's `likelihood.formulaVersion` picks the combination formula:
+An aggregation can combine more than one cause's likelihood. The **Simple damped union**, **Exposure grouped** and **Exposure-vector grouped** modes do this. The **Combination formula** field picks the formula.
 
-| Value | Behaviour |
+| Option | Behaviour |
 |---|---|
-| absent or `1` (default) | Damped-union formula. Inputs above `1` are clamped to `1` first so an unbounded (frequency) scale can't send the combined value negative or otherwise off-scale. This keeps the output safe, but it is not a mathematically correct combination for a frequency scale. |
-| `2` | Poisson rate-to-probability transform: exact for a per-annum-frequency scale (reduces to plain rate addition when a mode's damping factor is `1`, and a principled discounted value when damping is `< 1`). |
+| **Legacy damped union (default)** | Inputs above 1 are clamped to 1 first, so an unbounded (frequency) scale cannot send the combined value negative or off-scale. This keeps the output safe, but it is not a mathematically correct combination for a frequency scale. |
+| **Poisson rate-to-probability transform** | Exact for a per-annum-frequency scale. It reduces to plain rate addition when a mode's damping factor is 1, and gives a principled discounted value when damping is below 1. |
+| **(use model default)** | The aggregation uses the formula that the model's risk matrix sets. When the model sets none, it uses the legacy damped union. |
 
-Set `formulaVersion: 2` if your def's likelihood scale is a per-annum frequency and you use any aggregation mode other than `max`. `max` mode (highest single cause wins, no arithmetic combination) is unaffected by this setting either way.
+Choose **Poisson rate-to-probability transform** when your likelihood scale is a per-annum frequency and the aggregation uses any mode other than **Max**. The **Max** mode takes the highest single cause and combines nothing, so the formula has no effect on it.
 
-```yaml
-likelihood:
-  keys: [a, b, c, d, e, f]
-  labels: { a: Rare, b: Unlikely, c: Possible, d: Likely, e: Frequent, f: Continuous }
-  probability: { a: 0.05, b: 0.5, c: 2, d: 5, e: 10, f: 20 }
-  thresholds: { a: 0.1, b: 1, c: 3, d: 8, e: 15, f: 20 }
-  formulaVersion: 2
-```
+## Set the formula for one aggregation
 
-## Per-aggregation override
+1. In the diagram toolbar, select an aggregation in the **Aggregation** picker.
+2. Select the edit button beside the picker. To start a new aggregation, select the add button instead.
+3. In the **Edit Aggregation** dialog, expand **Likelihood aggregation**. Switch on **Enable**.
+4. In **Mode**, choose a mode other than **Max**.
+5. In **Combination formula**, choose an option.
+6. Select **Save**.
 
-An aggregation's own Likelihood config can override the def-level `formulaVersion` for that aggregation only. The aggregation's own setting wins. Otherwise the definition's value applies, and otherwise `1`. Set it from the Aggregation Settings panel's Likelihood section. The **Combination formula** field sits next to `dampingFactor`/`withinDamping`/`acrossDamping` and shows for every mode except `max`, which never combines more than one cause.
-
-The field starts unset. If the def's `formulaVersion` changes later, an aggregation that never set its own value picks up the new def value on the next load. Pick an explicit value only when this particular aggregation needs a formula different from the rest of the model.
+The **Combination formula** field does not show for the **Max** mode, which never combines more than one cause. The field starts on **(use model default)**. If the model's default changes later, an aggregation that kept that option picks up the new default on the next load. Choose an explicit option only when this aggregation needs a formula different from the rest of the model.

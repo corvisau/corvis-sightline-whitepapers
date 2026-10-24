@@ -1,7 +1,7 @@
 Export PNG on the diagram toolbar writes a picture of the current bow-tie to the
 model's `outputs/` folder. A dialog collects the filename and whether to frame
 the diagram to a fixed aspect ratio. The diagram draws only through a data
-slice, so on a model with no data slices Export PNG and Export Draw.io are
+slice. On a model with no data slices, Export PNG and Export Draw.io are
 disabled until you create one.
 
 ## The export renders separately from what is on screen
@@ -12,7 +12,7 @@ the button. Zoom level, scroll position, a hovered node, a selected node and an
 open dialog all stay out of the image.
 
 The export still shows the model and view settings you are working with. Hidden
-elements stay hidden, the active aggregation is applied, and display options
+elements stay hidden, the active data slice is applied, and display options
 such as compact mode are honoured.
 
 A progress notification appears while the export runs, and you can cancel it.
@@ -31,7 +31,7 @@ Three rules apply to every exported PNG, whatever the editor looks like:
 ## Exporting every data slice
 
 Export, then All slices (PNG), writes one picture for each saved data slice. The
-item appears only when the model file holds at least one data slice; a slice
+item appears only when the model holds at least one saved data slice; a slice
 created since the last Save all does not count.
 
 Each picture is rendered in the same offscreen view as a single export, one after
@@ -47,10 +47,10 @@ Every picture in a batch is framed at 24:11 and carries a physical size of
 24 × 11 cm, so PowerPoint inserts it at that size. The single export keeps the
 framing chosen in its dialog.
 
-The batch reads the model and the slices from disk. It skips unsaved edits and
+The batch reads the saved model and the saved slices. It skips unsaved edits and
 any unsaved view change on a slice (compact, tags, elements, outcome sort or
 annotation display). Save first when the pictures must show them. Each slice
-applies its own filter and aggregation, and the batch does not use the slice
+applies its own filter and settings, and the batch does not use the slice
 currently open in the editor.
 
 An empty slice produces no file. The closing message counts it as skipped.

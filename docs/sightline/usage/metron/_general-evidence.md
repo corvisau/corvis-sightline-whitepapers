@@ -4,7 +4,7 @@ any number of pairs, so the same evidence is not re-entered on every outcome
 record.
 
 General evidence is separate from, and compatible with, the inline per-pair
-evidence on the Assess drawer (`kind`/`value`/`label`). Use inline evidence for
+evidence on the Assess drawer (kind, value and label). Use inline evidence for
 something specific to one pair. Use general evidence for something shared across
 the assessment.
 
@@ -83,10 +83,10 @@ staged edit across all three tabs and restores the last-saved table.
 
 ### Opening the evidence file
 
-The **Open** column renders a link for any row whose `value` is set:
+The **Open** column renders a link for any row whose **Value** is set:
 
 - `file`: opens the referenced file with the OS's default application
-  (resolved relative to the assessment `*.assessment.yaml`'s own directory,
+  (resolved relative to the assessment's own folder,
   or as an absolute path).
 - `url`: opens the link in the default browser (a real `target="_blank"`
   anchor).
@@ -112,37 +112,19 @@ shared assessment cites when the pair has none of its own.
 ## Deleting a linked record
 
 Deleting a record in the Evidence tab removes it from the table and clears its id
-from every pair that linked it. No dangling reference remains in a pair's Assess
-drawer, the report or an export. It also clears the id from every
+from every pair that linked it. It also clears the id from every
 [shared assessment](/docs/sightline/usage/metron/shared-assessments) that cited it.
 
 ## Report and exports
 
-- **Report envelope** (contract v5): `assessment.generalEvidence[]` carries
-  every authored record. A linked pair's block carries only its ids in
-  `evidenceRefs`, and an unlinked pair omits the key.
+- **Reports and JSON export**: every authored record appears in full. A linked
+  pair carries only the ids of its linked records.
 - **CSV export**: an `evidence_refs` column lists each pair's linked ids,
   joined with `;`. CSV is per pair, so it carries only the link ids. The full
   records are in the JSON and report exports.
-- **JSON export**: a top-level `generalEvidence` array beside the
-  `rollup` tree carries every authored record in full.
 
-## Data model
+## Moving an existing assessment
 
-```yaml
-# *.assessment.yaml
-generalEvidence:
-  - id: ev-1
-    kind: note
-    title: Example policy review notes
-    retrievedAt: "2026-01-01"
-    comment: Reviewed with the system owner
-pairs:
-  - requirementId: IAM-1
-    entityId: d-1
-    # ...
-    evidenceRefs: [ev-1] # optional; absent for an unlinked pair
-```
-
-`generalEvidence` defaults to `[]` and `pairs[].evidenceRefs` is optional, so
-every existing `*.assessment.yaml` loads unchanged without migration.
+An assessment that still holds its general evidence in the older location is moved
+with the same one-time command as shared assessments. See
+[Shared assessments](/docs/sightline/usage/metron/shared-assessments#moving-an-existing-assessment).

@@ -6,7 +6,7 @@ Sightline, which includes Lamina, Tetra and Metron, needs VS Code 1.118.0 or lat
 
 ## A workspace with your models
 
-A model is a set of plain YAML files in a model directory. Open the folder that holds your models as a VS Code workspace. The apps find each other's files in that workspace. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
+A model is a set of files in a model directory. Open the folder that holds your models as a VS Code workspace. The apps find each other's files in that workspace. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 
 ## A licence for editing
 

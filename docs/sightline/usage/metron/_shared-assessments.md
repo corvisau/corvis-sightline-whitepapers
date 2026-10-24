@@ -43,12 +43,8 @@ The grid edits **Label**, **Outcome** and **Comment** inline. **Edit...** opens 
 drawer for the evidence fields, which a grid cell cannot hold. A row needs a
 label before it can save.
 
-Two columns are read-only:
-
-| Column | Meaning |
-|---|---|
-| Version | Metron raises it when the outcome, comment, evidence or linked evidence changes. A rename does not raise it. |
-| Used by | The number of pairs that link the shared assessment, across every requirement. |
+The **Used by** column is read-only. It shows the number of pairs that link the shared
+assessment, across every requirement.
 
 Filter, group, search and column visibility work as on the **Evidence** tab. To
 delete several rows, select them and right-click.
@@ -91,14 +87,14 @@ its own or from its record cannot.
 
 ## Completed pairs
 
-When a pair enters a done status, Metron stamps it with the shared assessment's version. A later
-change to the shared content raises the version above that stamp, and the pair shows
-the **Reval** warning.
+When a pair enters a done status, Metron records the shared assessment's outcome, comment,
+evidence and linked evidence as they stand. A later change to any of them differs from
+that record, and the pair shows the **Reval** warning. A rename does not change them.
 
 The pair follows the shared content at once, so its outcome in the dashboard, the
 exports and the reports moves with the record. The warning marks the pairs whose
 finished assessment changed. Right-click a flagged pair and choose **Revalidate**
-to accept the change. Metron stamps the pair with the current version when you revalidate it.
+to accept the change. Metron records the shared assessment as it stands when you revalidate the pair.
 
 Two link changes on a done pair raise the same warning:
 
@@ -121,40 +117,22 @@ assessment that cited it.
 
 ## Reports and exports
 
-The dashboard, the CSV export, the JSON export and the report envelope read the
+The dashboard, the CSV export, the JSON export and the reports read the
 resolved values. A linked pair appears with its shared outcome, comment and linked
-evidence, as if the pair held them. No report field or contract version changes.
+evidence, as if the pair held them. No report field changes.
 
-## File format
+## A link to a missing shared assessment
 
-Shared assessments live in the `*.assessment.yaml` file, beside `generalEvidence`.
-
-```yaml
-sharedAssessments:
-  - id: sa-1
-    label: Zone baseline
-    version: 2
-    outcome: mil-3
-    notes: Standard zone control
-    evidenceRefs: [ev-1]
-pairs:
-  - requirementId: IAM-1
-    entityId: d-1
-    state: done
-    outcome: null
-    evidence: []
-    sharedRef: sa-1
-    assessedSharedVersion: 2
-```
-
-A pair writes only its own values. The linked pair above holds `outcome: null`, and
-the outcome it shows comes from `sa-1`.
-
-`sharedAssessments` and `sharedRef` are optional, and a file without them loads
-unchanged. No migration is needed.
-
-A `sharedRef` that names no record raises a warning in the Problems panel. The pair
+A link that names no shared assessment raises a warning in the Problems panel. The pair
 shows only its own values, and Metron does not flag it for revalidation.
+
+## Moving an existing assessment
+
+An assessment file that still holds a `sharedAssessments` list is not read for it,
+raises a warning, and a save is refused so the list is not lost. Moving the list to the
+shared register is a one-time command, not an action in the app. The
+[upgrade page](/docs/sightline/upgrade/compatibility#moving-old-assessments-to-the-shared-register)
+gives the command.
 
 ## Choosing between reuse tools
 

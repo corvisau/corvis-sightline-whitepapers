@@ -21,7 +21,7 @@ In a browser page, a save made in that page does not raise the notice. Only a ch
 
 ## Review before saving
 
-Save all lists every unsaved change before it writes anything. Read the list against the reloaded model. Where the other writer changed the same field, the value in your unsaved change is the one that saves.
+The **Journal** lists every unsaved change. Read it against the reloaded model before you select **Save all**. The **Save changes** dialog that **Save all** opens does not list the changes. Where the other writer changed the same field, the value in your unsaved change is the one that saves.
 
 ## Refresh Diagram
 

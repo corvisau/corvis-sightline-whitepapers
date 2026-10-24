@@ -1,36 +1,18 @@
-`zoneTrust` is a zone's display-only trust-level or classification label. It
+A zone's **Zone Trust** is a display-only trust level or classification label. It
 renders as a small grey pill on the right of the zone's header bar, next to the
-red `SL-T` pill. The draw.io export carries the same pill.
+red SL-T pill. The draw.io export carries the same pill.
 
-It has no structural role. Zone identity is `id`; nothing resolves,
-references, or keys off `zoneTrust`. Two zones may carry the same value.
+**Zone Trust** has no structural role. Nothing resolves, references or keys off
+it, and two zones may carry the same value.
 
-## Authoring
+## Setting it
 
-```yaml
-zones:
-  - id: sys-datacenter
-    label: Example Data Centre
-    zoneTrust: Z-0001
-    slT: 3
-    members:
-      - grp-storage
-```
+1. Select the zone to open its props drawer.
+2. Enter a value in **Zone Trust**, for example `Z-0001`.
+3. Save your changes.
 
-Both pills are optional and independent. A zone with only `slT` renders one
-pill, a zone with only `zoneTrust` renders one pill, a zone with neither
-renders none. The header bar height is the same either way.
+Clear the field and save to remove the pill.
 
-The field is equally available on a zone authored inline in a nested `tree:`
-fragment:
-
-```yaml
-tree:
-  - type: group
-    id: root
-    members:
-      - type: zone
-        id: sys-field
-        label: Field Site
-        zoneTrust: Z-0002
-```
+The grey pill and the red SL-T pill are optional and independent. A zone with one
+value renders one pill, and a zone with neither renders none. The header bar
+height is the same in every case.

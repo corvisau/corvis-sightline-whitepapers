@@ -32,9 +32,7 @@ The relationship and the target kind accept any text. The lists in the drawer su
 
 A new row starts as an `entity` link with the relationship `relates-to`. To remove a link, click the **×** button at the end of its first line.
 
-A row is saved only when the relationship, the target kind and the target all have a value. An incomplete row shows a note under it and is not written to the file. Closing the drawer discards an incomplete row.
-
-When you remove the last link, the entity has no `links` entry in its file.
+A row is saved only when the relationship, the target kind and the target all have a value. An incomplete row shows a note under it and is not saved. Closing the drawer discards an incomplete row.
 
 ## Table columns
 
@@ -70,6 +68,6 @@ The target box is plain text. Metron does not look up an entity target, so no li
 
 ## Limits
 
-- An external link is stored and shown, but the drawer cannot open it.
-- An entity link resolves only against the model open in the same app. A link from one app to an entity in another app is stored, but not followed.
-- A Metron finding can carry links in its file. The finding drawer does not edit them.
+- An external link is saved and shown, but the drawer cannot open it.
+- An entity link resolves only against the model open in the same app. A link from one app to an entity in another app is saved, but not followed.
+- The Metron finding drawer does not edit links.

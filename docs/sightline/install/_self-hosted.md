@@ -1,5 +1,7 @@
 Self-Hosted Sightline runs Lamina, Tetra and Metron in a browser from one container on a host that you operate. The container serves the web shell and one storage server for all three apps. Self-Hosted Sightline has documentation only and no support. See [Deployment options](/docs/sightline/architecture/deployment-options).
 
+This page is deployment and administration reference for the person who runs the container. Users work through the apps in the browser.
+
 ## Prerequisites
 
 - A host with a container engine and a copy of the Sightline source

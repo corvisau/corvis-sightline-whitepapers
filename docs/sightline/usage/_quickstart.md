@@ -5,7 +5,7 @@ Before you start, [install Sightline](/docs/sightline/install/extensions).
 ## 1. Open a Tetra model
 
 1. Select **Sightline** in the activity bar.
-2. Select a `*.tetra.yaml` manifest in the **Models** tree. A Tetra model is marked **Tetra**.
+2. Select a model marked **Tetra** in the **Models** tree.
 
 To start a new model, select **New…** on a folder and choose **Tetra: New Model**. See [Open a Tetra model](/docs/sightline/usage/tetra/opening-a-model). To rename, move or delete a model, see [Rename, move and delete models and folders](/docs/sightline/usage/shared/manage-models-and-folders).
 
@@ -16,8 +16,8 @@ Use the data slice picker in the toolbar to show part of the model. A data slice
 ## 3. Assess the model in Metron
 
 1. Select **Sightline** in the activity bar.
-2. Select **New…** on a folder in the **Models** tree and choose **Metron: New Package** to create a requirement package.
-3. Add a scheme package to the `uses:` list of the new package. The package does not open until it names one. See [Getting started with Metron](/docs/sightline/usage/metron/getting-started).
+2. Select **New…** on a folder in the **Models** tree and choose **Metron: New Requirement Package** to create a requirement package.
+3. Open the **Packages** tab of the new package. Select **Add package** and choose a scheme package. The package opens on a built-in Pass/Fail scheme until you add one. See [Getting started with Metron](/docs/sightline/usage/metron/getting-started).
 4. Run **Metron: Apply Package to Model** to bind the package to your Tetra model.
 
 The binding produces a worklist of pairs, each of one requirement and one entity. See [Getting started with Metron](/docs/sightline/usage/metron/getting-started).

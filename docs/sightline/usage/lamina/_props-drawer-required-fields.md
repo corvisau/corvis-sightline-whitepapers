@@ -1,24 +1,22 @@
 Every field row in the props drawer carries a required or optional marker
-(the accent bar on the left of the row). This page describes what the marker
-means and when it changes.
+(the accent bar on the left of the row).
 
 ## Required and optional markers
 
 The marker shows whether the entity requires the field:
 
-| Entity | `label` |
+| Entity | Label |
 |---|---|
 | Cause | optional |
 | Event | required |
 | Outcome | required |
 | Control | required |
 
-Control's `category` and `controlType` are also required. Every other field
+The **Category** and **Control Type** fields of a control are also required. Every other field
 in the drawer is optional.
 
 The drawer does not block saving a required-but-blank field, so you can still
-save a Cause without a label. The marker is informational and shows what the
-entity's canonical shape expects.
+save a Cause without a label.
 
 ## Selecting a different entity always shows a clean form
 

@@ -20,7 +20,7 @@ Lists the models the server serves through the model routes: tetra models by def
 
 ## `POST /models`
 
-Creates a model or package of one kind, which the server must be configured to create, and answers the descriptor that discovery now lists for it. The model's files go directly in `location`, the folder you chose, with the manifest named for the slug of `name`. The folder may hold unrelated files. A folder that already holds a Sightline manifest, or a file the new model would write, answers 409 with `reason` set to `exists`, and nothing is written. A failed write removes the files this request wrote and leaves the folder and its other files in place. A Metron requirement package is written alone, with an empty `uses:` list, and does not load until a scheme package is added there. Choose `location` from `GET /folders`, or make one with `POST /folders`. A rule package takes a `domain`, the app that runs its rules, which defaults to `metron`.
+Creates a model or package of one kind, which the server must be configured to create, and answers the descriptor that discovery now lists for it. The model's files go directly in `location`, the folder you chose, with the manifest and every data file named for `id`, such as `<id>.tetra.yaml` and `<id>.zones.yaml`. The `id` is written to `meta.id` and `name` is the free-text label, so a long descriptive name does not lengthen the file names. An `id` is unique across every model in the workspace, whatever its kind: an `id` that another model already holds answers 409 with `reason` set to `duplicate`. The folder may hold unrelated files and models of other apps. A folder that already holds a model of the same app, or a file the new model would write, answers 409 with `reason` set to `exists`. The four Metron package kinds count as one app. Nothing is written in either case. A failed write removes the files this request wrote and leaves the folder and its other files in place. A Metron requirement package is written alone, with an empty `uses:` list and `schemeRef: default`. It opens at once on a built-in Pass and Fail scheme, and a commit that names a scheme package in `uses:` connects a shared scheme. Choose `location` from `GET /folders`, or make one with `POST /folders`. A rule package takes a `domain`, the app that runs its rules, which defaults to `metron`.
 
 ### Responses
 
@@ -38,11 +38,11 @@ Creates a model or package of one kind, which the server must be configured to c
   }
 }
 ```
-**400: The body is not JSON. `kind` is missing or not creatable on this server. `name` is missing or has no letter or digit. `location` is not a string or leaves the workspace. `domain` is not a string without whitespace or `/`.**
+**400: The body is not JSON. `kind` is missing or not creatable on this server. `id` is missing, is not a string, or does not match the pattern. `name` is missing or blank. `location` is not a string or leaves the workspace. `domain` is not a string without whitespace or `/`.**
 
 ```json
 {
-  "error": "name must contain at least one letter or digit"
+  "error": "Use lowercase letters, digits and single hyphens, up to 64 characters."
 }
 ```
 **403: The caller is authenticated as a reader. This is the answer only when the server requires authentication.**
@@ -52,12 +52,13 @@ Creates a model or package of one kind, which the server must be configured to c
   "error": "the editor role is required to write"
 }
 ```
-**409: The folder already holds a Sightline manifest or a file this model would write. Nothing was written.**
+**409: Nothing was written. `reason` is `duplicate` when another model in the workspace already has this `id`, and the body repeats it as `id`. `reason` is `exists` when the folder already holds a model of the same app or a file this model would write.**
 
 ```json
 {
   "ok": false,
-  "reason": "exists"
+  "reason": "duplicate",
+  "id": "plant-a"
 }
 ```
 **500: A write failed. The files this request wrote were removed, and the folder and its other files are as they were.**
@@ -1645,6 +1646,50 @@ Lists the causes that link the record through a `record` link on their vector, a
     {
       "modelId": "lam-1",
       "causeId": "C001"
+    }
+  ]
+}
+```
+**403: The deployment refuses the read.**
+
+```json
+{
+  "error": "Reading records is not permitted."
+}
+```
+**404: No record has that id in that model.**
+
+```json
+{
+  "error": "record not found: example-rules/cross-zone-relation:example-grid/relationId=F9,zoneId=Z9"
+}
+```
+
+## `GET /models/{modelId}/findings/{findingId}/members`
+
+Lists the members of a Metron finding. A member is an assessment record named by a manual `record` link whose `instance` is the assessment id. Each answer carries the drift of its link, derived now from the assessment register and never stored: `current`, `data-changed` when the assessed outcome moved, `source-changed` when the entity or requirement moved, `both-changed`, `new` for a member that was never accepted, `closed`, `missing` when the assessment or its record is absent, or `unreadable` when its register cannot be read. A record that has no member links answers an empty list. The grant the read needs is the one of the record's domain.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The model id (`blockdiagram.meta.id`). |
+| `findingId` | path | yes | string | The record id, percent-encoded as one path segment. |
+
+### Responses
+
+**200: The members and their drift.**
+
+```json
+{
+  "members": [
+    {
+      "assessmentId": "example-assessment",
+      "recordId": "example-requirements/R-1:example-grid/entityId=Z9",
+      "kind": "R-1",
+      "entityId": "Z9",
+      "drift": "data-changed",
+      "packageId": "example-requirements",
+      "requirementVersion": 2,
+      "entityVersion": 3
     }
   ]
 }

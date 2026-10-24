@@ -1,6 +1,6 @@
 Sightline is source-available software under the Sightline Licence. It is not open source as the Open Source Initiative defines the term, because it limits who may use it and for what purpose.
 
-The binding terms are in the `LICENSE` file that ships with the product. The summary at the top of that file is not the licence.
+The binding terms are in the `LICENSE.md` file that ships with the product. The summary at the top of that file is not the licence.
 
 ## How the apps enforce the licence
 
