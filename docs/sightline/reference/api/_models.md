@@ -1434,7 +1434,7 @@ Answers one record with its derived state and the version of its register. The r
     },
     "domain": "tetra",
     "data": {
-      "type": "network_ip"
+      "channelType": "network"
     },
     "links": [
       {
@@ -1506,7 +1506,7 @@ Edits a record's `title`, `state` and person-layer values, and, on a record of a
       },
       "domain": "tetra",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -1596,7 +1596,7 @@ Answers the journal entries of one record, oldest first. Each entry carries the 
       "rules": "example-rules@1",
       "kind": "created",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -1740,7 +1740,7 @@ Creates a record under a manual rule of a rule package and appends a `created` e
       },
       "domain": "tetra",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -1938,7 +1938,7 @@ Runs the generator rules of one domain and reconciles each package's output agai
       "rules": "example-rules@1",
       "kind": "created",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -2120,7 +2120,7 @@ Adds a link the record keeps until it is removed. The link is manual: its pin mo
       },
       "domain": "tetra",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -2216,7 +2216,7 @@ Removes a manual link. A link a rule wrote (`auto`) answers 400, because the nex
       },
       "domain": "tetra",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -2302,7 +2302,7 @@ Approves the record as it stands: copies the values its lower layers supply into
       },
       "domain": "tetra",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {
@@ -2397,7 +2397,7 @@ Clears the record's `snapshot`, which returns it to its live layers, and appends
       },
       "domain": "tetra",
       "data": {
-        "type": "network_ip"
+        "channelType": "network"
       },
       "links": [
         {

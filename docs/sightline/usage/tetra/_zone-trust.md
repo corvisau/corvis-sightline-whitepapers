@@ -2,6 +2,8 @@ A zone's **Zone Trust** is a display-only trust level or classification label. I
 renders as a small grey pill on the right of the zone's header bar, next to the
 red SL-T pill. The draw.io export carries the same pill.
 
+For when to use a zone and how it differs from a group, see [Tetra entities](/docs/sightline/methodology/tetra-entities#zones-and-groups).
+
 **Zone Trust** has no structural role. Nothing resolves, references or keys off
 it, and two zones may carry the same value.
 

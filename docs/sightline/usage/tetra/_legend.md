@@ -13,7 +13,7 @@ groups to show. An empty diagram shows nothing even with **Legend** set to **Sho
 The legend lists only what the diagram uses. A section with nothing to list does
 not appear.
 
-- **Channels:** one row per channel type, with its colour and line style.
+- **Channels:** one row per channel type in use (Network, Virtual or Hosting), with its colour and line style. A channel with its own line style or colour still shows the row of its type.
 - **Information:** one row per information type: System, Function or Security.
   The colour is the one the information badges and the flow lines use. A type
   appears when a flow or a badge on the canvas has it. A badge with no

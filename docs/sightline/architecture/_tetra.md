@@ -2,7 +2,7 @@ Tetra models networks and systems as block diagrams. A Tetra model is a set of f
 
 ## What you model
 
-A Tetra model describes zones, groups, devices, networks, channels, flows and information. Templates let an entity inherit a shared body instead of repeating it. See [Templates](/docs/sightline/usage/tetra/templates).
+A Tetra model describes zones, groups, devices, networks, channels, flows and information. Templates let an entity inherit a shared body instead of repeating it. See [Templates](/docs/sightline/usage/tetra/templates). For what each entity is for and when to choose it, see [Tetra entities](/docs/sightline/methodology/tetra-entities) and [Tetra channels and flows](/docs/sightline/methodology/tetra-channels-and-flows).
 
 ## Views
 

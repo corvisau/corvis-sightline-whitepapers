@@ -1,4 +1,4 @@
-A Lamina model holds each control under the cause or outcome that owns it. The control impact reads of the Sightline API list the risks that one control is a gap for and those it is critical for. A gap analysis paper can then quote one count and one list, and the author does not trace each cause by hand.
+A Lamina model holds each control under the cause or outcome that owns it. The control impact reads of the Sightline API list the Risks that one control is a gap for and those it is critical for. A gap analysis paper can then quote one count and one list, and the author does not trace each cause by hand.
 
 The routes are listed in the [Discovery routes](/docs/sightline/reference/api/discovery) page of the API reference. This page explains what they count.
 
@@ -6,7 +6,7 @@ The routes are listed in the [Discovery routes](/docs/sightline/reference/api/di
 
 A control is reused through a control template. Each control that names the template is an instance of it, and the reads treat the template as the control.
 
-A risk is an event. A preventative control reaches the events that its cause lists. A mitigative control reaches the events that list its outcome. An event that several controls reach counts once.
+A Risk groups cause-event-outcome paths. See [Risks](/docs/sightline/usage/lamina/risks). A control reaches a Risk when a path of the Risk runs through the owner of the control. The owner of a preventative control is a cause, and the owner of a mitigative control is an outcome. A Risk with no paths is reached through its events. A model that defines no Risks has one Risk for each event, with the id of the event. A Risk that several controls reach counts once.
 
 Each instance has a state, from its target rating and its current rating:
 
@@ -19,7 +19,7 @@ Each instance has a state, from its target rating and its current rating:
 
 The reads take the ratings and the critical flag from the control after its template applies. A control that omits them carries the values of the template, and a value on the control overrides the template.
 
-An event is a gap risk when a control that reaches it is a gap or unassessed. An event is a critical risk when a control that reaches it has the critical flag. The same template can be critical on one cause and not on another. A critical risk is therefore an event reached through a control that carries the flag.
+A Risk is a gap risk when a control that reaches it is a gap or unassessed. A Risk is a critical risk when a control that reaches it has the critical flag. The same template can be critical on one cause and not on another. A critical risk is therefore a Risk reached through a control that carries the flag.
 
 ## Choose the control
 
@@ -41,11 +41,13 @@ A model, cause, outcome, control or template that does not exist answers 404, an
 |---|---|
 | `control` | The template id, with the label, type, category and group of the first control. |
 | `instances` | Each matched control: its owner, ratings, state, critical flag, zones and the events it reaches. |
-| `risks` | Each event reached: every cause that lists it, every outcome it lists, the controls that reach it, and its gap and critical flags. |
-| `summary` | The number of controls and events, the ids of the gap and critical events, and the number of controls in each state. |
+| `risks` | Each Risk reached: its id, name, source, events and rating, the controls that reach it, and its gap and critical flags. |
+| `summary` | The number of controls and Risks, the ids of the gap and critical Risks, and the number of controls in each state. |
+| `ratingBasis` | The risk matrix and the likelihood rule that the ratings used. |
+| `issues` | The Risk definitions that the read could not fully honour. |
 | `problems` | The files of the model that could not be read or parsed. |
 
-The likelihood of a cause and the consequence of an outcome appear as stored. A likelihood is an index into the risk matrix. See [Risk-matrix likelihood scale](/docs/sightline/usage/lamina/risk-matrix-likelihood-scale).
+The rating of a Risk has a residual side and an inherent side, as described in [Risks](/docs/sightline/usage/lamina/risks). A Risk with no paths has no rating.
 
 Check `problems` before quoting a count. A file that fails to parse drops its causes, events and outcomes from the answer, and the counts then fall short.
 
@@ -65,8 +67,10 @@ This trimmed answer comes from a template that two causes use. One control is a 
     "criticalRiskIds": ["E-001", "E-002"],
     "byState": { "gap": 1, "met": 1, "unassessed": 0, "not-applicable": 0 }
   },
+  "ratingBasis": { "riskMatrixDef": "model", "aggregationMode": "simple-damped-union" },
+  "issues": [],
   "problems": []
 }
 ```
 
-Both events are gap risks, because `K-001` reaches both and is a gap.
+The model in this example defines no Risks, so each event is a Risk with the id of the event. Both Risks are gap risks, because `K-001` reaches both and is a gap.

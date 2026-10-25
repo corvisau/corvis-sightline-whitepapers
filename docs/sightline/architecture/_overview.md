@@ -28,3 +28,4 @@ Sightline runs in your own VS Code, on infrastructure that you operate, or on a 
 
 - [Install Sightline](/docs/sightline/install/extensions)
 - [Quickstart](/docs/sightline/usage/quickstart)
+- [Modelling methodology](/docs/sightline/methodology/overview)

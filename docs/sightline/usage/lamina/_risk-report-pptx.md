@@ -9,7 +9,7 @@ The PowerPoint risk report mirrors the Word risk report, and it groups the risks
 | **Mitigative Controls** | Outcome, inherent controls, mitigative controls, target effectiveness, current effectiveness and current effectiveness detail. There is one row for each control, without duplicates. The outcome and inherent-controls cells merge. |
 | **Outcomes** | Name, events, inherent controls, controls, conditional modifiers with their conditions, and inherent and residual consequence for each category. The conditional modifiers appear under **Conditional Modifiers** only for an outcome that has some. |
 
-Each table continues onto as many slides as it needs. A row is never split across slides. When a group of merged rows crosses onto the next slide, the merged cell repeats there. The likelihood, consequence and risk cells carry the same colours as the Word report.
+Each table continues onto as many slides as it needs. A row is never split across slides. When a group of merged rows crosses onto the next slide, the merged cell repeats there. The likelihood, consequence and risk cells carry the same colours as the Word report. The event likelihood and the highest risk follow the rating rule of the model. See [Risks](/docs/sightline/usage/lamina/risks).
 
 ## The template is a style reference
 

@@ -78,8 +78,8 @@ The `flow.` and `channel.` aliases work in a program filter, not in a legacy str
 | Zone | `zone` | The zone's `zoneType`, if set |
 | Group, device, network | `group`, `device`, `network` | Not set |
 | Information item | `information` | The item's `informationType` (`system`, `function` or `security`) |
-| Channel | `channel` | The channel `type`, for example `network_ip` |
-| Flow | `flow` | The flow `type` (`system`, `function` or `security`) |
+| Channel | `channel` | Not set. The channel `channelType` holds `network`, `virtual` or `hosting` ([channel types](/docs/sightline/methodology/tetra-channels-and-flows#channel-types)) |
+| Flow | `flow` | The flow `type` (`system`, `function` or `security`; see [flow types](/docs/sightline/methodology/tetra-channels-and-flows#flow-types)) |
 | Annotation | `annotation` | The annotation `type` |
 | System | `system` | The system's own `type`, if set |
 
@@ -98,6 +98,23 @@ item.system == "AMI" && item.tags |> hasAny("ext")
 The `|>` operator pipes the left-hand value into the right-hand transform as its first argument. All comparison and logical operators (`==`, `!=`, `&&`, `||`, `!`) work normally.
 
 A tag filter matches the tag exactly, including its case. `hasAny("ami")` does not match a tag written `AMI`. To keep tags consistent, use the **Tags** field in the props drawer. As you type, the field lists the tags that other elements in the model already use. Matching ignores case, and tags already on the element are left out. Pick a suggestion to add it. To add a tag that no element uses yet, type it and press Enter.
+
+### Protocol filters
+
+A channel carries a `protocol` stack, and a flow carries the stack that it lists itself. These fields read a stack, or a value derived from the model, in a filter:
+
+| Field | Holds | Example |
+|---|---|---|
+| `protocol` | The whole stack, bottom to top. A channel with no stack of its own holds the stack that it inherits from its network | `item.protocol \|> hasAny("ipsec")` |
+| `protocolTop` | The top entry of the stack. An entity with an empty stack has none | `item.protocolTop == "dnp3"` |
+| `topology` | `point-to-point` or `multipoint`, derived for a channel. A hosting channel has none | `item.topology == "multipoint"` |
+| `hopProtocols` | The distinct protocols across the hops of a flow's route. A flow with no resolved hop has none | `item.hopProtocols \|> hasAny("ipsec")` |
+
+`hasAny("ipsec")` selects every channel whose stack contains `ipsec`, wherever it sits in the stack. `protocolTop == "dnp3"` selects the channels and flows that carry DNP3 as their highest protocol.
+
+`item.hopProtocols |> hasAny("ipsec")` selects the flows that cross a tunnel on some hop. The [protocol stack by hop](/docs/sightline/methodology/tetra-channels-and-flows#protocol-stack-by-hop) section says how a hop is found.
+
+In the Tabular Editor, the Basic filter tab lists **Top of protocol stack**, **Topology** and **Protocols on any hop** beside the other fields.
 
 ### Multi-line filters (AND semantics)
 
@@ -335,7 +352,7 @@ In prune mode nothing is dimmed, so the Shade tab has no second layer to act on 
 
 ### What each category covers
 
-- **IP Channels** are channels of type `network_ip`. An untyped channel counts as one; a hosting or serial channel never does.
+- **IP Channels** are network channels whose protocol list includes `ip` or is empty. A channel with no list of its own counts the list that it inherits from its network. A channel with no protocol at all counts as one. The [channel types](/docs/sightline/methodology/tetra-channels-and-flows#channel-types) table says what each type means. A hosting channel, a virtual channel and a serial channel never do.
 - **Flows** covers every flow.
 - **Networks** removes the network node and its subtree.
 - **Annotation Overlay** takes its layer from what the annotation links. An annotation is dimmed when every entity it points at is dimmed.

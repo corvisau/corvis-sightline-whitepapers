@@ -64,7 +64,7 @@ A write that fails on a disk error or a validation refusal reports itself the sa
 
 ## Managing your licence
 
-In the web shell, the bottom-right badge shows **Saving allowed by server** or **Saving unavailable**. It follows the server's permission for your account in the current app. Your server administrator manages the licence and your access permissions. There is no licence paste dialog in the web shell.
+In a Tetra tab in the web shell, the bottom-right badge shows **Saving allowed by server** or **Saving unavailable**. It follows the server's permission for your account in the current app. Your server administrator manages the licence and your access permissions. There is no licence paste dialog in the web shell.
 
 In VS Code, you manage the licence on your machine.
 

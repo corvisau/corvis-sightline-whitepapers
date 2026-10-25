@@ -27,7 +27,7 @@ Choose **Poisson rate-to-probability transform** when your likelihood scale is a
 
 ## Set the formula for one aggregation
 
-1. In the diagram toolbar, select an aggregation in the **Aggregation** picker.
+1. In the diagram toolbar, select **Model Properties**. In the **Aggregation** picker at the top of the drawer, select an aggregation.
 2. Select the edit button beside the picker. To start a new aggregation, select the add button instead.
 3. In the **Edit Aggregation** dialog, expand **Likelihood aggregation**. Switch on **Enable**.
 4. In **Mode**, choose a mode other than **Max**.

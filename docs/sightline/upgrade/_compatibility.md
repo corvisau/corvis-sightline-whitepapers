@@ -18,18 +18,22 @@ A model with no `schemaVersion` opens when its manifest holds none of the older 
 
 A model whose manifest holds an older shape does not open. The message names each older shape that the manifest holds and the conversion that applies to it. A manifest that says version 1 does not open either, because version 2 is the lowest that Tetra opens.
 
-A model file can also hold an older shape that the manifest does not show. Tetra does not open a model while any of its files holds one. The message names each file and shape and gives the command that converts it. Run these commands on the model folder, then stamp the model:
+A model file can also hold an older shape that the manifest does not show, and a manifest can hold entities. Tetra does not open a model while the manifest or any other file holds one. The message names each file and shape and gives the command that converts it. Run these commands on the model folder, then stamp the model:
 
 | Older shape | Command |
 |---|---|
+| A manifest that holds `tree`, `zones`, `systems`, `groups`, `devices`, `networks`, `channels`, `information`, `flows`, `annotations` or `overlays` | `pnpm --filter @sightline/tools-tetra-manifest-entities-migration run migrate --model-dir <model folder>` |
 | A zone with a `zoneId` field | `pnpm --filter @sightline/tools-tetra-zone-trust-migration run migrate --model-dir <model folder>` |
 | A device with a `channels` or `networks` field | `pnpm --filter @sightline/tools-tetra-connections-migration run migrate --model-dir <model folder>` |
 | An annotation with a `position`, `distance`, `maxWidth`, `positionOffset` or `severity` field, or a link with a `position` or `positionOffset` field | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
 | A channel or flow with a `portOffset` field or a `showLabel` of `true` or `false` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
 | A zone, group, device, network or data slice with a `layout` of `horizontal` or `vertical` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
+| A channel, or a device connection, with a `type` field | `pnpm --filter @sightline/tools-tetra-channel-type-migration run migrate --model-dir <model folder>` |
 | A data slice program or a member `expr` that selects the kind of entity with `item.type`, such as `item.type == 'zone'`, in place of `item.kind` | `pnpm --filter @sightline/tools-item-kind-migration run migrate --model-dir <model folder>` |
 
 The field command moves an annotation bubble that has a corner position, such as `bottom-left`, to the middle of that side. It changes a `layout` of `horizontal` to `columns` and `vertical` to `rows`.
+
+The channel type command replaces `type` with a `channelType`, a `protocol` list and, for a wireless link, a `lineStyle` of `dashed`, so the line looks the same. It leaves a channel with no `type` as it is. It lists each channel of type `physical`, which has no equivalent, and each data slice line that compares `item.type` with a retired channel type. Remove or change those by hand.
 
 After the conversions, run `pnpm --filter @sightline/tools-tetra-schema-stamp run migrate --model-dir <model folder>`. The command checks the whole model, writes `schemaVersion: 2` to the manifest, and lists the conversions that remain when it finds an older shape.
 
@@ -48,6 +52,16 @@ Each older shape has a conversion. Apply the conversions that suit a model direc
 | A data slice filter written as a string, or collapsed containers listed in `collapsed` or `groups` | Converts string filters to program filters and the `collapsed` and `groups` options to `containers`. |
 
 A conversion stamps `schemaVersion: 1` on a manifest when none of the older shapes is left in it. A second run changes nothing. A dry run lists the files without writing them. A conversion rewrites the file with a YAML serializer, so comments in a manifest it rewrites are not kept.
+
+## Tetra manifest entities
+
+Tetra does not open a model whose manifest holds an entity collection. The message names the manifest and the command below. A Tetra manifest holds model settings only: `schemaVersion`, `blockdiagram`, `files`, `imports`, `templates`, `uses`, `dataSlices`, `queries`, `reports` and `zoneColourDefs`. Every entity sits in a file that the manifest lists under `files`. A manifest that still holds `tree`, `zones`, `systems`, `groups`, `devices`, `networks`, `channels`, `information`, `flows`, `annotations` or `overlays` moves them with one command:
+
+`pnpm --filter @sightline/tools-tetra-manifest-entities-migration run migrate --model-dir <model folder>`
+
+The command moves each collection into the listed file that already holds that kind of entity. When no listed file holds it, the command creates a file named for the model and the kind, such as `plant.devices.yaml`, and adds it to `files`. The manifest `tree` goes to the model's tree file. The command never overwrites a file, and it adds `-2`, `-3` and so on to a name that is taken. A second run changes nothing. A dry run lists the files without writing them. The command rewrites the files it changes with a YAML serializer, so their comments are not kept.
+
+When the same id is defined in the manifest and in a listed file, the command names the id and the files, leaves that model unchanged, and exits with an error. Remove one definition, then run the command again.
 
 ## Lamina manifest id
 

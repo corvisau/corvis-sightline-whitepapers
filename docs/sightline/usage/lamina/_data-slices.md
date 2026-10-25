@@ -4,7 +4,7 @@ A **data slice** pairs a bonsai filter expression with an optional aggregation p
 
 ## Where a slice applies
 
-A data slice and its aggregation change the diagram only. The **Data slice** and **Aggregation** pickers appear in the Diagram view, and they keep their selection while the Table view is open.
+A data slice and its aggregation change the diagram only. The **Data slice** menu appears in the Diagram view, and the slice and the aggregation keep their selection while the Table view is open. The aggregation is chosen in the **Model Properties** drawer; see [Choosing an aggregation](#choosing-an-aggregation).
 
 Lamina draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. Select a slice, and Lamina also selects its aggregation, if it has one, and applies its saved view settings. To view the whole model, create a slice with no filter.
 
@@ -22,14 +22,14 @@ Staged field edits are the one exception. When you edit a field that the active 
 
 ## Creating, editing, and duplicating slices
 
-Click the New/Edit/Duplicate/Delete icon buttons next to the toolbar's **Data slice** picker:
+Open the **Data slice** menu in the toolbar. The button reads **Data slice:** and the name of the active slice. The menu lists the slices, and the **New**, **Edit**, **Duplicate** and **Delete** buttons sit in a row at the top of it:
 
 - **New** opens an empty editor. A slice saved with no filter lines has no filter and shows the whole model.
 - **Edit** opens the currently-active slice with every field pre-filled.
 - **Duplicate** opens the same editor pre-filled from the currently-active slice (name, filter, aggregation, description) but as a new slice. When you save it, Lamina creates an independent copy and leaves the source slice unchanged.
 - **Delete** asks for confirmation, then removes the active slice. The first remaining slice becomes active. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
 
-A new or duplicated slice appears in the picker and becomes active as soon as you save the editor. Lamina saves it with your other unsaved changes when you click **Save all**.
+A new or duplicated slice appears in the picker and becomes active as soon as you save the editor. Lamina saves it with your other unsaved changes when you click **Save all**. When you save an edit to the active slice, Lamina selects the slice's aggregation at once and keeps your view settings.
 
 In the web shell, the active data slice and the active aggregation belong to the browser tab. They survive a reload, and you lose them when you close the tab, so a new tab opens on the model's first slice. The VS Code extension keeps both choices per workspace.
 
@@ -40,6 +40,14 @@ A new slice has no query, and a slice with no query shows the whole model. **Edi
 The query builder, opened from **Edit query**, has a **Show code** button that reveals the exact bonsai program as read-only text, with a Copy button.
 
 A statement can be disabled and enabled again with the round button at the right of its row. A slice whose statements are all disabled shows the whole model, as a slice with no query does. See [Disabling a statement](/docs/sightline/usage/shared/tabular-filtering#disabling-a-statement).
+
+## Choosing an aggregation
+
+Choose **Model Properties** in the toolbar. The **Aggregation** picker at the top of the drawer lists **None** and every aggregation of the model. A choice applies to the diagram at once. It does not count as an unsaved change, and **Save all** has nothing to write for it.
+
+The add, edit and delete buttons beside the picker create, change and remove an aggregation. Edit and Delete act on the aggregation the picker shows. A read-only mount disables all three buttons and leaves the picker usable. Lamina saves these changes with your other unsaved changes when you click **Save all**.
+
+The **Aggregation** picker is not the **Risk aggregation** setting further down the drawer. **Risk aggregation** chooses the profile that rates the Risks of the model; see [Risks](/docs/sightline/usage/lamina/risks).
 
 ## Exporting the diagram
 

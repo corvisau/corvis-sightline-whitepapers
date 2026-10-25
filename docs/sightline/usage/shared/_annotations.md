@@ -97,7 +97,9 @@ A Lamina annotation has one of three types: `text`, `markdown` or `statusgrid`. 
 
 ### Editing a value
 
-Edit the text of an annotation in the props drawer, not on the canvas bubble. The canvas right-click menu also offers **Set type** and **Set style**.
+Edit the text of an annotation in the props drawer, not on the canvas bubble. To open the drawer, double-click the bubble or select **Edit** on its right-click menu. The right-click menu also offers **Set type** and **Set style**.
+
+A double-click on any Lamina node opens its props drawer. A double-click on the Lamina canvas does not zoom. Use the scroll wheel or the zoom buttons instead.
 
 ### Shared bubble
 
