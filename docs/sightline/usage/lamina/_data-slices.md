@@ -1,12 +1,12 @@
-A **data slice** pairs a bonsai filter expression with an optional aggregation profile, giving the toolbar's picker a saved, named view of the model. This page covers where a slice applies and the New, Edit, Duplicate and Delete flow.
+A **data slice** holds a bonsai filter expression and the view settings of the diagram, giving the toolbar's picker a saved, named view of the model. A slice only chooses what the diagram draws. This page covers where a slice applies and the New, Edit, Duplicate and Delete flow.
 
 ---
 
 ## Where a slice applies
 
-A data slice and its aggregation change the diagram only. The **Data slice** menu appears in the Diagram view, and the slice and the aggregation keep their selection while the Table view is open. The aggregation is chosen in the **Model Properties** drawer; see [Choosing an aggregation](#choosing-an-aggregation).
+A data slice changes the diagram only. The **Data slice** menu appears in the Diagram view, and the slice keeps its selection while the Table view is open.
 
-Lamina draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. Select a slice, and Lamina also selects its aggregation, if it has one, and applies its saved view settings. To view the whole model, create a slice with no filter.
+Lamina draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. Select a slice, and Lamina applies its saved view settings. To view the whole model, create a slice with no filter.
 
 A model with no data slices shows no **Data slice** control. The Diagram view shows the message "This model has no data slices. Create one to draw it." and a **Create data slice** button, which opens the slice editor. The Table view lists the model as usual.
 
@@ -26,14 +26,14 @@ Open the **Data slice** menu in the toolbar. The button reads **Data slice:** an
 
 - **New** opens an empty editor. A slice saved with no filter lines has no filter and shows the whole model.
 - **Edit** opens the currently-active slice with every field pre-filled.
-- **Duplicate** opens the same editor pre-filled from the currently-active slice (name, filter, aggregation, description) but as a new slice. When you save it, Lamina creates an independent copy and leaves the source slice unchanged.
+- **Duplicate** opens the same editor pre-filled from the currently-active slice (name, filter, description) but as a new slice. When you save it, Lamina creates an independent copy and leaves the source slice unchanged.
 - **Delete** asks for confirmation, then removes the active slice. The first remaining slice becomes active. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
 
-A new or duplicated slice appears in the picker and becomes active as soon as you save the editor. Lamina saves it with your other unsaved changes when you click **Save all**. When you save an edit to the active slice, Lamina selects the slice's aggregation at once and keeps your view settings.
+A new or duplicated slice appears in the picker and becomes active as soon as you save the editor. Lamina saves it with your other unsaved changes when you click **Save all**. When you save an edit to the active slice, Lamina keeps your view settings.
 
-In the web shell, the active data slice and the active aggregation belong to the browser tab. They survive a reload, and you lose them when you close the tab, so a new tab opens on the model's first slice. The VS Code extension keeps both choices per workspace.
+In the web shell, the active data slice belongs to the browser tab. It survives a reload, and you lose it when you close the tab, so a new tab opens on the model's first slice. The VS Code extension keeps the choice per workspace.
 
-The editor has a **Name** field, a **Query** block, an **Aggregation** picker and a **Description** field. The **Aggregation** picker offers **None**, and a slice saved with **None** draws without an aggregation. **None** is the default when the model has no aggregations, so a new model can create its first slice with only a name. The picker also lists an aggregation you created since the last **Save all**. The editor shows the slice's query as read-only text, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
+The editor has a **Name** field, a **Query** block and a **Description** field. A slice needs only a name, so a new model can create its first slice at once. The editor shows the slice's query as a list of steps, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Each statement is a numbered row, with a badge that says what it does and a short description of what it selects. A comment shows as a caption, and a disabled statement stays in its place with an **off** badge. Each step shows its effect on the result, for example **+12 → 41**, from the whole model to the final count. **Show code**, beside **Edit query**, shows the query as text with a **Copy** button. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
 
 A new slice has no query, and a slice with no query shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`. A statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**.
 
@@ -41,13 +41,11 @@ The query builder, opened from **Edit query**, has a **Show code** button that r
 
 A statement can be disabled and enabled again with the round button at the right of its row. A slice whose statements are all disabled shows the whole model, as a slice with no query does. See [Disabling a statement](/docs/sightline/usage/shared/tabular-filtering#disabling-a-statement).
 
-## Choosing an aggregation
+## Slices from earlier versions
 
-Choose **Model Properties** in the toolbar. The **Aggregation** picker at the top of the drawer lists **None** and every aggregation of the model. A choice applies to the diagram at once. It does not count as an unsaved change, and **Save all** has nothing to write for it.
+A manifest of schema version 2 can give a slice an `aggregationId` and list aggregation profiles in `aggregations`. Schema version 3 has neither key. Lamina reads a version 2 manifest without them, and a slice draws the same diagram with or without an aggregation. The slice editor has no **Aggregation** field. See [Compatibility](/docs/sightline/upgrade/compatibility) for the command that removes both keys from the file.
 
-The add, edit and delete buttons beside the picker create, change and remove an aggregation. Edit and Delete act on the aggregation the picker shows. A read-only mount disables all three buttons and leaves the picker usable. Lamina saves these changes with your other unsaved changes when you click **Save all**.
-
-The **Aggregation** picker is not the **Risk aggregation** setting further down the drawer. **Risk aggregation** chooses the profile that rates the Risks of the model; see [Risks](/docs/sightline/usage/lamina/risks).
+To see one Risk as a single aggregated cause, event and outcome, use the **Risk** view. See [Risks](/docs/sightline/usage/lamina/risks).
 
 ## Exporting the diagram
 

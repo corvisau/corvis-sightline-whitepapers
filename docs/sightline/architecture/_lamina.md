@@ -13,7 +13,7 @@ A bow-tie diagram shows an event with its causes on one side and its consequence
 
 ## Data slices
 
-A data slice pairs a filter expression with an aggregation profile. It gives the toolbar a saved, named view. See [Data slices](/docs/sightline/usage/lamina/data-slices).
+A data slice pairs a filter expression with the view settings of the diagram. It gives the toolbar a saved, named view. See [Data slices](/docs/sightline/usage/lamina/data-slices).
 
 ## Findings inbox
 

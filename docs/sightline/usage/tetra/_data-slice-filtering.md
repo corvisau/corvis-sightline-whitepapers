@@ -31,7 +31,16 @@ A new or duplicated slice appears in the popover and becomes active as soon as y
 
 The **PNG**, **Legend (PNG)** and **Draw.io** exports capture the diagram. On a model with no data slices they are disabled until you create one. Reports stay available.
 
-The editor shows the slice's query under a **Query** label as read-only text, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
+The editor shows the slice's query under a **Query** label as a list of steps. A line above it reads **(no query)**, **1 statement** or the number of statements. The list shows each line of the query:
+
+- A statement is a numbered row. Its badge says what it does: **Add**, **Remove**, **Save**, **Emit** or **Keep**. A short description says what it selects.
+- A statement the editor cannot describe shows its parts as chips.
+- A comment shows as a caption above the steps that follow it.
+- A disabled statement stays in its place, dimmed and struck through, with an **off** badge.
+
+Each step also shows its effect on the result, for example **+12 → 41**. A **Starts from** row names the base slice, or the whole model, and gives its item count. An **Ends with** row gives the size of the result.
+
+**Show code**, beside **Edit query**, shows the query as text with a **Copy** button. A long statement is split at its pipes, one step to a line. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
 
 A new slice has no query. A slice with no query shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`. A statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**. A statement that does not add anything, such as a `remove()` or a `where()` without `add()`, then acts on an empty result. The `remove()` examples in this page start from `model |> add()` for the same reason.
 

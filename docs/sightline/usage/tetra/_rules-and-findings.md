@@ -88,7 +88,7 @@ The drawer edits one rule. The rule id is fixed once the rule exists.
 | Depends on | A list with one row for each rule whose records this rule reads or must run after. Write a rule of the same package as `rule-id`, and a rule of another package as `package-id/rule-id`. The row offers the rules of the model as suggestions. |
 | Key parts | A list with one row for each name that identifies one record of the rule. The order of the rows is the order of the key. The row offers the names that the `emitRecord` key of the program uses. |
 | Data fields | A list with one row for each field of the record. Each row has a name and a type. The row offers `text` and `number` as types, accepts any other type, and saves `text` when the type is empty. |
-| Program | The program as read-only text, with an **Edit query** button that opens the query builder in a dialog, for a `generator` or a `transform` rule |
+| Program | The program as a list of steps, with a **Show code** button and an **Edit query** button that opens the query builder in a dialog, for a `generator` or a `transform` rule |
 
 Select **Add dependency**, **Add key part** or **Add data field** to add a row to a list. Select **×** at the end of a row to remove it. To move a row, drag the handle at its start. To move a row with the keyboard, focus the handle and press Space. Press an arrow key to move the row. Press Space to drop it.
 
@@ -96,7 +96,7 @@ The drawer leaves an empty row out when it saves. The drawer refuses a name that
 
 A help icon beside each field opens a short explanation on hover and when you tab to it. A message under a field names the problem with that field. A line above the buttons says why **Save** and **Test rule** are off.
 
-A line above the program reads **(no query)**, **1 statement** or the number of statements. The drawer shows each statement of the program, including statements that use `emitRecord` and `groupBy`. Select **Edit query** to edit a statement in the query builder. **Apply** returns the edited program to the drawer, and **Test rule** and **Save** use it. **Cancel** keeps the program as it was. Escape closes only the dialog.
+A line above the program reads **(no query)**, **1 statement** or the number of statements. The drawer shows each statement of the program as a numbered row, including statements that use `emitRecord` and `groupBy`. A badge on each row says what the statement does, and a generator's last step has the **Emit** badge. A comment shows as a caption, and a disabled statement stays in its place with an **off** badge. **Show code** shows the program as text, with a **Copy** button. Select **Edit query** to edit a statement in the query builder. **Apply** returns the edited program to the drawer, and **Test rule** and **Save** use it. **Cancel** keeps the program as it was. Escape closes only the dialog.
 
 A manual rule has no program. Switch the mode to `manual` and save, and the saved rule loses its program. A `generator` rule needs a program, and the drawer refuses to save one without it.
 

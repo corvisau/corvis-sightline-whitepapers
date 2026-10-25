@@ -112,6 +112,8 @@ A `via` on a path node names the channel for the hop that arrives at that node, 
 
 A hop has no stack when no channel joins its nodes, or when more than one does. A flow with a list of targets in `nodeB` has no hops. Two devices on one network need the network in `path` to get hop stacks.
 
+The flow drawer shows a list of targets in `nodeB` as one read-only field. To change the list, edit the model file.
+
 The flow drawer lists each hop with its channel and its full stack, from the lowest layer to the highest. The data slice field `hopProtocols` holds the distinct protocols across all hops of a flow. For example, `item.hopProtocols |> hasAny("ipsec")` selects the flows that cross a tunnel on some hop.
 
 ## Protocol boundaries
@@ -142,13 +144,20 @@ The type sets the colour of the line, so a reader can follow one kind of informa
 
 ## Direction, initiation and criticality
 
-Both kinds share three settings.
+Both kinds share two settings.
 
-| Setting       | Values                                   | Meaning                                                                                                            |
-| ------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `direction`   | `a-to-b`, `b-to-a`, `bidirectional`      | Which way the traffic or information moves. The default is `bidirectional`                                         |
-| `initiation`  | `interactive`, `programmatic`, `offline` | Who starts it: a person, software or a manual transfer. The default is `programmatic` |
-| `criticality` | `critical`, `important`, `normal`        | How much the system depends on it. The default is `normal`. The exact definition of each level is not settled yet |
+| Setting       | Values                              | Meaning                                                                                                            |
+| ------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `direction`   | `a-to-b`, `b-to-a`, `bidirectional` | Which way the traffic or information moves. The default is `bidirectional`                                         |
+| `criticality` | `critical`, `important`, `normal`   | How much the system depends on it. The default is `normal`. The exact definition of each level is not settled yet |
+
+A flow has a third setting, `initiation`. A channel starts no exchange of its own, so it has no `initiation`.
+
+| Setting      | Values                                   | Meaning                                                                                                         |
+| ------------ | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `initiation` | `interactive`, `programmatic`, `offline` | Who starts the exchange: a person, software or a manual transfer. The default is `programmatic`. It sets the line style |
+
+A channel file that still holds an `initiation` opens without it, and the key goes at the next save.
 
 ## Paths
 

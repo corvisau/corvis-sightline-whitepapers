@@ -596,7 +596,7 @@ Answers the same entries as the model-wide route, for one cause. The `links` lis
 
 ## `GET /cross-app/models/{modelId}/risks`
 
-A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a Risk by the events it selects, by id, by tag or by data slice. A Risk takes every cause that lists its events and every outcome those events list. A model whose manifest defines no Risks answers one Risk for each event. A path can sit in several Risks. Each Risk with paths carries a residual and an inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule that produced it. The manifest's `riskAggregationId` selects the aggregation profile, and the default is `simple-damped-union`. `issues` lists the definitions that the read could not fully honour, and `problems` lists the files that could not be read.
+A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a Risk by its parts: data slices, events and other Risks. A Risk takes every cause that lists its events and every outcome those events list. A model whose manifest defines no Risks answers one Risk for each event. A path can sit in several Risks. Each Risk with paths carries a residual and an inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule that produced it. A Risk's own `aggregation` and the manifest's `riskDefaults` set how its causes and events combine, and the default is `simple-damped-union`. `issues` lists the definitions that the read could not fully honour, and `problems` lists the files that could not be read.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1174,6 +1174,91 @@ Answers for the control `controlId` that the outcome `outcomeId` owns, which is 
 ```json
 {
   "error": "outcome not found: O-001"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
+## `POST /cross-app/models/{modelId}/risks/query`
+
+Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk the model defines, or one that the model derives from an event. Send `parts` to rate a Risk built from data slices, events and held Risks; `id` (default `adhoc`), `name` and `aggregation` are optional with `parts`, and `aggregation` overrides the manifest's `riskDefaults` for this query only. A held Risk is a Risk the manifest defines. The route takes a body, so it is a `POST`, but it only reads: it writes nothing, takes no lock and is not audited, and a read-only caller may use it. The answer is the Risk as the list route gives it, with the same `ratingBasis`. `issues` lists only the definition issues of the queried Risk, and `problems` lists the files that could not be read. A part that names an unknown event, data slice or Risk adds an issue and does not fail the request.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+
+### Responses
+
+**200: The rated Risk.**
+
+```json
+{
+  "risk": {
+    "id": "station-outage",
+    "name": "Station outage",
+    "source": "authored",
+    "eventIds": [
+      "E-001",
+      "E-002"
+    ],
+    "subRiskIds": [],
+    "paths": [
+      {
+        "causeId": "C-001",
+        "eventId": "E-001",
+        "outcomeId": "O-001"
+      },
+      {
+        "causeId": "C-001",
+        "eventId": "E-002",
+        "outcomeId": "O-002"
+      }
+    ]
+  },
+  "ratingBasis": {
+    "riskMatrixDef": "default",
+    "aggregationMode": "simple-damped-union"
+  },
+  "issues": [],
+  "problems": []
+}
+```
+**400: The body is not JSON, is not a Risk query, or its `id` is one the manifest already defines. The last answer carries `reason: "duplicate-id"`.**
+
+```json
+{
+  "error": "the manifest already defines a Risk with the id R001",
+  "reason": "duplicate-id"
+}
+```
+**404: No Lamina model has this id, or the model has no Risk with `riskId`.**
+
+```json
+{
+  "error": "risk not found: R009"
 }
 ```
 **409: More than one Lamina model has this id.**

@@ -15,23 +15,28 @@ The probability of a key is its representative point value, such as the midpoint
 
 ## Combine more than one cause
 
-An aggregation can combine more than one cause's likelihood. The **Simple damped union**, **Exposure grouped** and **Exposure-vector grouped** modes do this. The **Combination formula** field picks the formula.
+An aggregation can combine more than one cause's likelihood. The `simple-damped-union`, `exposure-grouped` and `exposure-vector-grouped` modes do this. The `formulaVersion` field picks the formula.
 
-| Option | Behaviour |
+| `formulaVersion` | Behaviour |
 |---|---|
-| **Legacy damped union (default)** | Inputs above 1 are clamped to 1 first, so an unbounded (frequency) scale cannot send the combined value negative or off-scale. This keeps the output safe, but it is not a mathematically correct combination for a frequency scale. |
-| **Poisson rate-to-probability transform** | Exact for a per-annum-frequency scale. It reduces to plain rate addition when a mode's damping factor is 1, and gives a principled discounted value when damping is below 1. |
-| **(use model default)** | The aggregation uses the formula that the model's risk matrix sets. When the model sets none, it uses the legacy damped union. |
+| `1` (default) | Inputs above 1 are clamped to 1 first, so an unbounded (frequency) scale cannot send the combined value negative or off-scale. This keeps the output safe, but it is not a mathematically correct combination for a frequency scale. |
+| `2` | Poisson rate-to-probability transform. Exact for a per-annum-frequency scale. It reduces to plain rate addition when a mode's damping factor is 1, and gives a principled discounted value when damping is below 1. |
+| absent | The aggregation uses the formula that the model's risk matrix sets. When the model sets none, it uses the legacy damped union. |
 
-Choose **Poisson rate-to-probability transform** when your likelihood scale is a per-annum frequency and the aggregation uses any mode other than **Max**. The **Max** mode takes the highest single cause and combines nothing, so the formula has no effect on it.
+Set `formulaVersion: 2` when your likelihood scale is a per-annum frequency and the aggregation uses any mode other than `max`. The `max` mode takes the highest single cause and combines nothing, so the formula has no effect on it.
 
-## Set the formula for one aggregation
+## Set the formula for the model default
 
-1. In the diagram toolbar, select **Model Properties**. In the **Aggregation** picker at the top of the drawer, select an aggregation.
-2. Select the edit button beside the picker. To start a new aggregation, select the add button instead.
-3. In the **Edit Aggregation** dialog, expand **Likelihood aggregation**. Switch on **Enable**.
-4. In **Mode**, choose a mode other than **Max**.
-5. In **Combination formula**, choose an option.
-6. Select **Save**.
+Set the formula in the manifest, on the per-event likelihood of the model default aggregation:
 
-The **Combination formula** field does not show for the **Max** mode, which never combines more than one cause. The field starts on **(use model default)**. If the model's default changes later, an aggregation that kept that option picks up the new default on the next load. Choose an explicit option only when this aggregation needs a formula different from the rest of the model.
+```yaml
+riskDefaults:
+  perEvent:
+    likelihood:
+      mode: simple-damped-union
+      formulaVersion: 2
+```
+
+A Risk sets its own formula the same way, under `aggregation.perEvent.likelihood`.
+
+The `max` mode never combines more than one cause, so it ignores the field. An aggregation that sets no `formulaVersion` uses the formula that the model's risk matrix sets, so a later change to the model default applies on the next load. Set a value only when this aggregation needs a formula different from the rest of the model.

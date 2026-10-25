@@ -82,8 +82,12 @@ A requirement runs only a rule whose mode is `generator` or `transform` and whos
 input is the model. A `manual` rule, or a rule that reads records, cannot scope or
 assess a requirement.
 
-The drawer shows the program as read-only text, one statement on each line, with
-a Copy button. A line above the program reads **(no query)**, **1 statement** or
+The drawer shows the program as a list of steps. Each statement is a numbered
+row, with a badge that says what it does and a short description of what it
+selects. A generator's last step has the **Emit** badge. A comment shows as a
+caption, and a disabled statement stays in its place with an **off** badge.
+**Show code** shows the program as text, one statement on each line, with a Copy
+button. A line above the program reads **(no query)**, **1 statement** or
 the number of statements. Select **Edit query** to open the shared query builder in a
 dialog, the same pipeline editor Requirements and the Worklist use for their own
 filters. Select **Apply** to return the edited program to the drawer, or

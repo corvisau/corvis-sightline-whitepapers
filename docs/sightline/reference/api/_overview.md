@@ -23,9 +23,6 @@ The storage server has no authentication unless the operator configures it. When
 | `PUT /models/{id}/query-templates` | [Model routes](/docs/sightline/reference/api/models) |
 | `PUT /models/{id}/query-templates/{itemId}` | [Model routes](/docs/sightline/reference/api/models) |
 | `DELETE /models/{id}/query-templates/{itemId}` | [Model routes](/docs/sightline/reference/api/models) |
-| `GET /models/{id}/aggregations` | [Model routes](/docs/sightline/reference/api/models) |
-| `PUT /models/{id}/aggregations/{itemId}` | [Model routes](/docs/sightline/reference/api/models) |
-| `DELETE /models/{id}/aggregations/{itemId}` | [Model routes](/docs/sightline/reference/api/models) |
 | `POST /models/{id}/template-files` | [Model routes](/docs/sightline/reference/api/models) |
 | `POST /models/{id}/template-files/add` | [Model routes](/docs/sightline/reference/api/models) |
 | `POST /models/{id}/template-files/remove` | [Model routes](/docs/sightline/reference/api/models) |
@@ -66,6 +63,7 @@ The storage server has no authentication unless the operator configures it. When
 | `GET /cross-app/models/{modelId}/control-templates/{templateId}/impact` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /cross-app/models/{modelId}/causes/{causeId}/controls/{controlId}/impact` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /cross-app/models/{modelId}/outcomes/{outcomeId}/controls/{controlId}/impact` | [Discovery routes](/docs/sightline/reference/api/discovery) |
+| `POST /cross-app/models/{modelId}/risks/query` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /cross-app/models/{modelId}/finding-inbox` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /metron/assessments/{id}` | [Discovery routes](/docs/sightline/reference/api/discovery) |
 | `GET /metron/assessments/{id}/workspace` | [Discovery routes](/docs/sightline/reference/api/discovery) |

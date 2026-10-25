@@ -67,6 +67,38 @@ When the same id is defined in the manifest and in a listed file, the command na
 
 A Lamina manifest needs a `meta.id`. A manifest without one does not open, because the Models tree does not list it. The message that Lamina shows names the file and gives the command that adds an id to every manifest in its folder. See [Open a Lamina model](/docs/sightline/usage/lamina/opening-a-model).
 
+## Lamina schema version 3
+
+Lamina schema version 3 moves aggregation to the Risk. A version 3 manifest has none of these keys:
+
+- `aggregations`
+- `riskAggregationId`
+- `aggregationId` on a data slice
+- `events`, `eventTags` and `dataSlice` on a Risk
+
+A Risk lists `parts` in place of the last three. Each Risk can set an `aggregation`, and `riskDefaults` sets the aggregation of every Risk that sets none.
+
+| Version 2 key | Version 3 form |
+|---|---|
+| The profile that `riskAggregationId` names | `riskDefaults`. The `likelihood` block becomes `perEvent.likelihood`, without `collapse`, and the `outcomes` mode becomes `perEvent.consequence`. |
+| `aggregationId` of a data slice | Removed. With no `riskAggregationId` and no `riskDefaults`, the profile that the slices name becomes `riskDefaults`, and the ratings of the Risks can change. |
+| Tag grouping in a profile | Removed. A grouped cause, event or outcome has no equivalent. |
+| `events` of a Risk | One `event` part for each id. |
+| `dataSlice` of a Risk | A `dataSlice` part. |
+| `eventTags` of a Risk | A `dataSlice` part. The migration writes a data slice named `risk-<Risk id>-tags` with the filter `event.tags |> hasAll(...)`. |
+
+A version 2 manifest opens. Lamina reads it as version 3, selects the same events for each Risk, and leaves the file as it is. The Risk routes of the API answer from the same reading. The `ratingBasis` of the Risk answers no longer has an `aggregationId` member, and the routes `GET`, `PUT` and `DELETE /models/{id}/aggregations` answer 404.
+
+The web shell and the API refuse a change to the data slices or the manifest of a model that still holds a removed key. The message gives the command below. Run it once on the model folder:
+
+```bash
+pnpm --filter @sightline/tools-bowtie-risk-aggregation-migration run migrate --model-dir <model folder>
+```
+
+The command rewrites each `*.bowtie.yaml` file of the folder, writes `schemaVersion: 3` and keeps the comments and the order of the keys. It prints a warning for each profile feature that it cannot carry over, and for a model default that it took from the data slices. Add `--dry-run` to list the files without writing them. A second run changes nothing. The command skips a manifest below version 2 and says so. Ask Corvis for the earlier migration of such a model.
+
+A build of Sightline from before this release refuses a manifest of version 3.
+
 ## Rule package domain
 
 A rule package names the app that runs its rules in `meta.domain`. A rule no longer carries a `domain` of its own. A rule package manifest with no `meta.domain` does not load. Tetra and Metron report the package, and a run skips its rules.
