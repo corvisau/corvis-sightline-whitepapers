@@ -11,9 +11,13 @@ A bow-tie diagram shows an event with its causes on one side and its consequence
 - **Tree view.** The **Lamina** group of the **Models** tree in the **Sightline** activity-bar view lists the models in the workspace. See [Tree browser panel](/docs/sightline/usage/shared/tree-browser-panel).
 - **Props drawer.** The drawer opens the properties of one entity. See [Authoring controls](/docs/sightline/usage/lamina/authoring-controls) and [Props drawer required fields](/docs/sightline/usage/lamina/props-drawer-required-fields).
 
+## Risks
+
+The canvas draws one Risk at a time, picked in the Model Tree. A Risk is dynamic, with a filter over the elements, or static, with a list of elements. See [Risks](/docs/sightline/usage/lamina/risks).
+
 ## Data slices
 
-A data slice pairs a filter expression with the view settings of the diagram. It gives the toolbar a saved, named view. See [Data slices](/docs/sightline/usage/lamina/data-slices).
+Earlier versions of Lamina saved a filter and the view settings of the diagram as a data slice. The Diagram no longer offers slices, and the version 4 migration turns each slice into a Risk. See [Compatibility](/docs/sightline/upgrade/compatibility).
 
 ## Findings inbox
 
@@ -22,7 +26,7 @@ The findings inbox lists the Metron findings that have no cause yet. **Create ca
 ## Output
 
 - Lamina exports the diagram as a PNG. See [PNG export](/docs/sightline/usage/lamina/png-export).
-- Lamina generates a risk report for each data slice. See [Risk report (PPTX)](/docs/sightline/usage/lamina/risk-report-pptx).
+- Lamina generates a risk report for each Risk. See [Risk report (PPTX)](/docs/sightline/usage/lamina/risk-report-pptx).
 
 ## Where to go next
 

@@ -170,9 +170,9 @@ With the read-only setting on, the toolbar's **Templates** and **Constants** but
 - `Licensed to: <name> (no editing in Bow-Tie)`
 - `Licensed to: <name>`, with the licence id, the issue date and the expiry
 
-**Without a licence.** Viewing, findings browsing and report generation stay fully usable. Every editing control stays enabled. **Save all** appears in the pool save bar below the diagram and below the Tabular Editor. The **Save changes** dialog lists each change by the label of its cause, event, outcome, control or annotation. A data slice or query template appears by its own label.
+**Without a licence.** Viewing, findings browsing and report generation stay fully usable. Every editing control stays enabled. **Save all** appears in the pool save bar below the diagram and below the Tabular Editor. The **Save changes** dialog lists each change by the label of its cause, event, outcome, control or annotation. A query template appears by its own label.
 
-**Leaving with changes pending.** You can switch the data slice or the surface mode without a prompt. Opening a second create surface asks nothing either. Your changes stay pending. **Undo** and **Redo** sit in the pool save bar, which stays in place when you switch between the diagram and the Tabular Editor.
+**Leaving with changes pending.** You can pick another Risk or switch the surface mode without a prompt. Opening a second create surface asks nothing either. Your changes stay pending. **Undo** and **Redo** sit in the pool save bar, which stays in place when you switch between the diagram and the Tabular Editor.
 
 **Structural changes.** These actions wait for **Save**:
 
@@ -186,7 +186,7 @@ With the read-only setting on, the toolbar's **Templates** and **Constants** but
 
 The link that a promoted finding records to its new cause still writes to disk at once. The cause itself waits for **Save**.
 
-A new entity that waits for **Save** shows on the canvas even when the active data slice would exclude it. The slice filter applies again when the model reloads after **Save**.
+A new entity that waits for **Save** shows on the canvas even when the picked Risk does not include it. The Risk applies again when the model reloads after **Save**.
 
 **Read-only view.** These stay available with the licence off and with the read-only setting on:
 

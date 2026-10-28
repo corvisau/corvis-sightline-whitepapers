@@ -47,7 +47,7 @@ A broken link stays focusable, so a keyboard or screen-reader user can read its 
 
 Every multiline field in the drawer renders as Markdown and supports links.
 
-A link resolves against the model as staged in the drawer, whichever data slice is active. A link to an object that the slice hides still opens it.
+A link resolves against the model as staged in the drawer, whichever Tetra data slice or Lamina Risk the canvas shows. A link to an object that the canvas leaves off still opens it.
 
 An object you created and have not saved yet is linkable. An object you have staged for deletion stops resolving, and its links render as broken.
 

@@ -23,5 +23,5 @@ The Models tree lists a model only when it has an id, and a model opens only whe
 
 ## Related
 
-- [Data slices](/docs/sightline/usage/lamina/data-slices)
+- [Risks](/docs/sightline/usage/lamina/risks)
 - [Authoring controls](/docs/sightline/usage/lamina/authoring-controls)

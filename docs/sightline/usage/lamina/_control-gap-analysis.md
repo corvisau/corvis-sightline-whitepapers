@@ -6,7 +6,7 @@ The routes are listed in the [Discovery routes](/docs/sightline/reference/api/di
 
 A control is reused through a control template. Each control that names the template is an instance of it, and the reads treat the template as the control.
 
-A Risk groups cause-event-outcome paths. See [Risks](/docs/sightline/usage/lamina/risks). A control reaches a Risk when a path of the Risk runs through the owner of the control. The owner of a preventative control is a cause, and the owner of a mitigative control is an outcome. A Risk with no paths is reached through its events. A model that defines no Risks has one Risk for each event, with the id of the event. A Risk that several controls reach counts once.
+A Risk groups cause-event-outcome paths. See [Risks](/docs/sightline/usage/lamina/risks). A control reaches a Risk when a path of the Risk runs through the owner of the control. The owner of a preventative control is a cause, and the owner of a mitigative control is an outcome. A Risk with no paths is reached through its events. A dynamic Risk or a static Risk is reached when the cause or outcome that owns the control is one of its members, even when the Risk holds no event and has no path. A cause or outcome that the Risk shows only as a missing neighbour does not reach it. A model that defines no Risks has one Risk for each event, with the id of the event. A Risk that several controls reach counts once.
 
 Each instance has a state, from its target rating and its current rating:
 

@@ -33,7 +33,7 @@ Select **Tools** for these actions:
 - **Staged changes journal** lists unsaved edits and offers **Undo** and **Redo**.
 - **View findings on diagram** narrows the diagram to entities with authored findings. It is disabled when no finding references the model.
 - **Show coverage overlay** displays assessment coverage. Select **Hide coverage overlay** to switch it off.
-- **Push layout nudges to base slice** opens the confirmation for moving the active slice's nudges into its base slice.
+- **Push layout nudges to base slice** opens the confirmation for moving the active slice's nudges into the slice it lists.
 
 The browser shows the bundled device images and default entity icons. Icon choices from VS Code workspace settings apply in the extension.
 
@@ -47,7 +47,7 @@ Edit and delete an entity from the canvas or the Tabular Editor.
 - **Tabular Editor**: right-click a row, then choose **Edit**, **View Code** or **Delete**. See [Bulk edit](/docs/sightline/usage/shared/bulk-edit) for the row context menu.
 - **Tabular Editor, empty space**: right-click the header, a group row or the space below the last row. The menu matches the empty canvas: **Edit…** and **View Code** for the model's top-level container, then an **Add** entry for each entity type. Input fields keep the browser menu.
 
-The Model Tree lists and reveals entities; it has no edit actions of its own. See [Tree browser panel](/docs/sightline/usage/shared/tree-browser-panel).
+The Model Tree lists and reveals entities, and its row toggles choose what the active data slice shows. See [Choosing what a slice shows from the Model Tree](/docs/sightline/usage/tetra/data-slice-filtering#choosing-what-a-slice-shows-from-the-model-tree). It has no entity edit actions of its own. See [Tree browser panel](/docs/sightline/usage/shared/tree-browser-panel).
 
 ## Related
 

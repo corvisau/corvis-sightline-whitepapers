@@ -33,7 +33,7 @@ An annotation linked to several owners shows one bubble per owner by default. To
 
 - The shared bubble has a leader line to each target. It sits beside the first target that is visible, and it takes the placement of that link: **Side**, offsets and **Distance**.
 - Alt+right-click on the shared bubble opens the nudge panel for that first visible link. A change there moves the whole bubble.
-- A target that the active data slice hides loses its leader line. The bubble stays while any target is visible, and it disappears when every target is hidden.
+- A target that the active data slice (Tetra) or the picked Risk (Lamina) leaves off the canvas loses its leader line. The bubble stays while any target is visible, and it disappears when every target is hidden.
 - When the first target is hidden, the bubble moves to the next visible link and takes that link's placement.
 - An annotation with one link looks the same in both modes. A `scope` annotation ignores **Bubble** and keeps one badge per zone.
 - Set **Bubble** back to `perLink`, or clear it, to return to one bubble per owner.
@@ -103,4 +103,4 @@ A double-click on any Lamina node opens its props drawer. A double-click on the 
 
 ### Shared bubble
 
-A data slice in Lamina changes which targets appear, but it does not move annotations. A shared bubble stays beside the first visible target, and it moves to the next visible target when a slice hides the first.
+The picked Risk changes which targets appear, but it does not move annotations. A shared bubble stays beside the first visible target, and it moves to the next visible target when the Risk leaves the first off the canvas.

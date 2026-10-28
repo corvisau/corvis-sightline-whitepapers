@@ -596,7 +596,7 @@ Answers the same entries as the model-wide route, for one cause. The `links` lis
 
 ## `GET /cross-app/models/{modelId}/risks`
 
-A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a Risk by its parts: data slices, events and other Risks. A Risk takes every cause that lists its events and every outcome those events list. A model whose manifest defines no Risks answers one Risk for each event. A path can sit in several Risks. Each Risk with paths carries a residual and an inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule that produced it. A Risk's own `aggregation` and the manifest's `riskDefaults` set how its causes and events combine, and the default is `simple-damped-union`. `issues` lists the definitions that the read could not fully honour, and `problems` lists the files that could not be read.
+A Risk groups cause-event-outcome paths. The manifest's `risks` list defines each Risk by the elements it includes, the elements it excludes, an optional program and the Risks it holds. A Risk counts only its members: a path is a member event with one of its member causes and one of its member outcomes. A model whose manifest defines no Risks answers no Risks. A path can sit in several Risks. Each Risk with paths carries a residual and an inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule that produced it. A Risk's own `aggregation` and the manifest's `riskDefaults` set how its causes and events combine, and the default is `simple-damped-union`. `issues` lists the definitions that the read could not fully honour, and `problems` lists the files that could not be read.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -608,7 +608,6 @@ A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a R
 
 ```json
 {
-  "mode": "authored",
   "risks": [
     {
       "id": "R001",
@@ -652,13 +651,21 @@ A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a R
       ]
     }
   ],
+  "membership": {
+    "byElement": {
+      "C-001": [
+        "R001"
+      ]
+    },
+    "byRisk": {}
+  },
   "uncoveredEventIds": [
     "E-003"
   ],
   "issues": [
     {
       "riskId": "R003",
-      "kind": "unknown-event",
+      "kind": "unknown-element",
       "id": "E-009"
     }
   ],
@@ -700,7 +707,7 @@ A Risk groups cause-event-outcome paths. The manifest's `risks` list defines a R
 
 ## `GET /cross-app/models/{modelId}/control-templates/{templateId}/impact`
 
-Collects every control in the model that names the template, and answers the Risks those controls reach. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each Risk they reach a gap risk. Not Applicable on either rating is never a gap. A Risk is critical when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A control reaches a Risk when a path of the Risk runs through the control's owner: the cause for a preventative control and the outcome for a mitigative one. A Risk with no paths is reached through its events. A model that defines no Risks has one Risk for each event, with the event's id. Each Risk carries its residual and inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule the ratings used. `issues` lists the Risk definitions that the read could not fully honour. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. A template the model defines but no control names answers an empty result. A control is reused by template, so this is the way to ask about "the control" across causes and outcomes.
+Collects every control in the model that names the template, and answers the Risks those controls reach. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each Risk they reach a gap risk. Not Applicable on either rating is never a gap. A Risk is critical when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A control reaches a Risk when its owner is a member of the Risk, or of a Risk that it holds: the cause for a preventative control and the outcome for a mitigative one. A model that defines no Risks answers no Risks. Each Risk carries its residual and inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule the ratings used. `issues` lists the Risk definitions that the read could not fully honour. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. A template the model defines but no control names answers an empty result. A control is reused by template, so this is the way to ask about "the control" across causes and outcomes.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -862,7 +869,7 @@ Collects every control in the model that names the template, and answers the Ris
 
 ## `GET /cross-app/models/{modelId}/causes/{causeId}/controls/{controlId}/impact`
 
-Answers for the control `controlId` that the cause `causeId` owns, which is a preventative control. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each Risk they reach a gap risk. Not Applicable on either rating is never a gap. A Risk is critical when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A control reaches a Risk when a path of the Risk runs through the control's owner: the cause for a preventative control and the outcome for a mitigative one. A Risk with no paths is reached through its events. A model that defines no Risks has one Risk for each event, with the event's id. Each Risk carries its residual and inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule the ratings used. `issues` lists the Risk definitions that the read could not fully honour. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. With `scope=template` the answer widens to every control that names the same template.
+Answers for the control `controlId` that the cause `causeId` owns, which is a preventative control. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each Risk they reach a gap risk. Not Applicable on either rating is never a gap. A Risk is critical when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A control reaches a Risk when its owner is a member of the Risk, or of a Risk that it holds: the cause for a preventative control and the outcome for a mitigative one. A model that defines no Risks answers no Risks. Each Risk carries its residual and inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule the ratings used. `issues` lists the Risk definitions that the read could not fully honour. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. With `scope=template` the answer widens to every control that names the same template.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1033,7 +1040,7 @@ Answers for the control `controlId` that the cause `causeId` owns, which is a pr
 
 ## `GET /cross-app/models/{modelId}/outcomes/{outcomeId}/controls/{controlId}/impact`
 
-Answers for the control `controlId` that the outcome `outcomeId` owns, which is a mitigative control. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each Risk they reach a gap risk. Not Applicable on either rating is never a gap. A Risk is critical when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A control reaches a Risk when a path of the Risk runs through the control's owner: the cause for a preventative control and the outcome for a mitigative one. A Risk with no paths is reached through its events. A model that defines no Risks has one Risk for each event, with the event's id. Each Risk carries its residual and inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule the ratings used. `issues` lists the Risk definitions that the read could not fully honour. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. With `scope=template` the answer widens to every control that names the same template.
+Answers for the control `controlId` that the outcome `outcomeId` owns, which is a mitigative control. An instance is a `gap` when its current effectiveness rating is below its target on None, Low, Partial and Full, and `unassessed` when either rating is missing or Not Assessed; both make each Risk they reach a gap risk. Not Applicable on either rating is never a gap. A Risk is critical when a control that reaches it has `critical: true`. Ratings and the critical flag are read after the control's template is applied, so a control that omits them carries the template's values. A control reaches a Risk when its owner is a member of the Risk, or of a Risk that it holds: the cause for a preventative control and the outcome for a mitigative one. A model that defines no Risks answers no Risks. Each Risk carries its residual and inherent `rating`, and `ratingBasis` names the risk matrix and the likelihood rule the ratings used. `issues` lists the Risk definitions that the read could not fully honour. `problems` lists the files of the model that could not be read or parsed, and an answer with problems may understate the impact. With `scope=template` the answer widens to every control that names the same template.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1204,7 +1211,7 @@ Answers for the control `controlId` that the outcome `outcomeId` owns, which is 
 
 ## `POST /cross-app/models/{modelId}/risks/query`
 
-Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk the model defines, or one that the model derives from an event. Send `parts` to rate a Risk built from data slices, events and held Risks; `id` (default `adhoc`), `name` and `aggregation` are optional with `parts`, and `aggregation` overrides the manifest's `riskDefaults` for this query only. A held Risk is a Risk the manifest defines. The route takes a body, so it is a `POST`, but it only reads: it writes nothing, takes no lock and is not audited, and a read-only caller may use it. The answer is the Risk as the list route gives it, with the same `ratingBasis`. `issues` lists only the definition issues of the queried Risk, and `problems` lists the files that could not be read. A part that names an unknown event, data slice or Risk adds an issue and does not fail the request.
+Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk the model defines. Send `include` to rate a Risk that you build: `include` lists the cause, event and outcome ids the Risk counts, `exclude` lists ids it leaves out, `filter.program` is an optional program that runs first, and `risks` lists Risks the manifest defines that it holds. Exclude beats include, and both beat the program. `riskId` and the built form exclude each other; `id` (default `adhoc`), `name`, `aggregation` and `flattenSubRisks` are optional, and `aggregation` overrides the manifest's `riskDefaults` for this query only. The answer carries `kind`, `memberIds` and `missingNeighbourIds`, as the list route gives them. A held Risk is a Risk the manifest defines. The route takes a body, so it is a `POST`, but it only reads: it writes nothing, takes no lock and is not audited, and a read-only caller may use it. The answer is the Risk as the list route gives it, with the same `ratingBasis`. `issues` lists only the definition issues of the queried Risk, and `problems` lists the files that could not be read. An `include`, `exclude` or `risks` entry that names an unknown element or Risk adds an issue and does not fail the request.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|

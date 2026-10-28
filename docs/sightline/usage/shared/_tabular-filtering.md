@@ -4,7 +4,7 @@ Tetra has five mechanisms, and Lamina has four. The Tetra-only mechanism is the 
 
 The Metron assessment worklist has the analogous **Filter**, **Group** and **Saved filters** toolbar over a different, scheme-driven field set. See [Worklist filtering](/docs/sightline/usage/metron/worklist-filtering).
 
-A data slice is a coarser mechanism that the model author defines, and it narrows the diagram only. The Tabular Editor lists the whole model, staged changes included, whatever data slice is active. **Filter** and **Group** are the only controls that narrow the grid. For Tetra, see [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering). For Lamina, see [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices).
+In Tetra, a data slice is a coarser mechanism that the model author defines, and it narrows the diagram only. In Lamina, the picked Risk decides what the diagram draws. In both apps the Tabular Editor lists the whole model, staged changes included, whatever data slice or Risk the diagram shows. **Filter** and **Group** are the only controls that narrow the grid. For Tetra, see [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering).
 
 ---
 
@@ -32,7 +32,7 @@ To disable a statement, select the round button at the right of its row. The row
 
 A disabled statement keeps its steps and stays editable. The query does not run it, and the builder does not check it for errors. A register that a disabled statement saves does not exist for the statements after it. **Show code** lists a disabled statement with `//!` at the start of the line. A statement with no steps has nothing to disable. The summary beside **Edit query** counts disabled statements separately, for example `2 statements, 1 disabled`.
 
-When every statement is disabled, the query behaves like one that holds only comments. Tetra and Lamina data slices then show the whole model, and Metron filters match nothing. The [Tetra](#tetra) and [Lamina](#lamina) sections and the Metron [worklist](/docs/sightline/usage/metron/worklist-filtering) page repeat this for their own filters.
+When every statement is disabled, the query behaves like one that holds only comments. Tetra data slices then show the whole model, and Metron filters match nothing. The [Tetra](#tetra) and [Lamina](#lamina) sections and the Metron [worklist](/docs/sightline/usage/metron/worklist-filtering) page repeat this for their own filters.
 
 ### Available Basic-tab filter fields
 

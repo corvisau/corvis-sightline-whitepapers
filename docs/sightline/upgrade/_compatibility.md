@@ -12,9 +12,13 @@ A Lamina manifest carries a `schemaVersion`.
 |---|---|---|
 | 0 or 1, or absent with an older shape in the manifest | An older shape that Tetra no longer converts. | Does not open |
 | Absent, with no older shape in the manifest | Read as version 2. | Opens |
-| 2 | The shape that **Tetra: New Model** writes. | Current |
+| 2 | The shape of a model with no data slice that selects its own entities. | Opens |
+| 3 | Version 2, and a data slice can carry `include` and `exclude`. | Opens, unless a slice uses `baseSlice` |
+| 4 | Version 3, and no data slice uses `baseSlice`. A slice lists the slices it includes in `slices`. This is the shape that **Tetra: New Model** writes. | Current |
 
 A model with no `schemaVersion` opens when its manifest holds none of the older shapes. Tetra does not add the key when it saves such a model.
+
+A model that uses `baseSlice` does not open, whatever its `schemaVersion` says, and a model with no `schemaVersion` is no exception. The message names the data slice command below, which converts the model to version 4. A model that the command stamps at version 4 does not open in an older build of Sightline.
 
 A model whose manifest holds an older shape does not open. The message names each older shape that the manifest holds and the conversion that applies to it. A manifest that says version 1 does not open either, because version 2 is the lowest that Tetra opens.
 
@@ -28,14 +32,17 @@ A model file can also hold an older shape that the manifest does not show, and a
 | An annotation with a `position`, `distance`, `maxWidth`, `positionOffset` or `severity` field, or a link with a `position` or `positionOffset` field | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
 | A channel or flow with a `portOffset` field or a `showLabel` of `true` or `false` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
 | A zone, group, device, network or data slice with a `layout` of `horizontal` or `vertical` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
+| A data slice with a `baseSlice` field | `pnpm --filter @sightline/tools-tetra-slice-migration run migrate --model-dir <model folder>` |
 | A channel, or a device connection, with a `type` field | `pnpm --filter @sightline/tools-tetra-channel-type-migration run migrate --model-dir <model folder>` |
 | A data slice program or a member `expr` that selects the kind of entity with `item.type`, such as `item.type == 'zone'`, in place of `item.kind` | `pnpm --filter @sightline/tools-item-kind-migration run migrate --model-dir <model folder>` |
 
 The field command moves an annotation bubble that has a corner position, such as `bottom-left`, to the middle of that side. It changes a `layout` of `horizontal` to `columns` and `vertical` to `rows`.
 
+The data slice command replaces `baseSlice` with `slices`, so a slice that built on another now lists it. A slice with no filter, `include` or `exclude` of its own shows the same model as before. A slice with one of these did run it inside the base slice, and now shows the base slice plus whatever its own selection matches over the whole model, so it can show more. The command prints each such slice, so you can check it. It drops a `baseSlice` that named a slice that does not exist, the slice itself, or a loop of slices, because Tetra already ignored those, and prints each one.
+
 The channel type command replaces `type` with a `channelType`, a `protocol` list and, for a wireless link, a `lineStyle` of `dashed`, so the line looks the same. It leaves a channel with no `type` as it is. It lists each channel of type `physical`, which has no equivalent, and each data slice line that compares `item.type` with a retired channel type. Remove or change those by hand.
 
-After the conversions, run `pnpm --filter @sightline/tools-tetra-schema-stamp run migrate --model-dir <model folder>`. The command checks the whole model, writes `schemaVersion: 2` to the manifest, and lists the conversions that remain when it finds an older shape.
+After the conversions, run `pnpm --filter @sightline/tools-tetra-schema-stamp run migrate --model-dir <model folder>`. The command checks the whole model, writes `schemaVersion: 4` to the manifest, and lists the conversions that remain when it finds an older shape.
 
 Tetra accepts any id made of letters, digits, dots, underscores and hyphens for a new group, device, network, information or system. An id such as `dev-erp-prod-app` needs no change.
 
@@ -95,9 +102,37 @@ The web shell and the API refuse a change to the data slices or the manifest of 
 pnpm --filter @sightline/tools-bowtie-risk-aggregation-migration run migrate --model-dir <model folder>
 ```
 
-The command rewrites each `*.bowtie.yaml` file of the folder, writes `schemaVersion: 3` and keeps the comments and the order of the keys. It prints a warning for each profile feature that it cannot carry over, and for a model default that it took from the data slices. Add `--dry-run` to list the files without writing them. A second run changes nothing. The command skips a manifest below version 2 and says so. Ask Corvis for the earlier migration of such a model.
+The command rewrites each `*.bowtie.yaml` file of the folder, writes `schemaVersion: 3` and keeps the comments and the order of the keys. It prints a warning for each profile feature that it cannot carry over, and for a model default that it took from the data slices. Add `--dry-run` to list the files without writing them. A second run changes nothing. A manifest below version 2, or with no `schemaVersion`, first takes the earlier migrations that Lamina applies when it opens such a model. A top-level key that those migrations change is written again in full, so a comment inside that key is lost. Views are no longer part of the manifest, so the command removes them and prints a warning that names each one. Re-create each view in Lamina.
 
 A build of Sightline from before this release refuses a manifest of version 3.
+
+## Lamina schema version 4
+
+Lamina schema version 4 replaces data slices and parts-based Risks with one Risk form that includes elements, excludes elements and runs a program. A version 4 manifest has none of these:
+
+- `dataSlices`
+- `parts` on a Risk
+- `dataSlice` on a report
+
+| Version 3 form | Version 4 form |
+|---|---|
+| A data slice | A Risk named `slice-<id>`, in the `Data slices` risk folder, with the filter of the slice as its program and no aggregation. A filter that has no program form becomes a list of the elements the slice selects now. The view settings of the slice (`compact`, `showTags`, `showElements`, `outcomeSort` and `annotationDisplay`) have no equivalent and are dropped with a warning. |
+| A Risk of `parts` | A Risk that includes its elements. An `event` part includes the event with the causes and outcomes that link to it. A `dataSlice` part holds the Risk of that slice, and a `risk` part stays. A Risk that holds a Risk keeps it as one rated item, so its ratings do not change. |
+| `dataSlice` of a report | `risk`, which names the Risk of the slice. |
+
+A model with no `risks` list used to have one Risk for each event. A version 4 model has none, and the Diagram shows a prompt to create a Risk. The read of the Risks no longer has the `mode` member, and a Risk no longer has `source`.
+
+A version 3 manifest opens. Lamina reads it as version 4 and leaves the file as it is. The Risk routes of the API, the reports and the PNG export answer from the same reading. The `data-slices` routes of the API answer 404 for a Lamina model, and the routes of a Tetra model are unchanged.
+
+The web shell and the API refuse a change to a model that still holds a removed key. The message gives the command below. Run it once on the model folder:
+
+```bash
+pnpm --filter @sightline/tools-bowtie-risk-tree-migration run migrate --model-dir <model folder>
+```
+
+The command rewrites each `*.bowtie.yaml` file of the folder, writes `schemaVersion: 4` and keeps the comments and the order of the keys. It prints a warning for each slice, Risk or report that it cannot carry over exactly. Add `--dry-run` to list the files without writing them. A second run changes nothing. The command skips a manifest below version 3 and says so. Run the version 3 command above first.
+
+A build of Sightline from before this release refuses a manifest of version 4.
 
 ## Rule package domain
 

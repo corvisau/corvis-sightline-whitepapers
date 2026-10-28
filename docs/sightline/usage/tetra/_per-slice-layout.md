@@ -1,7 +1,7 @@
 Layout and nudge tweaks are per data slice, not baked into the model. They cover edge routing (standoff, port, attach side, label
 positions), container structure (layout direction, margins, min size,
 alignment, annotation anchor, child order) and annotation-bubble placement. Each slice carries its own
-overrides; a sub-slice inherits its base slice's layout and stores only
+overrides; a slice inherits the layout of the slices it lists and stores only
 what it changes on top.
 
 ---
@@ -49,22 +49,22 @@ from the previous node, and its exit is the line leaving toward the next one.
 > relationship, a collapsed hop) where a segment is reachable only through the
 > popover's header stepper.
 
-## Base-slice inheritance
+## Layout inheritance
 
-Tetra data slices support a base slice for filters (see
-[Tetra Data Slice Filtering](/docs/sightline/usage/tetra/data-slice-filtering)). A slice can name
-another slice as its base, and the base's filter applies first. Layout
-overrides reuse the same chain for inheritance:
+A slice can list other slices (see
+[Building a slice from other slices](/docs/sightline/usage/tetra/data-slice-filtering#building-a-slice-from-other-slices)).
+Layout overrides follow the same list:
 
-- Walking a slice's base chain outward, the nearest ancestor that
-  defines a given value for a given entity wins.
-- Resolution is field-level. A sub-slice can override
-  just the start offset on a channel. Every other value still inherits from the base: the channel's end offset and all other channels, containers and annotations.
-- A cycle or a missing base slice degrades to no inheritance
-  for that slice, as in the filter chain.
+- The nearest slice that defines a given value for a given entity wins. A later
+  entry in the list wins over an earlier entry, and the slice's own values win
+  over both.
+- Resolution is field-level. A slice can override
+  just the start offset on a channel. Every other value still inherits from the listed slices: the channel's end offset and all other channels, containers and annotations.
+- A cycle or a missing slice degrades to no inheritance
+  for that slice.
 
-So a base slice such as OT View can lay out about 80% of a diagram. A sub-slice
-such as OT View: Site 42 layers on just the two or three nudges specific to
+So a slice such as OT View can lay out about 80% of a diagram. A slice such as
+OT View: Site 42 lists OT View and layers on just the two or three nudges specific to
 that view.
 
 ## Editing overrides
@@ -136,8 +136,8 @@ The route keeps a clear gap of about 28 px from an avoided group, wider than the
 it keeps from devices, networks and zones, so the detour is easy to see.
 
 The list belongs to the whole channel or flow, so it applies to every segment of
-the line, whichever segment the popover shows. A nearer slice replaces the list of its
-base slice instead of adding to it. **Reset to inherited** removes the local list.
+the line, whichever segment the popover shows. A nearer slice replaces the list of a slice
+it lists instead of adding to it. **Reset to inherited** removes the local list.
 
 The router skips an entry that cannot apply, and the popover marks that entry with
 the reason:
@@ -179,18 +179,18 @@ handles, with a "Create a data slice to edit the layout" hint.
 
 When a slice is active, all three nudge panels and the Children list show, per field:
 
-- **`inherited from <base slice name>`**: the value comes from a base
-  slice, and the active slice does not touch the field.
+- **`inherited from <slice name>`**: the value comes from a slice that
+  the active slice lists, and the active slice does not touch the field.
 - **`Reset to inherited`**: the field is locally overridden on the active
   slice. Clicking it clears the local override, so the field falls back to whatever the
-  base chain (or nothing) provides.
+  listed slices (or nothing) provide.
 - Neither: the field has no override anywhere in the chain, so the model value is in effect.
 
 The Children list carries one hint for the whole list, because the child order is a single value describing the entire order. The hint reads `order inherited from <base>` when the order comes from an ancestor. A `Reset order to inherited` button appears when this slice sets it.
 
 ### Pushing nudges to the base slice
 
-The command **Tetra: Push Layout Nudges to Base Slice** moves the layout nudges of the active data slice into its base slice. It runs from the command palette and needs an open diagram.
+The command **Tetra: Push Layout Nudges to Base Slice** moves the layout nudges of the active data slice into its base slice, the one slice that it lists. It runs from the command palette and needs an open diagram.
 
 In the browser, select **Tools**, then **Push layout nudges to base slice**. It opens the same confirmation and stages the same change.
 
@@ -202,15 +202,16 @@ In the browser, select **Tools**, then **Push layout nudges to base slice**. It 
 
 The base slice takes every nudge of the slice: channels, flows, containers and annotations. Where both slices set the same value, the base slice takes the value from the slice. The base slice keeps every value that the slice does not set.
 
-The slice then holds no nudges of its own and inherits them from the base slice, so it draws the same layout as before. Other slices that share the base slice start to inherit the pushed nudges as well.
+The slice then holds no nudges of its own and inherits them from the base slice, so it draws the same layout as before. Other slices that list the base slice start to inherit the pushed nudges as well.
 
-The change joins the other unsaved edits until **Save all** writes it. The command pushes to the direct base slice only. Run it again from the base slice to move the nudges one level further up.
+The change joins the other unsaved edits until **Save all** writes it. The command pushes to the listed slice only. Run it again from that slice to move the nudges one level further up.
 
 The command shows the reason and changes nothing in these cases:
 
-- The slice has no base slice.
-- The base slice no longer exists.
-- The base slices loop back on themselves.
+- The slice lists no slice.
+- The slice lists more than one slice, so it has no single parent to push to.
+- The listed slice no longer exists.
+- The listed slices loop back on themselves.
 - The slice holds no nudges of its own.
 - The view is read-only.
 
@@ -223,8 +224,8 @@ flow and annotation that carries a layout override in the active slice shows a
 small dot:
 
 - **Filled**: the override is set locally on the active slice.
-- **Hollow (a ring)**: the override is only inherited from a base slice, and
-  the active slice does not touch it.
+- **Hollow (a ring)**: the override is only inherited from a slice that the
+  active slice lists, and the active slice does not touch it.
 
 The dot is entity-level: it marks whether an entity carries an override
 and whether any of it is local, not which specific field. An entity with

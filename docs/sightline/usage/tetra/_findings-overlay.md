@@ -57,9 +57,8 @@ Selecting **View Findings on Diagram** in the diagram's title bar, next to
 **Refresh Diagram**, or running **Tetra: View Findings on Diagram** from the
 command palette, narrows the whole canvas to just the
 entities any finding references. The slice is transient and never persisted;
-the **Data slice** picker shows it as `Findings (N entities)`. Picking any other
-slice (or **None**) from the same picker exits back to normal browsing; the
-transient entry disappears from the list. If no findings reference the
+the **Slices** view does not list it. Picking any slice in the **Slices** view
+exits back to normal browsing. If no findings reference the
 current model, an info message says so and nothing changes.
 
 ## Coverage overlay

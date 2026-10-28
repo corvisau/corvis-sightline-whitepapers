@@ -11,7 +11,7 @@ To start a new model, select **New…** on a folder and choose **Tetra: New Mode
 
 ## 2. Narrow the model with a data slice
 
-Use the data slice picker in the toolbar to show part of the model. A data slice is a saved, named filter. See [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering).
+Use the **Slices** view below the **Model Tree** to show part of the model. A data slice is a saved, named filter. See [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering).
 
 ## 3. Assess the model in Metron
 

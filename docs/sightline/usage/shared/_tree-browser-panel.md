@@ -31,7 +31,7 @@ A single click selects. A double-click edits. A single click never opens the pro
 
 ## Rows the canvas is not showing
 
-With a data slice active, the canvas renders only the entities the slice keeps. The tree still lists the whole model, and it greys the rows that the slice leaves off the canvas. Hover a greyed row to see the reason in its tooltip.
+In Tetra, with a data slice active, the canvas renders only the entities the slice keeps. The tree still lists the whole model, and it greys the rows that the slice leaves off the canvas. Hover a greyed row to see the reason in its tooltip.
 
 A greyed entity still exists in the model. Double-click its row to open its props drawer and edit it, because editing reads the whole model rather than the slice. A single click highlights the row and leaves the canvas alone, because there is no node to move to.
 
@@ -42,6 +42,8 @@ VS Code owns the section. It remembers whether you left it collapsed or expanded
 ## Tetra
 
 In the browser, select **Tools**, then **Model tree** in the Tetra toolbar. The tree opens beside that model's editor and provides the same selection, filtering and editing actions. Close it with the panel's close button. The browser panel has a fixed width; the extension uses the size of the VS Code sidebar section.
+
+In Tetra, every row also carries a toggle that includes or excludes the row in the active data slice, and the tree greys nothing out. See [Choosing what a slice shows from the Model Tree](/docs/sightline/usage/tetra/data-slice-filtering#choosing-what-a-slice-shows-from-the-model-tree).
 
 The Models section above the tree lists the Tetra models in the workspace. Select one to open it, and the tree below shows its entities.
 
@@ -65,10 +67,7 @@ The canvas cannot always move to the entity you clicked. A node inside a collaps
 
 A greyed row can join a multi-selection. Its row highlights, and the canvas skips it because there is no node to select.
 
-A greyed row has the tooltip `not in the active data slice`. Both filter modes produce greyed rows:
-
-- **Prune** removes the non-matching entities from the canvas, so every one of them greys in the tree.
-- **Shade** keeps them on the canvas at 30% opacity, and greys the same rows in the tree.
+A greyed row has the tooltip `not in the active data slice`. The slice removes the non-matching entities from the canvas, so every one of them greys in the tree.
 
 The View menu's "Hide ..." toggles declutter the canvas without greying anything in the tree.
 
@@ -112,7 +111,7 @@ Lamina's tree selects one row at a time. Cmd, Ctrl and Shift clicks on its rows 
 
 ### On the Tabular Editor
 
-The tree lists the whole model. No row greys, because the table shows every entity whatever data slice is active.
+The tree lists the whole model. No row greys, because the table shows every entity whichever Risk the canvas shows.
 
 | Action | Result |
 |---|---|
@@ -128,4 +127,4 @@ A control has no row in the table, so its tree row highlights and the table tick
 
 A selection made in the table does not select nodes on the diagram.
 
-For how a slice decides which entities reach the canvas, see the [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices) page. The Tetra tree uses the same control over a containment tree.
+For how the picked Risk decides which entities reach the Lamina canvas, see [Risks](/docs/sightline/usage/lamina/risks). The Tetra tree uses the same control over a containment tree.

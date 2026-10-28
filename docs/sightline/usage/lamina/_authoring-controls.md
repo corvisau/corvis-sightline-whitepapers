@@ -4,7 +4,7 @@ reuse comes from a template.
 This page covers how to add a control, reuse a template, set the elements a
 control covers and read where an inherited value came from. For the
 effectiveness ratings and the zone rules that colour a control's element badges,
-see [Lamina Data Slices](/docs/sightline/usage/lamina/data-slices).
+see [Rate a Risk](/docs/sightline/usage/lamina/risks#rate-a-risk).
 
 ## Add a control
 

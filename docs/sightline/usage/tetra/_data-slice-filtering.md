@@ -1,33 +1,31 @@
-Tetra uses **bonsai filter expressions** to project the full model into a narrowed view called a _data slice_. This page covers the filter language, the execution pipeline and the Tetra sentinel transforms (`cascade()`, `exclude()`). It also covers set-pipeline programs, the prune and shade display modes, and the member filter fields of a zone or group.
+Tetra uses **bonsai filter expressions** to project the full model into a narrowed view called a _data slice_. This page covers the filter language, the execution pipeline and the Tetra sentinel transforms (`cascade()`, `exclude()`). It also covers set-pipeline programs, how a slice displays, and the member filter fields of a zone or group.
 
 ---
 
 ## Creating, editing, and duplicating slices
 
-A data slice has a name, an optional description, an optional query and a saved view perspective (zoom, pan and display settings). A slice with no query shows the whole model.
+A data slice has a name, an optional description, an optional query and a saved view perspective (zoom, pan and display settings). A slice that has no query and no included entries from the Model Tree shows the whole model. A slice made with **New** starts empty instead; see [Choosing what a slice shows from the Model Tree](#choosing-what-a-slice-shows-from-the-model-tree).
 
-The toolbar's **Data slice** control appears in the Diagram view only. A data slice narrows the diagram, and the Table view always lists the whole model. The active slice stays selected while the Table view is open. The control's label reads **Data slice:** followed by the name of the active slice.
+A data slice narrows the diagram, and the Table view always lists the whole model. The active slice stays selected while the Table view is open. The **Slices** view chooses the active slice and creates, edits, duplicates and deletes slices; see [Choosing slices from the Slices view](#choosing-slices-from-the-slices-view).
 
-Tetra draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. To view the whole model, create a slice with no filter.
+Tetra draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. To view the whole model, make a slice whose query is `model |> add()`: select **Edit query** on a new slice and apply it.
 
 A slice saves its view perspective, orientation included. A slice that saved no orientation opens in rows. The **Layout** field in the model's properties does not change the diagram while a slice is active. On a model with no slices, it sets the orientation that the first new slice starts from.
 
 In the web shell, the active slice belongs to the browser tab. It survives a reload and is lost when you close the tab, so a new tab opens on the model's first slice. The VS Code extension keeps the choice per workspace.
 
-A model with no data slices shows no **Data slice** control. The Diagram view shows the message "This model has no data slices. Create one to draw it." and a **Create data slice** button, which opens the slice editor. The Table view lists the model as usual.
+On a model with no data slices, the Diagram view shows the message "This model has no data slices. Create one to draw it." and a **Create data slice** button, which opens the slice editor. The Table view lists the model as usual.
 
 A user who cannot edit the model sees the message "The model author hasn't created a data slice yet." instead, with no button. A web shell tab opened with a reader token is one example.
 
-Click the control to open the slice menu. A row of four buttons stays at the top of the menu: **New**, **Edit**, **Duplicate** and **Delete**. Below the buttons, the menu lists the slices and scrolls when the list is long, so the buttons never scroll out of view. A slice that builds on a base slice opens a submenu to the side. The first entry of the submenu is the base slice itself, followed by the slices that build on it. Click a slice to apply it and close the menu. The Up and Down arrow keys, Home and End move between the entries. The Right arrow key opens a submenu, the Left arrow key closes it, and Escape closes the menu.
+These actions work on slices:
 
-The buttons at the top of the menu do these actions:
+- **New slice** opens an empty editor. The slice it creates starts empty: it shows nothing until you include entries from the Model Tree or apply a query.
+- **Edit** opens the slice with every field pre-filled; its id never changes.
+- **Duplicate** opens the same editor pre-filled from the slice (name, filter, description) but under a fresh id. Saving creates an independent copy and leaves the source slice untouched.
+- **Delete** asks for confirmation, then removes the slice. When you delete the active slice, the first remaining slice becomes active. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
 
-- **New** opens an empty editor.
-- **Edit** opens the currently-active slice with every field pre-filled; its id never changes.
-- **Duplicate** opens the same editor pre-filled from the currently-active slice (name, filter, base slice, description) but under a fresh id. Saving creates an independent copy and leaves the source slice untouched.
-- **Delete** asks for confirmation, then removes the active slice. The first remaining slice becomes active. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
-
-A new or duplicated slice appears in the popover and becomes active as soon as you save the editor. It reaches the model file with your other unsaved changes when you click **Save all**.
+A new or duplicated slice appears in the **Slices** view and becomes active as soon as you save the editor. It reaches the model file with your other unsaved changes when you click **Save all**.
 
 The **PNG**, **Legend (PNG)** and **Draw.io** exports capture the diagram. On a model with no data slices they are disabled until you create one. Reports stay available.
 
@@ -38,15 +36,15 @@ The editor shows the slice's query under a **Query** label as a list of steps. A
 - A comment shows as a caption above the steps that follow it.
 - A disabled statement stays in its place, dimmed and struck through, with an **off** badge.
 
-Each step also shows its effect on the result, for example **+12 → 41**. A **Starts from** row names the base slice, or the whole model, and gives its item count. An **Ends with** row gives the size of the result.
+Each step also shows its effect on the result, for example **+12 → 41**. A **Starts from** row names the whole model and gives its item count. An **Ends with** row gives the size of the result.
 
 **Show code**, beside **Edit query**, shows the query as text with a **Copy** button. A long statement is split at its pipes, one step to a line. Select **Edit query** to open the query builder in its own dialog. **Apply** returns the edited query to the editor, and **Cancel** or Escape keeps the query as it was. Escape closes only the query dialog.
 
-A new slice has no query. A slice with no query shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`. A statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**. A statement that does not add anything, such as a `remove()` or a `where()` without `add()`, then acts on an empty result. The `remove()` examples in this page start from `model |> add()` for the same reason.
+A new slice has no query and shows nothing, because it starts empty. An older slice that has no query and no included entries shows the whole model. **Edit query** on a slice with no query opens the builder on `model |> add()`. A statement counts toward the result only when it ends in `add()`. The slice stays without a query until you select **Apply**. A statement that does not add anything, such as a `remove()` or a `where()` without `add()`, then acts on an empty result. The `remove()` examples in this page start from `model |> add()` for the same reason.
 
 A **Show code** button in the top-right corner of the query builder, opened from **Edit query**, reveals the exact bonsai program as read-only text. The program is the same statement list described below, and a **Copy** button copies it. Use it to debug a filter or to share it outside the editor.
 
-A statement in the query builder can be disabled and enabled again with the round button at the right of its row. A slice whose statements are all disabled shows the whole model, as a slice with no query does. See [Disabling a statement](/docs/sightline/usage/shared/tabular-filtering#disabling-a-statement).
+A statement in the query builder can be disabled and enabled again with the round button at the right of its row. A slice whose statements are all disabled shows the whole model, as an older slice with no query does. A slice that has included entries from the Model Tree shows only those entries when its statements are all disabled. See [Disabling a statement](/docs/sightline/usage/shared/tabular-filtering#disabling-a-statement).
 
 ### Filtering by kind
 
@@ -61,6 +59,79 @@ model |> excludeKinds("information") |> remove()
 `includeKinds("zone")` is the same as `where("item.kind |> oneOf('zone')")`. A slice saved with the former **Include related** checkboxes keeps working: the generated statement and its comments stay in the program as written, and the builder no longer edits them.
 
 ---
+
+## Choosing slices from the Slices view
+
+While a Tetra model is open, the activity bar holds a **Slices** view directly below the **Model Tree**. The web shell shows the same list as a **Slices** section below its Model Tree. The view lists the slices of the model in folders, with the folders first. The folders open collapsed, so a long list shows its folders and the slices outside any folder. Typing in the filter field opens the folders that hold a match. It is the only control that changes the active slice.
+
+- Click a slice to make it the active slice. Double-click a slice to open its editor. Click a folder to highlight it. Hold Ctrl or Cmd and click to highlight several rows.
+- **New slice** opens the editor for a new slice. A model with no slice shows "Create a slice to choose what the canvas shows." and this button.
+- The buttons above the list act on the highlighted rows: **Edit**, **Duplicate**, **Move here** and **Delete** for slices, and **Move here** and **Delete folder** for folders. Right-click a row for a menu of the same actions. A right-click on a row that is not highlighted highlights it first, and on a highlighted row it acts on the whole highlight. **Edit** and **Duplicate** open the slice editor, and **Delete** asks for confirmation. When the highlight holds both slices and folders, an action that one of them lacks shows disabled with the reason "Not every picked row supports this".
+- To make a folder, type a path such as `Plant/Zone A` in the field and select **Add folder**. A folder name cannot be empty, cannot repeat, and cannot differ from a sibling folder only by case.
+- **Move here** moves the highlighted slices into the highlighted folder. With no folder highlighted, it moves them to the top level. Highlight no more than one folder. With only a folder highlighted, it asks you to pick the slices to move.
+- **Delete folder** works only when the folder holds no slice and no subfolder.
+
+A model that you cannot edit shows every button disabled, with the reason as its tooltip. Moves and folder changes reach the model file with your other unsaved changes when you click **Save all**.
+
+## Choosing what a slice shows from the Model Tree
+
+While a data slice is active, every row of the Model Tree carries a toggle. The toggle chooses what the slice shows. The tree lists every row of the model. Nothing greys out for being outside the slice, because a row has to stay reachable to be turned on.
+
+A row is in one of four states. A row can also be in the slice without a state of its own. The mark and the row text both show the state, so you can read the tree at a glance. A blue mark means you set the row. A grey mark means something else selected it. A maroon mark means you excluded it.
+
+| State | Mark | Row text | Effect |
+|---|---|---|---|
+| Not set | Empty box with a dashed outline | Grey | The slice does not name the row. |
+| Included | Blue box with a tick | Normal | The slice shows the row. |
+| Included with contents | Blue box with a down arrow | Normal | The slice shows the row and everything it contains. |
+| Excluded | Maroon box with a cross | Grey, struck through | The slice does not show the row, whatever else selects it. |
+| Included by something else | Grey box with a tick | Normal, in italics | The row is in the slice without a state of its own. |
+
+A row is included by something else when it is inside an included row, when the query selects it, or when it is a container that the slice shows only because something inside it is included. Select its toggle to give the row a state of its own.
+
+Select a toggle to move the row to the next state. With the focus on a row, press `i` to include it, `c` to include it with its contents, `x` to exclude it and `u` to clear it. When the row you act on is one of several selected rows, the new state applies to all of them. This lets you include a zone with its contents in one gesture. Use Cmd or Ctrl and click to add a row to the selection, and Shift and click to select a range.
+
+Including a row with its contents does not add channels or flows. A channel or flow appears when its own row is included and its two ends are both in the slice.
+
+An exclusion wins over an inclusion, and a statement in the query cannot remove a row that you included. The slice runs the statements of its query first, then the rows you included, then the rows you excluded.
+
+The toggles change the slice in the same way as the slice editor: the change waits with your other unsaved changes until you click **Save all**. A user who cannot edit the model sees the states, and the toggles do nothing.
+
+The first toggle on a slice that was made before this feature converts the slice without changing what it shows. A slice with no query gets the query `model |> add()`, so it still shows the whole model, and the toggles then add to it or take from it. The **Edit query** field shows the added statement.
+
+The slice editor shows a line such as "Selection: 3 included, 1 excluded" for a slice that has included entries. The line is read-only. Change the entries in the Model Tree.
+
+A slice that shows nothing replaces the diagram with the message "This data slice is empty. Tick elements in the model tree to add them." The Table view still lists the whole model.
+
+## Building a slice from other slices
+
+A data slice can list other data slices. The slice shows every item that the listed slices show. Its own included rows and query add to that set, and its own excluded rows remove from it. An item that several listed slices show appears once.
+
+The slice editor does not edit the list. A model author writes the slice ids in the `slices` key of the slice, in the model file:
+
+```yaml
+dataSlices:
+  - id: s-scada
+    name: SCADA
+    filter:
+      program:
+        - model |> where("item.tags |> hasAny('scada')") |> add()
+  - id: s-comms
+    name: Comms
+    filter:
+      program:
+        - model |> where("item.tags |> hasAny('comms')") |> add()
+  - id: s-ot
+    name: Operational technology
+    slices: [s-scada, s-comms]
+```
+
+The diagram, the reports and the PNG exports all show the union for a slice that lists slices. These rules apply to the list:
+
+- A listed slice that lists slices of its own also contributes those, to any depth. Set `flattenSlices: false` on the slice to use only each listed slice's own query and rows.
+- Saving refuses slices that list each other in a cycle. An id that names no slice is skipped.
+- A listed slice that has no query and no included rows shows the whole model, so the union is the whole model.
+- A layout change saved on a listed slice carries over to the slice that lists it. A later entry in the list wins over an earlier entry, and the slice's own layout changes win over both.
 
 ## Filter expression language (bonsai)
 
@@ -326,50 +397,25 @@ F |> follow("path")  |> add()
 
 ---
 
-## Filter display modes: prune vs shade
+## How a slice displays
 
-The View popover carries a Prune tab and a Shade tab. The selected tab is the display mode, and it decides what the slice filter does with the entities it did not match.
+A slice always prunes. Tetra removes the entities that the slice does not select, and only the selected subtree renders. A slice saved in shade mode by an earlier version opens pruned, and its saved mode does not mark the slice as modified.
 
-| Mode | What happens to a non-matching entity |
-|---|---|
-| **Prune** | Tetra removes it. Only the matching subtree renders. |
-| **Shade** | It stays on the canvas at 30% opacity. The model is unchanged. |
+### The category rows in the View menu
 
-Shade mode suits orientation. The full diagram stays on screen with the non-matching entities faded, which keeps the surrounding context in view. An invalid filter returns an empty shaded set.
-
-### The category rows on each tab
-
-Both tabs list the same five categories with the same `Keep` and `Hide` buttons. `Hide` always removes, and the tab decides which entities it removes.
-
-In shade mode the filter has split the canvas into two layers, and each tab owns one:
-
-| Tab | Governs | A `Hide` on it removes |
-|---|---|---|
-| **Prune** | The entities the filter matched, at full opacity | That category, from the matched entities only |
-| **Shade** | The entities the filter dimmed | That category, from the dimmed entities only |
-
-Both sets act at the same time, on complementary halves. Take four flows, where `F1` and `F2` match the filter and `F3` and `F4` do not:
-
-| Mode | Prune tab | Shade tab | Result |
-|---|---|---|---|
-| Shade | Flows = Hide | Flows = Keep | `F1` and `F2` go; `F3` and `F4` stay, dimmed |
-| Shade | Flows = Keep | Flows = Hide | `F1` and `F2` stay at full opacity; `F3` and `F4` go |
-| Shade | Flows = Hide | Flows = Hide | All four go |
-| Prune | Flows = Hide | Either | All four go |
-
-In prune mode nothing is dimmed, so the Shade tab has no second layer to act on and is inert.
+The View menu lists five categories, each with a `Keep` and a `Hide` button. `Hide` removes that category from the canvas.
 
 ### What each category covers
 
 - **IP Channels** are network channels whose protocol list includes `ip` or is empty. A channel with no list of its own counts the list that it inherits from its network. A channel with no protocol at all counts as one. The [channel types](/docs/sightline/methodology/tetra-channels-and-flows#channel-types) table says what each type means. A hosting channel, a virtual channel and a serial channel never do.
 - **Flows** covers every flow.
 - **Networks** removes the network node and its subtree.
-- **Annotation Overlay** takes its layer from what the annotation links. An annotation is dimmed when every entity it points at is dimmed.
-- **Through-Node Runs** is geometry rather than an entity, so it follows the layer of the edge that carries it. Removing a run moves no segment index and no hit target.
+- **Annotation Overlay** covers every annotation.
+- **Through-Node Runs** is geometry rather than an entity. Removing a run moves no segment index and no hit target.
 
-### Persistence and the no-slice case
+### Persistence
 
-The mode and both category sets save onto the data slice. The tabs render only while a data slice is active. On a model with no data slices, the popover shows the Prune set alone as one flat list. Both sets use the same nouns, so together they would appear as five pairs of identical rows.
+The category rows save onto the data slice.
 
 ---
 

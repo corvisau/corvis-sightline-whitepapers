@@ -37,7 +37,7 @@ Two rows in the View menu control the behaviour.
 The two rows are independent. Pulse Glow works with Focus set to Off, in which case
 nothing dims and the lit lines pulse.
 
-Neither option is saved with a data slice. Both return to their defaults when the
+Neither option is saved. Both return to their defaults when the
 panel reloads, and a PNG export or headless render, which has no selection, is
 unaffected.
 
@@ -49,4 +49,4 @@ the lit lines keep a static dashed glow.
 ## Pulse Glow in Tetra
 
 Tetra's Pulse Glow view option draws the same effect on a selected channel or
-flow. See [Data slices](/docs/sightline/usage/lamina/data-slices) for the options a slice does save.
+flow.

@@ -374,7 +374,7 @@ Applies changes only when `baseVersion` matches the current version. A stale wri
   "version": "a81e..."
 }
 ```
-**400: `version` is not a positive integer, or a change path is outside the model directory.**
+**400: `version` is not a positive integer, a change path is outside the model directory, or the commit would leave a Tetra model the loader refuses (the answer carries the loader message and nothing is written).**
 
 ```json
 {
