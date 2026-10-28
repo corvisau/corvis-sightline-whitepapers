@@ -8,11 +8,11 @@ A data slice has a name, an optional description, an optional query and a saved 
 
 A data slice narrows the diagram, and the Table view always lists the whole model. The active slice stays selected while the Table view is open. The **Slices** view chooses the active slice and creates, edits, duplicates and deletes slices; see [Choosing slices from the Slices view](#choosing-slices-from-the-slices-view).
 
-Tetra draws the diagram through a data slice. When a model has slices, one is always active: the slice you last used, or the first slice when that one no longer exists. To view the whole model, make a slice whose query is `model |> add()`: select **Edit query** on a new slice and apply it.
+Tetra draws the diagram through a data slice. A model opens with no active slice, and Tetra does not restore the slice you used last. Until you open a slice in the **Slices** view, the Diagram view and the Model Tree show the message "Open a slice in the Slices view to show the model." To view the whole model, make a slice whose query is `model |> add()`: select **Edit query** on a new slice and apply it.
 
 A slice saves its view perspective, orientation included. A slice that saved no orientation opens in rows. The **Layout** field in the model's properties does not change the diagram while a slice is active. On a model with no slices, it sets the orientation that the first new slice starts from.
 
-In the web shell, the active slice belongs to the browser tab. It survives a reload and is lost when you close the tab, so a new tab opens on the model's first slice. The VS Code extension keeps the choice per workspace.
+In the web shell and the VS Code extension, a reload, a new tab or a new window opens the model with no active slice.
 
 On a model with no data slices, the Diagram view shows the message "This model has no data slices. Create one to draw it." and a **Create data slice** button, which opens the slice editor. The Table view lists the model as usual.
 
@@ -23,7 +23,7 @@ These actions work on slices:
 - **New slice** opens an empty editor. The slice it creates starts empty: it shows nothing until you include entries from the Model Tree or apply a query.
 - **Edit** opens the slice with every field pre-filled; its id never changes.
 - **Duplicate** opens the same editor pre-filled from the slice (name, filter, description) but under a fresh id. Saving creates an independent copy and leaves the source slice untouched.
-- **Delete** asks for confirmation, then removes the slice. When you delete the active slice, the first remaining slice becomes active. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
+- **Delete** asks for confirmation, then removes the slice. When you delete the active slice, no slice is active until you open another. When you delete the last slice, the confirmation warns that the diagram stays empty until you create another one.
 
 A new or duplicated slice appears in the **Slices** view and becomes active as soon as you save the editor. It reaches the model file with your other unsaved changes when you click **Save all**.
 
@@ -64,18 +64,22 @@ model |> excludeKinds("information") |> remove()
 
 While a Tetra model is open, the activity bar holds a **Slices** view directly below the **Model Tree**. The web shell shows the same list as a **Slices** section below its Model Tree. The view lists the slices of the model in folders, with the folders first. The folders open collapsed, so a long list shows its folders and the slices outside any folder. Typing in the filter field opens the folders that hold a match. It is the only control that changes the active slice.
 
-- Click a slice to make it the active slice. Double-click a slice to open its editor. Click a folder to highlight it. Hold Ctrl or Cmd and click to highlight several rows.
+- Click a row to highlight it. Hold Ctrl or Cmd and click to highlight several rows. Highlighting a row changes neither the diagram nor the Model Tree.
+- Double-click a slice to open it and make it the active slice. A dot and bold text mark the open slice.
 - **New slice** opens the editor for a new slice. A model with no slice shows "Create a slice to choose what the canvas shows." and this button.
-- The buttons above the list act on the highlighted rows: **Edit**, **Duplicate**, **Move here** and **Delete** for slices, and **Move here** and **Delete folder** for folders. Right-click a row for a menu of the same actions. A right-click on a row that is not highlighted highlights it first, and on a highlighted row it acts on the whole highlight. **Edit** and **Duplicate** open the slice editor, and **Delete** asks for confirmation. When the highlight holds both slices and folders, an action that one of them lacks shows disabled with the reason "Not every picked row supports this".
+- The buttons above the list act on the highlighted rows: **Open** (or **Close slice** on the open slice), **Edit**, **Duplicate**, **Move here** and **Delete** for slices, and **New slice here**, **Move here** and **Delete folder** for folders. Right-click a row, or press the context-menu key or Shift+F10 on it, for a menu of the same actions. A right-click on a row that is not highlighted highlights it first, and on a highlighted row it acts on the whole highlight. **Edit** and **Duplicate** open the slice editor, and **Delete** asks for confirmation. When the highlight holds both slices and folders, an action that one of them lacks shows disabled with the reason "Not every picked row supports this".
+- **Close slice** leaves no slice active. **New slice** with one folder highlighted, and **New slice here**, create the slice in that folder.
 - To make a folder, type a path such as `Plant/Zone A` in the field and select **Add folder**. A folder name cannot be empty, cannot repeat, and cannot differ from a sibling folder only by case.
 - **Move here** moves the highlighted slices into the highlighted folder. With no folder highlighted, it moves them to the top level. Highlight no more than one folder. With only a folder highlighted, it asks you to pick the slices to move.
 - **Delete folder** works only when the folder holds no slice and no subfolder.
 
-A model that you cannot edit shows every button disabled, with the reason as its tooltip. Moves and folder changes reach the model file with your other unsaved changes when you click **Save all**.
+A model that you cannot edit shows its buttons and its menu items disabled, with the reason as the tooltip. **Open** and **Close slice** stay available, because they change no data. Moves and folder changes reach the model file with your other unsaved changes when you click **Save all**.
 
 ## Choosing what a slice shows from the Model Tree
 
 While a data slice is active, every row of the Model Tree carries a toggle. The toggle chooses what the slice shows. The tree lists every row of the model. Nothing greys out for being outside the slice, because a row has to stay reachable to be turned on.
+
+With no slice active, the Model Tree lists no rows. It shows the message "Open a slice in the Slices view to show the model."
 
 A row is in one of four states. A row can also be in the slice without a state of its own. The mark and the row text both show the state, so you can read the tree at a glance. A blue mark means you set the row. A grey mark means something else selected it. A maroon mark means you excluded it.
 
