@@ -2,7 +2,7 @@ Lamina models risk as bow-tie diagrams. A Lamina model is a set of files in a mo
 
 ## What you model
 
-A bow-tie diagram shows an event with its causes on one side and its consequences on the other. Controls sit on the paths between them. A risk matrix rates each outcome. Each matrix declares the consequence categories that Lamina rates. See [Risk matrix likelihood scale](/docs/sightline/usage/lamina/risk-matrix-likelihood-scale).
+A bow-tie diagram shows an event with its causes on one side and its consequences on the other. Controls sit on the paths between them. A risk matrix rates each outcome. Each matrix declares the consequence categories that Lamina rates. See [Risk matrix likelihood scale](/docs/sightline/usage/lamina/risk-matrix-likelihood-scale). For what each element is for and when to choose it, see [Lamina elements](/docs/sightline/methodology/lamina-elements).
 
 ## Views
 

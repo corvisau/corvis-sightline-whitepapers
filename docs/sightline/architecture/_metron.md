@@ -2,7 +2,7 @@ Metron is the compliance assessment app of Sightline. It binds a requirement pac
 
 ## Requirement packages and bindings
 
-A requirement package defines the requirements to assess. When you bind the package to a Tetra model, Metron produces a worklist of pairs, each of one requirement and one entity. Each pair carries its own outcome, evidence and notes.
+A requirement package defines the requirements to assess. When you bind the package to a Tetra model, Metron produces a worklist of pairs, each of one requirement and one entity. Each pair carries its own outcome, evidence and notes. For what each part of an assessment is for and when to choose it, see [Metron assessment](/docs/sightline/methodology/metron-assessment).
 
 An outcome stays editable until you mark it complete. When the requirement or the entity changes afterwards, Metron flags the pair as needing revalidation. See [Getting started with Metron](/docs/sightline/usage/metron/getting-started) and [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model).
 

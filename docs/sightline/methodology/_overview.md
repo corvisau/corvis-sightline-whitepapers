@@ -1,4 +1,4 @@
-The method models the security architecture of a system with security zones, and it aligns in part with IEC 62443. The methodology pages explain what each part of a model means and when to choose it. The usage pages explain how to author and render a model.
+The method models the security architecture of a system with security zones, and it aligns in part with IEC 62443. The methodology pages explain what each part of a model or an assessment means and when to choose it. The usage pages explain how to author and render a model.
 
 ## Pages
 
@@ -6,8 +6,8 @@ The method models the security architecture of a system with security zones, and
 |---|---|
 | [Tetra entities](/docs/sightline/methodology/tetra-entities) | Which entity represents a boundary, a device, a network, a piece of information or a collection of systems? |
 | [Tetra channels and flows](/docs/sightline/methodology/tetra-channels-and-flows) | When is a connection a channel, when is it a flow, and which type fits? |
-
-Methodology pages for Lamina and Metron are not written yet.
+| [Lamina elements](/docs/sightline/methodology/lamina-elements) | Which bow-tie element, control kind, control type or rating field records a part of a risk? |
+| [Metron assessment](/docs/sightline/methodology/metron-assessment) | Which part of an assessment holds a practice, a scope, an outcome, a shared answer or a finding? |
 
 ## The method in short
 

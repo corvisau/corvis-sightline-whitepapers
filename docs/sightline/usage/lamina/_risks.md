@@ -175,10 +175,10 @@ The view appears when you pick a Risk on the **Diagram** surface. It hides again
 | **Include neighbours** | Includes every missing neighbour of the picked Risk. See [Include neighbours](#include-neighbours). |
 | Double-click on an element | Opens the element in the drawer. |
 | **Delete** with an element picked | Adds the deletion to the pending changes of the diagram. |
-| **Add folder** | Adds the typed path to `elementFolders`. The view refuses a path with an empty segment, a path that already exists, and a path that differs from an existing folder only by case. |
+| **New folder** | Adds a folder named New Folder (New Folder 2 if that name is taken) to `elementFolders`, inside the picked folder when one is picked, and opens its name for editing. Enter or leaving the field keeps the name, and Escape removes the folder. The view refuses an empty name, a name that already exists, and a name that differs from an existing folder only by case, shows the reason under the name, and keeps the name open. |
 | **Delete** with a folder picked | Removes a folder from `elementFolders`. It is off for a folder that holds elements or subfolders, and for a folder that exists only because an element names it. The tooltip gives the reason. |
 
-The actions act on the picked rows. They sit in the buttons above the list, and a right-click on a row opens a menu of the same actions, picking the row first when it is not picked. An action that one of several picked rows lacks shows disabled, with the reason "Not every picked row supports this". A read-only model disables every control that changes the model. A change waits in the pending changes of the diagram until **Save all**. The view does not rename a folder or move an element to another folder. Edit the **Folder** field of the element for that. It does not take a drag onto the canvas, because the view and the canvas are separate panels.
+The actions act on the picked rows. They sit in the icon buttons of the toolbar above the filter, with the name of each in its tooltip, and a right-click on a row opens a menu of the same actions, picking the row first when it is not picked. An action that one of several picked rows lacks shows disabled, with the reason "Not every picked row supports this". A read-only model disables every control that changes the model. A change waits in the pending changes of the diagram until **Save all**. The view does not rename a folder or move an element to another folder. Edit the **Folder** field of the element for that. It does not take a drag onto the canvas, because the view and the canvas are separate panels.
 
 ### Include elements in a Risk
 
@@ -194,7 +194,7 @@ A toggle that returns a Risk to its saved form drops the pending change.
 
 ### Include neighbours
 
-A neighbour is a cause or outcome that links to a member event and is not a member. **Include neighbours** adds every neighbour of the picked Risk to its included elements. The button shows how many neighbours the Risk has. It is off for a Risk with no neighbours.
+A neighbour is a cause or outcome that links to a member event and is not a member. **Include neighbours** adds every neighbour of the picked Risk to its included elements. The tooltip of the button shows how many neighbours the Risk has. It is off for a Risk with no neighbours.
 
 ### Show missing neighbours
 

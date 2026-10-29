@@ -4,9 +4,9 @@ A migration tool converts a model in the earlier format. Ask Corvis for the tool
 
 This page is migration reference for the person who upgrades a model directory. The app does not show it, and the commands run from a shell.
 
-## Lamina schema versions
+## Tetra schema versions
 
-A Lamina manifest carries a `schemaVersion`.
+A Tetra manifest carries a `schemaVersion`.
 
 | Version | Shape | Status |
 |---|---|---|
@@ -29,9 +29,7 @@ A model file can also hold an older shape that the manifest does not show, and a
 | A manifest that holds `tree`, `zones`, `systems`, `groups`, `devices`, `networks`, `channels`, `information`, `flows`, `annotations` or `overlays` | `pnpm --filter @sightline/tools-tetra-manifest-entities-migration run migrate --model-dir <model folder>` |
 | A zone with a `zoneId` field | `pnpm --filter @sightline/tools-tetra-zone-trust-migration run migrate --model-dir <model folder>` |
 | A device with a `channels` or `networks` field | `pnpm --filter @sightline/tools-tetra-connections-migration run migrate --model-dir <model folder>` |
-| An annotation with a `position`, `distance`, `maxWidth`, `positionOffset` or `severity` field, or a link with a `position` or `positionOffset` field | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
-| A channel or flow with a `portOffset` field or a `showLabel` of `true` or `false` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
-| A zone, group, device, network or data slice with a `layout` of `horizontal` or `vertical` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
+| An annotation with a `position`, `distance`, `maxWidth`, `positionOffset` or `severity` field, a link with a `position` or `positionOffset` field, a channel or flow with a `portOffset` field or a `showLabel` of `true` or `false`, or a zone, group, device, network or data slice with a `layout` of `horizontal` or `vertical` | `pnpm --filter @sightline/tools-tetra-field-migration run migrate --model-dir <model folder>` |
 | A data slice with a `baseSlice` field | `pnpm --filter @sightline/tools-tetra-slice-migration run migrate --model-dir <model folder>` |
 | A channel, or a device connection, with a `type` field | `pnpm --filter @sightline/tools-tetra-channel-type-migration run migrate --model-dir <model folder>` |
 | A data slice program or a member `expr` that selects the kind of entity with `item.type`, such as `item.type == 'zone'`, in place of `item.kind` | `pnpm --filter @sightline/tools-item-kind-migration run migrate --model-dir <model folder>` |
@@ -73,6 +71,22 @@ When the same id is defined in the manifest and in a listed file, the command na
 ## Lamina manifest id
 
 A Lamina manifest needs a `meta.id`. A manifest without one does not open, because the Models tree does not list it. The message that Lamina shows names the file and gives the command that adds an id to every manifest in its folder. See [Open a Lamina model](/docs/sightline/usage/lamina/opening-a-model).
+
+## Lamina schema versions
+
+A Lamina manifest carries a `schemaVersion`. Lamina reads a manifest with no `schemaVersion` as version 0.
+
+| Version | Shape | Status |
+|---|---|---|
+| 0, or absent | Views, each of which can hold its own `aggregation`. | Opens |
+| 1 | Views, with the aggregation profiles in a top-level `aggregations` list in place of the view. | Opens |
+| 2 | Data slices in place of views, with the aggregation profiles still in `aggregations`. | Opens |
+| 3 | Each Risk sets its own aggregation. See [Lamina schema version 3](#lamina-schema-version-3). | Opens |
+| 4 | Risks that include elements, exclude elements and run a program, with no data slices. See [Lamina schema version 4](#lamina-schema-version-4). | Current |
+
+Lamina opens a manifest of any version from 0 to 4. It reads an older manifest as version 4, and it does not change the file when it opens it. The web shell and the API refuse a change to a model that still holds a key that version 3 or version 4 removed. Convert such a model with the commands in the next two sections. Run the version 3 command first on a model below version 3, then the version 4 command.
+
+A manifest whose `schemaVersion` is higher than 4 does not open. The message says that the model is newer than the installed build and asks you to update Sightline.
 
 ## Lamina schema version 3
 
