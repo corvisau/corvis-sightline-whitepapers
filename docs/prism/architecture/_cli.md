@@ -1,6 +1,6 @@
 The operator CLI is the terminal interface to Prism. You run syncs from it, review changesets in it, and manage rules through it.
 
-It is one of the two interfaces to a single product. The other is the review app, in a browser. Neither is a product of its own, and the two mirror each other entry for entry. [Architecture overview](/docs/prism/architecture/overview) covers the two hostings and how to choose between them.
+It is one of the two interfaces to a single product. The other is the review app, in a browser. Neither is a product of its own, and the two mirror each other entry for entry. [Deployment options](/docs/prism/architecture/deployment-options) covers the two hostings and how to choose between them.
 
 ## It arrives with Standalone Prism
 

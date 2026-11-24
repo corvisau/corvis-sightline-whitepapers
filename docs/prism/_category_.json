@@ -1,4 +1,8 @@
 {
   "label": "Prism",
-  "position": 5
+  "position": 5,
+  "link": {
+    "type": "doc",
+    "id": "prism/architecture/overview"
+  }
 }

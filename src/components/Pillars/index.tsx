@@ -41,7 +41,7 @@ const FOUNDATION: Pillar = {
   role: 'Collects the asset data underneath',
   description:
     'Multi-source collection and normalisation, so the three pillars above stay current.',
-  href: '/docs/prism/',
+  href: '/docs/prism/architecture/overview',
 };
 
 export default function Pillars(): ReactNode {

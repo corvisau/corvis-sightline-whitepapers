@@ -31,10 +31,6 @@ The installer does not overwrite your `.env`, your connector manifests or your r
 
 Then [verify the version](#verify-the-version).
 
-## Building from source
-
-A contributor who upgrades a CLI they built from source has a different procedure. It needs two checkouts in a set order, and [Building the operator CLI](/docs/prism/development/building-the-cli) covers it.
-
 ## Verify the version
 
 Check the version that is actually installed, not the one you intended to install.

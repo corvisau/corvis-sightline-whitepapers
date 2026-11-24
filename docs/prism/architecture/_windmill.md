@@ -2,7 +2,7 @@ Windmill-hosted Prism schedules the collections and presents the review operatio
 
 It adds orchestration and a browser interface. It does not add a second engine. It calls the same one, deploys the same connectors, and records the same decisions as a terminal does.
 
-This is one of the two hostings of a single product, not a second product. [Architecture overview](/docs/prism/architecture/overview) covers the pair. Choosing it does not take the operator CLI away: the CLI reads and writes a Windmill-hosted store like any other.
+This is one of the two hostings of a single product, not a second product. [Deployment options](/docs/prism/architecture/deployment-options) covers the pair. Choosing it does not take the operator CLI away: the CLI reads and writes a Windmill-hosted store like any other.
 
 ## What it is made of
 
@@ -47,7 +47,7 @@ Two things about that configuration are worth knowing before you deploy.
 
 **Windmill-hosted Prism uses MongoDB or PostgreSQL.** Its storage resource names one of the two and carries that backend's connection details. The local JSON store is a single-process backend, intended for a workstation and for a single operator. It is not an option here.
 
-If you tried Prism on a workstation with the local store, that data does not carry over. The backends do not share data. See [Overview](/docs/prism/architecture/overview) for the backends Prism supports.
+If you tried Prism on a workstation with the local store, that data does not carry over. The backends do not share data. See [Storage backends](/docs/prism/install/storage-backends) for the backends Prism supports.
 
 ## The review app and the review TUI
 

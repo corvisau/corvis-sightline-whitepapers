@@ -1,111 +1,60 @@
-Sightline Prism collects asset data from many sources, normalises it to a common schema, and merges it into one consolidated view. This document describes the pipeline, the two hostings you can run it in, and where the work happens.
+Sightline Prism keeps one current, auditable record of every asset in an estate. It collects asset data from the systems that already hold it. It matches the records that describe the same asset, and merges them into a consolidated dataset. Every value in that dataset records the source that supplied it and the reason it won.
 
-## The pipeline
-
-Prism moves data through six stages.
+## What Prism does
 
 ```mermaid
-flowchart TD
-    A[Data sources<br/>cloud APIs, on-premise agents, files] --> B[Connectors<br/>normalise to a common schema]
-    B --> C[Schema validation<br/>each record checked against its schema]
-    C --> D[Snapshots<br/>one connected dataset per source]
-    D --> E[Sync engine<br/>merges by rule and priority]
-    E --> F[Consolidated dataset<br/>merged, with per-field provenance]
+flowchart TB
+    S1["Cloud platforms"]
+    S2["Endpoint security"]
+    S3["Directory services"]
+    S4["CMDB and spreadsheets"]
+    C["Connectors<br/>collect, normalise and validate"]
+    CD[("Connected datasets<br/>one per source")]
+    E["Sync engine<br/>match and merge"]
+    R{{"Operator review"}}
+    CON[("Consolidated dataset<br/>one master record per asset")]
+    S1 & S2 & S3 & S4 --> C
+    C --> CD --> E
+    E -- "auto" --> CON
+    E -- "review" --> R -- "approved" --> CON
+    WB["Source systems<br/>corrected through their connectors"]
+    CON -. "write-back" .-> WB
+    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
+    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
+    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
+    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
+    class S1,S2,S3,S4,WB src
+    class C,E proc
+    class CD,CON store
+    class R person
 ```
 
-1. **Data sources.** A source is a cloud API, an on-premise agent, or a file. Prism does not change the source.
-2. **Connectors.** A connector reads one type of source and normalises each record to a Prism schema.
-3. **Schema validation.** Prism validates every record before it stores the record. An invalid record does not enter the pipeline silently.
-4. **Snapshots.** Prism stores each collection as a snapshot in a connected dataset. One source has one connected dataset. A connected dataset is read-only to the sync engine.
-5. **Sync engine.** The engine applies your sync rules. It matches records across sources, resolves conflicts by priority, and produces a changeset.
-6. **Consolidated dataset.** The merged result. Each field records its source, its priority and its timestamp, so you can audit every value.
-
-The pipeline is not one program. Stages 1 to 4 run wherever the source is reachable. Stages 5 and 6 run centrally.
-
-## One product, two hostings
-
-Prism is one product. There are two ways to run it, and they differ in where the product runs, not in what it does.
-
-| Hosting | Where it runs | What the operator uses |
-|---|---|---|
-| **Standalone Prism** | Your own machines, as one or more nodes | The operator CLI, in a terminal |
-| **Windmill-hosted Prism** | A Windmill workspace | The review app, in a browser |
-
-Both hostings run the same engine, the same connectors and the same rules. A decision an operator records in one is the same decision, with the same effect, in the other.
-
-```mermaid
-flowchart LR
-    S["Standalone Prism<br/>operator CLI"] --> E[("the Prism store")]
-    W["Windmill-hosted Prism<br/>review app"] --> E
-```
-
-### Standalone does not mean one machine
-
-A standalone deployment is already more than one node.
-
-- `--role collector` installs a node that collects near a source.
-- `--role central` installs a node that runs the sync engine and the review TUI.
-- `prism-drain` runs where the source system is reachable, which is often neither of them.
-
-Standalone means that Windmill does not host the product. It says nothing about the size of the deployment.
-
-### The two hostings are not exclusive
-
-A customer who chooses Windmill keeps the terminal. The operator CLI reads and writes an ordinary Prism store, and a Windmill-hosted store is an ordinary Prism store. An operator runs `prism-migrate-rules` against a Windmill deployment from a laptop, and the workspace shows the result.
-
-Choose a hosting for where your operator works. Do not choose it for what the product can do.
-
-### How the code is arranged
-
-The product is built from three repositories. This is a build-time fact, and an installed copy of Prism needs none of them.
-
-| Repository | What it holds |
+| Stage | What happens |
 |---|---|
-| `sightline-prism` | The sync engine, the connector SDK and the connectors |
-| `sightline-prism-cli` | The operator CLI |
-| `sightline-prism-windmill` | The Windmill layer: the collector scripts and the review app |
+| Collect | A connector reads one source, normalises each record to a Prism schema, and stores a snapshot. |
+| Match | The sync engine decides which records from different sources describe the same asset. |
+| Merge | The engine compares each field with the value it already holds. Where the values differ, the source with the higher priority for that field wins. |
+| Review | A change that a rule marks for review waits for an operator to approve, reject or decline it. |
+| Write back | A reverse rule sends a merged value back to a source system, such as a CMDB. |
 
-The operator CLI and the Windmill layer each compile the engine and the connector SDK into their own release artifact. That is what lets an install carry no source and reach no registry. [Building the operator CLI](/docs/prism/development/building-the-cli) covers how that build works.
+## What Prism guarantees
 
-A connector you write against the connector SDK runs under either hosting.
+- **Provenance on every field.** Each value in the consolidated dataset records its source, that source's priority and the time it changed.
+- **No silent new assets.** By default, a record that matches no existing asset waits for an operator to approve it.
+- **Sources are read during a sync.** A sync reads stored snapshots. Only a write-back writes to a source, and the connector at that source performs it.
+- **Snapshots are kept unchanged.** Each collection stays available for audit after later collections arrive.
 
-## Where Prism runs
+## Ways to run Prism
 
-Prism separates the code from the deployment. The distinction causes more confusion than any other part of the product, so learn it before you run a command.
+Prism is one product with two hostings. Standalone Prism runs on your own machines, and an operator uses the operator CLI in a terminal. Windmill-hosted Prism runs in a Windmill workspace, and an operator uses the review app in a browser. Both run the same engine, connectors and rules. See [Deployment options](/docs/prism/architecture/deployment-options).
 
-| Term | What it is |
-|---|---|
-| **install directory** | Where `install.mjs` and the archive sit. The installer reads this. Operational commands do **not** run from here. |
-| **runtime instance** | A directory created by `node install.mjs --dir <path>`. It holds the environment file, the data directory, the connector manifests and the rule instances. Operational commands run from here. |
+## Where Prism fits in Sightline
 
-You can create more than one runtime instance from one install directory. Each instance has its own configuration and its own data.
-
-If you run an operational command anywhere but the instance, it does not find the environment file or the data directory. The failure does not name the cause.
-
-## Storage backends
-
-Prism stores data in one of three backends. The `STORAGE_BACKEND` environment variable selects the backend.
-
-| Backend | Value | Notes |
-|---|---|---|
-| MongoDB | `mongo` | The default. Needs a connection URI and a database name. |
-| PostgreSQL | `postgres` | One table per collection, created on first write. Safe for more than one process. |
-| Local JSON store | `local` | One file per collection, in the instance data directory. Single-process. |
-
-Every connector, the sync engine and the operator CLI work against any of them. No code changes.
-
-**The backends do not share data.** A runtime instance that you move from the local store to MongoDB starts empty. Its collected data stays in the local store, and Prism does not migrate it for you. Decide the backend before you collect data you want to keep.
-
-Windmill-hosted Prism uses MongoDB or PostgreSQL, never the local store. A local-store instance on a workstation does not carry over to it.
+Sightline's [Tetra, Lamina and Metron](https://docs.corvis.au/docs/sightline/architecture/overview) models describe an architecture, its risks and its compliance. Those models are as accurate as the asset data behind them. Prism maintains that asset data from the systems that hold it, so it stays current after the first import.
 
 ## Where to go next
 
-| Question | Document |
-|---|---|
-| What shape is the data? | [Data model](/docs/prism/architecture/data-model) |
-| How does the engine decide what to merge? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| What is a connector, and what is a manifest? | [Connector model](/docs/prism/architecture/connector-model) |
-| How do I build a connector? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |
-| Which sources are supported? | [Connectors](/docs/prism/architecture/connectors/) |
-| What is the operator CLI? | [The operator CLI](/docs/prism/architecture/cli) |
-| What does Windmill hosting add? | [Windmill-hosted Prism](/docs/prism/architecture/windmill) |
+- [The asset data problem](/docs/prism/methodology/asset-data-problem)
+- [How Prism works](/docs/prism/methodology/how-prism-works)
+- [Install Standalone Prism](/docs/prism/install/prism)
+- [First run](/docs/prism/usage/quickstart)

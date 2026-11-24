@@ -1,0 +1,8 @@
+{
+  "label": "Methodology",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "The asset data problem, how Prism reconciles it, and how to design sync rules."
+  }
+}

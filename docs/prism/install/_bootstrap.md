@@ -493,6 +493,6 @@ Step 3 is the one to watch. If the engine applies the change instead of shadowin
 | Question | Document |
 |---|---|
 | What does each review decision mean? | [Review and apply changesets](/docs/prism/usage/review-changesets) |
-| How does the engine decide a merge? | [Architecture overview](/docs/prism/architecture/overview) |
+| How does the engine decide a merge? | [Sync engine](/docs/prism/architecture/sync-engine) |
 | What else is in the review app? | [The review app](/docs/prism/usage/review-app) |
 | How do I add another connector? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |

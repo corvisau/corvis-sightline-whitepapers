@@ -28,7 +28,7 @@ ground risk in that architecture, then prove compliance against it.
   rule engine that can surface a Finding and let a person promote it
   straight into a Lamina Cause or link it to an existing Control.
 
-Underneath all three, **[Prism](./prism/index.md)** collects and normalises asset
+Underneath all three, **[Prism](/docs/prism/architecture/overview)** collects and normalises asset
 data from cloud APIs, on-prem agents and files, so the models above are
 working from current data rather than a one-off import done at project
 kickoff.
