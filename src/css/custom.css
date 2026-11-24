@@ -39,3 +39,11 @@
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+
+/* Themed diagrams: a page embeds a light and a dark file, marked #light and #dark, and
+   the site shows the one that matches its theme. Built by the source repository's
+   docs/internal/diagrams/build.mjs. */
+[data-theme='light'] .markdown img[src$='#dark'],
+[data-theme='dark'] .markdown img[src$='#light'] {
+  display: none;
+}

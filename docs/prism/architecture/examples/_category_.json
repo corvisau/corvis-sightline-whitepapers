@@ -1,0 +1,8 @@
+{
+  "label": "Example architectures",
+  "position": 1.5,
+  "link": {
+    "type": "generated-index",
+    "description": "Two example designs: an IT estate on Windmill-hosted Prism, and OT sites with an air gap on Standalone Prism."
+  }
+}

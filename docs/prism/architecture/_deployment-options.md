@@ -90,12 +90,12 @@ flowchart LR
     class STORE store
 ```
 
-The review app records the same decisions as the review TUI. It also covers two cases that the terminal does not cover:
+The review app records the same decisions as the review TUI. Both also cover a source that no connector can reach:
 
 - A person uploads data for a source whose connector cannot run.
 - A person completes a queued write-back by hand.
 
-[The review app](/docs/prism/usage/review-app) describes both.
+[The review app](/docs/prism/usage/review-app) describes both in the browser.
 
 ## The hostings are not exclusive
 

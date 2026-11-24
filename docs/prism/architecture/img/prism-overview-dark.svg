@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 860" width="960" height="860" role="img" aria-label="Prism: sources, connectors, sync engine, consolidated dataset and write-back" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<title>Prism: sources, connectors, sync engine, consolidated dataset and write-back</title>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b2"/></marker>
+  <marker id="arrow-wb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a58cf0"/></marker>
+</defs>
+<rect x="60" y="10" width="880" height="172" rx="14" fill="#1f232a" stroke="#363e4a" stroke-width="1"/>
+<text x="80" y="37" font-size="13" font-weight="700" letter-spacing="1.6" fill="#a9b3c1">SOURCES</text>
+<rect x="80" y="52" width="264" height="52" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
+<text x="212" y="83.4" text-anchor="middle" font-size="17" font-weight="650" fill="#dbe8f7">Cloud platforms</text>
+<rect x="368" y="52" width="264" height="52" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
+<text x="500" y="83.4" text-anchor="middle" font-size="17" font-weight="650" fill="#dbe8f7">Endpoint security (EDR)</text>
+<rect x="656" y="52" width="264" height="52" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
+<text x="788" y="83.4" text-anchor="middle" font-size="17" font-weight="650" fill="#dbe8f7">Directory services</text>
+<rect x="80" y="114" width="264" height="52" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
+<text x="212" y="145.4" text-anchor="middle" font-size="17" font-weight="650" fill="#dbe8f7">Other CMDBs</text>
+<rect x="368" y="114" width="264" height="52" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
+<text x="500" y="145.4" text-anchor="middle" font-size="17" font-weight="650" fill="#dbe8f7">Spreadsheets</text>
+<rect x="656" y="114" width="264" height="52" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="788" y="145.4" text-anchor="middle" font-size="17" font-weight="650" fill="#dbe8f7">Offline and air-gapped sites</text>
+<rect x="60" y="198" width="880" height="444" rx="14" fill="#1f232a" stroke="#363e4a" stroke-width="1"/>
+<text x="80" y="225" font-size="13" font-weight="700" letter-spacing="1.6" fill="#a9b3c1">SIGHTLINE PRISM</text>
+<path d="M285,182 L285,236" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M715,182 L715,236" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="80" y="238" width="410" height="92" rx="10" fill="#10302d" stroke="#4fc1b5" stroke-width="1.6"/>
+<text x="285" y="267.9" text-anchor="middle" font-size="20" font-weight="650" fill="#d4f1ed">Connector</text>
+<text x="285" y="290.4" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Collects on a schedule</text>
+<text x="285" y="312.9" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Normalises, validates, sends a snapshot</text>
+<rect x="510" y="238" width="410" height="92" rx="10" fill="#10302d" stroke="#4fc1b5" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="715" y="267.9" text-anchor="middle" font-size="20" font-weight="650" fill="#d4f1ed">Offline connector</text>
+<text x="715" y="290.4" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Runs where nothing can reach it</text>
+<text x="715" y="312.9" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Writes a snapshot file to upload later</text>
+<path d="M285,330 L285,354" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M715,330 L715,354" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="80" y="356" width="840" height="58" rx="10" fill="#352812" stroke="#d9a648" stroke-width="1.6"/>
+<text x="500" y="379.8" text-anchor="middle" font-size="19" font-weight="650" fill="#f6e6c6">Connected datasets</text>
+<text x="500" y="402.3" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">One per source, every snapshot kept unchanged</text>
+<path d="M250,414 L250,442" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="80" y="444" width="340" height="100" rx="10" fill="#10302d" stroke="#4fc1b5" stroke-width="1.6"/>
+<text x="250" y="477.9" text-anchor="middle" font-size="20" font-weight="650" fill="#d4f1ed">Sync engine</text>
+<text x="250" y="500.4" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Matches records to assets</text>
+<text x="250" y="522.9" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Merges each field by rule priority</text>
+<rect x="580" y="444" width="340" height="100" rx="10" fill="#352812" stroke="#d9a648" stroke-width="1.6"/>
+<text x="750" y="477.9" text-anchor="middle" font-size="20" font-weight="650" fill="#f6e6c6">Consolidated dataset</text>
+<text x="750" y="500.4" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">One master record per asset</text>
+<text x="750" y="522.9" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">Provenance on every field</text>
+<rect x="420" y="572" width="160" height="46" rx="10" fill="#3a1a2c" stroke="#d77fb3" stroke-width="1.6"/>
+<text x="500" y="600.4" text-anchor="middle" font-size="17" font-weight="650" fill="#f7dcec">Operator review</text>
+<path d="M420,494 L578,494" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+
+<text x="500" y="484" text-anchor="middle" font-size="15" font-weight="600" fill="#a9b3c1">auto</text>
+<path d="M250,544 L250,595 L418,595" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+
+<text x="262" y="576" text-anchor="start" font-size="15" font-weight="600" fill="#a9b3c1">review</text>
+<path d="M580,595 L660,595 L660,546" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
+
+<text x="672" y="576" text-anchor="start" font-size="15" font-weight="600" fill="#a9b3c1">approved</text>
+<rect x="60" y="672" width="880" height="176" rx="14" fill="#1d1833" stroke="#a58cf0" stroke-width="1.5"/>
+<text x="80" y="699" font-size="13" font-weight="700" letter-spacing="1.6" fill="#a58cf0">WRITE-BACK</text>
+<path d="M840,544 L840,702" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
+
+<text x="828" y="662" text-anchor="end" font-size="15" font-weight="600" fill="#a58cf0">reverse rules</text>
+<rect x="600" y="704" width="320" height="122" rx="10" fill="#251c45" stroke="#a58cf0" stroke-width="1.6"/>
+<text x="760" y="748.9" text-anchor="middle" font-size="20" font-weight="650" fill="#e6defc">Outbox</text>
+<text x="760" y="771.4" text-anchor="middle" font-size="16.5" fill="#e6defc" opacity="0.86">Reverse rules queue each write</text>
+<text x="760" y="793.9" text-anchor="middle" font-size="16.5" fill="#e6defc" opacity="0.86">A connector at each system writes it</text>
+<rect x="80" y="710" width="280" height="56" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
+<text x="220" y="733.3" text-anchor="middle" font-size="19" font-weight="650" fill="#dbe8f7">Target CMDB</text>
+<text x="220" y="754.8" text-anchor="middle" font-size="15.5" fill="#dbe8f7" opacity="0.86">such as Jira Assets</text>
+<path d="M600,738 L362,738" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
+<rect x="413.0" y="714" width="134.0" height="20" rx="4" fill="#1d1833"/>
+<text x="480" y="728" text-anchor="middle" font-size="15" font-weight="600" fill="#a58cf0">update the CMDB</text>
+<path d="M600,808 L30,808 L30,96 L58,96" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
+<rect x="167.0" y="784" width="326.0" height="20" rx="4" fill="#1d1833"/>
+<text x="330" y="798" text-anchor="middle" font-size="15" font-weight="600" fill="#a58cf0">enrich the sources, such as tags in EDR</text>
+</svg>
