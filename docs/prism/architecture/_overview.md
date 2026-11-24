@@ -23,7 +23,7 @@ A complete asset inventory is difficult to build and more difficult to keep curr
 - **Keeps connectors simple.** A connector is any program that reads a source and sends a snapshot. Prism ships connectors in TypeScript, Python and PowerShell, and you can write one in another language.
 - **Works offline.** A connector at an isolated site writes its snapshot to a file. An operator uploads the file later, and the next sync merges it like any other snapshot.
 - **Writes back.** Reverse rules send consolidated values to a target CMDB. They can also enrich a source system whose connector supports write-back, for example with asset criticality.
-- **Runs where you need it.** Prism runs hosted in a Windmill workspace, or on your own infrastructure.
+- **Runs where you need it.** Prism runs hosted in a Windmill workspace, or on-premises in your own containers.
 - **Suits AI-assisted authoring.** Connectors are ordinary programs and rules are JSON files, so an AI assistant can draft both. The engine that applies them is deterministic. An operator approves each new asset, decommission or field change that a rule marks for review.
 
 ## How data moves through Prism
@@ -52,7 +52,7 @@ Prism is one product with two hostings. Standalone Prism runs on your own machin
 
 ## Where Prism fits in Sightline
 
-Sightline's [Tetra, Lamina and Metron](https://docs.corvis.au/docs/sightline/architecture/overview) models describe an architecture, its risks and its compliance. Those models are as accurate as the asset data behind them. Prism maintains that asset data from the systems that hold it, so it stays current after the first import.
+Sightline's [Tetra, Lamina and Metron](https://docs.corvis.au/docs/sightline/architecture/overview) models describe an architecture, its risks and its compliance. Prism is the asset inventory part of Sightline. It keeps a current, auditable record of the assets in that estate, collected from the systems that hold them.
 
 ## Where to go next
 

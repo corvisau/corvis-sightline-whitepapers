@@ -38,9 +38,9 @@ const PIPELINE: Pillar[] = [
 const FOUNDATION: Pillar = {
   step: '',
   name: 'Prism',
-  role: 'Collects the asset data underneath',
+  role: 'Keeps the asset inventory',
   description:
-    'Multi-source collection and normalisation, so the three pillars above stay current.',
+    'Multi-source collection, normalisation and merge into one current, auditable asset inventory.',
   href: '/docs/prism/architecture/overview',
 };
 
