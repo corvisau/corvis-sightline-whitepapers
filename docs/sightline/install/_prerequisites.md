@@ -4,7 +4,7 @@ Sightline runs as one extension in Visual Studio Code.
 
 Sightline, which includes Lamina, Tetra and Metron, needs VS Code 1.118.0 or later.
 
-## A Workspace with Your Models
+## Model Workspace
 
 A model is a set of files in a model directory. Open the folder that holds your models as a VS Code workspace. The apps find each other's files in that workspace. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 

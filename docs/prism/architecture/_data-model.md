@@ -12,9 +12,12 @@ A single flat schema cannot hold all three without becoming either too loose to 
 
 ```mermaid
 flowchart TD
-    A["Tier 1 — Base types<br/>fields every asset has"] --> B["Tier 2 — Specific types<br/>fields a class of asset has"]
-    B --> C["Tier 3 — extendedData<br/>fields one vendor has"]
+    A["Tier 1: base types<br/>fields every asset has"] --> B["Tier 2: specific types<br/>fields a class of asset has"]
+    B --> C["Tier 3: extendedData<br/>fields one vendor has"]
+    class A,B,C store
 ```
+
+*Figure 1. The three schema tiers. Each tier holds fields that fewer assets share than the tier above it.*
 
 ## Tier 1: Base Types
 

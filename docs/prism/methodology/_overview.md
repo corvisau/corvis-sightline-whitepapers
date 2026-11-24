@@ -34,12 +34,10 @@ block-beta
     D --> E
     E --> F
     F -- "next collection" --> A
-    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
-    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
-    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
-    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
     class A src
     class B,C,F proc
     class D person
     class E store
 ```
+
+*Figure 1. The reconciliation cycle, which repeats on every collection.*

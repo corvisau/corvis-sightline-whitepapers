@@ -48,15 +48,12 @@ flowchart TB
     N1 <--> STORE
     N2 <--> STORE
     STORE <--> CORE
-    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
-    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
-    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
-    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
-    classDef muted fill:#eceff3,stroke:#7b8594,color:#1f2630
     class SA,SB src
     class N1,N2,ENG,TUI proc
     class STORE store
 ```
+
+*Figure 1. Standalone Prism: a collector node near each source, one shared store, and a central node for the sync engine and review.*
 
 Each node is a [runtime instance](/docs/prism/install/runtime-instance): a directory that holds that node's environment file, connector manifests and rules. Operational commands run from the runtime instance.
 
@@ -80,15 +77,12 @@ flowchart LR
     COL <--> STORE
     APP <--> STORE
     CLI <--> STORE
-    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
-    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
-    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
-    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
-    classDef muted fill:#eceff3,stroke:#7b8594,color:#1f2630
     class SRC src
     class COL,APP,CLI proc
     class STORE store
 ```
+
+*Figure 2. Windmill-hosted Prism: collector scripts and the review app run in a Windmill workspace, and the operator CLI can reach the same store.*
 
 The review app records the same decisions as the review TUI. Both also cover a source that no connector can reach:
 
@@ -97,7 +91,7 @@ The review app records the same decisions as the review TUI. Both also cover a s
 
 [The review app](/docs/prism/usage/review-app) describes both in the browser.
 
-## The Hostings Are Not Exclusive
+## Operator CLI Access to a Windmill-Hosted Store
 
 The operator CLI reads and writes an ordinary Prism store, and a Windmill-hosted store is an ordinary Prism store. An operator can run a CLI command against a Windmill-hosted deployment from a laptop, and the workspace shows the result.
 

@@ -1,7 +1,7 @@
 A panel for authoring the templates your entities inherit from. How templates
 behave is covered in the [Tetra templates](/docs/sightline/usage/tetra/templates) page.
 
-## Opening It
+## Opening the Template Editor
 
 Select **Templates** in the toolbar of an open Tetra diagram. You can also run
 **Tetra: Edit Templates** from the command palette with a Tetra model

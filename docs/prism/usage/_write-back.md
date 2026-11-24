@@ -37,7 +37,7 @@ npx prism-drain <source>
 
 **Expected output.** A line naming the outbox being drained, one line per item, and a summary counting written and failed.
 
-## ⚠️ the Shipped Drain Command Writes Nothing
+## ⚠️ Dry-Run Behaviour of the Shipped Drain Command
 
 **Read this before you run `prism-drain` against a real queue.**
 

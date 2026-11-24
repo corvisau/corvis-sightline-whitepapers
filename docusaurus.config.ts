@@ -113,6 +113,18 @@ const config: Config = {
     colorMode: {
       respectPrefersColorScheme: true,
     },
+    // Mermaid lays diagrams out with these metrics, so the font here must match the
+    // one custom.css gives the diagram. Colours come from custom.css, per theme.
+    mermaid: {
+      options: {
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+        themeVariables: {
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          fontSize: '15px',
+        },
+        flowchart: {curve: 'step', padding: 14, nodeSpacing: 36, rankSpacing: 46},
+      },
+    },
     navbar: {
       title: 'Sightline',
       logo: {

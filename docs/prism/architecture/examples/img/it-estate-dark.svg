@@ -5,11 +5,11 @@
   <marker id="arrow-wb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a58cf0"/></marker>
 </defs>
 <rect x="60" y="10" width="880" height="136" rx="14" fill="#1f232a" stroke="#363e4a" stroke-width="1"/>
-<text x="80" y="37" font-size="13" font-weight="700" letter-spacing="1.6" fill="#a9b3c1">SOURCES</text>
+<text x="80" y="132" font-size="13" font-weight="700" letter-spacing="1.6" fill="#a9b3c1">SOURCES</text>
 <rect x="80" y="52" width="158" height="66" rx="10" fill="#16263a" stroke="#6f9fd8" stroke-width="1.6"/>
 <text x="159" y="80.1" text-anchor="middle" font-size="16" font-weight="650" fill="#dbe8f7">Azure VMs</text>
 <text x="159" y="100.1" text-anchor="middle" font-size="14" fill="#dbe8f7" opacity="0.86">cloud</text>
-<rect x="250" y="52" width="158" height="66" rx="10" fill="#16263a" stroke="#a58cf0" stroke-width="2.6" stroke-dasharray="7 5"/>
+<rect x="250" y="52" width="158" height="66" rx="10" fill="#16263a" stroke="#a58cf0" stroke-width="2.6"/>
 <text x="329" y="80.1" text-anchor="middle" font-size="16" font-weight="650" fill="#dbe8f7">CrowdStrike</text>
 <text x="329" y="100.1" text-anchor="middle" font-size="14" fill="#dbe8f7" opacity="0.86">EDR</text>
 <rect x="420" y="52" width="158" height="66" rx="10" fill="#16263a" stroke="#a58cf0" stroke-width="2.6"/>
@@ -35,8 +35,8 @@
 <text x="340" y="268.6" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">On a schedule: Azure VMs, CrowdStrike, Jira Assets</text>
 <rect x="660" y="206" width="260" height="96" rx="10" fill="#10302d" stroke="#4fc1b5" stroke-width="1.6"/>
 <text x="790" y="237.9" text-anchor="middle" font-size="20" font-weight="650" fill="#d4f1ed">Connectors</text>
-<text x="790" y="260.4" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">AD, in PowerShell</text>
-<text x="790" y="282.9" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Spreadsheet</text>
+<text x="790" y="260.4" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">AD Computers (PowerShell)</text>
+<text x="790" y="282.9" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Asset register (spreadsheet)</text>
 <rect x="80" y="330" width="250" height="96" rx="10" fill="#10302d" stroke="#4fc1b5" stroke-width="1.6"/>
 <text x="205" y="373.1" text-anchor="middle" font-size="20" font-weight="650" fill="#d4f1ed">Sync engine</text>
 <text x="205" y="395.6" text-anchor="middle" font-size="16.5" fill="#d4f1ed" opacity="0.86">Runs the sync rules</text>
@@ -46,13 +46,14 @@
 <text x="475" y="406.9" text-anchor="middle" font-size="16.5" fill="#f7dcec" opacity="0.86">in a browser</text>
 <rect x="640" y="370" width="300" height="200" rx="10" fill="#352812" stroke="#d9a648" stroke-width="1.6"/>
 <text x="790" y="431.4" text-anchor="middle" font-size="20" font-weight="650" fill="#f6e6c6">Prism store</text>
-<text x="790" y="453.9" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">MongoDB</text>
+<text x="790" y="453.9" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">Atlas-hosted MongoDB</text>
 <text x="790" y="476.4" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">Connected datasets</text>
 <text x="790" y="498.9" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">Consolidated dataset</text>
 <text x="790" y="521.4" text-anchor="middle" font-size="16.5" fill="#f6e6c6" opacity="0.86">Outboxes</text>
 <rect x="80" y="610" width="520" height="96" rx="10" fill="#251c45" stroke="#a58cf0" stroke-width="1.6"/>
-<text x="340" y="653.1" text-anchor="middle" font-size="20" font-weight="650" fill="#e6defc">Jira Assets write-back script</text>
-<text x="340" y="675.6" text-anchor="middle" font-size="16.5" fill="#e6defc" opacity="0.86">Drains the outbox, creates and updates records</text>
+<text x="340" y="641.9" text-anchor="middle" font-size="20" font-weight="650" fill="#e6defc">Write-back scripts</text>
+<text x="340" y="664.4" text-anchor="middle" font-size="16.5" fill="#e6defc" opacity="0.86">Jira Assets: creates and updates records</text>
+<text x="340" y="686.9" text-anchor="middle" font-size="16.5" fill="#e6defc" opacity="0.86">CrowdStrike: tags each host with its criticality</text>
 <path d="M600,251 L630,251 L630,400 L638,400" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
 <path d="M860,302 L860,368" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#arrow)"/>
 <path d="M475,426 L475,500 L638,500" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-linejoin="round" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
@@ -60,7 +61,10 @@
 <path d="M790,570 L790,658 L602,658" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
 
 <text x="802" y="618" text-anchor="start" font-size="15" font-weight="600" fill="#a58cf0">outbox</text>
-<path d="M80,690 L36,690 L36,85 L58,85" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
-<rect x="137.0" y="580" width="406.0" height="20" rx="4" fill="#1f232a"/>
-<text x="340" y="594" text-anchor="middle" font-size="15" font-weight="600" fill="#a58cf0">write back to Jira Assets, and optionally the EDR</text>
+<path d="M80,690 L36,690 L36,30 L540,30 L540,50" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
+<path d="M329,30 L329,50" fill="none" stroke="#a58cf0" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#arrow-wb)"/>
+<rect x="111.0" y="22" width="142.0" height="20" rx="4" fill="#1f232a"/>
+<text x="182" y="36" text-anchor="middle" font-size="15" font-weight="600" fill="#a58cf0">criticality tags</text>
+<rect x="399.0" y="22" width="70.0" height="20" rx="4" fill="#1f232a"/>
+<text x="434" y="36" text-anchor="middle" font-size="15" font-weight="600" fill="#a58cf0">records</text>
 </svg>

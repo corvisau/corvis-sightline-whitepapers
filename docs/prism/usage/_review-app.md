@@ -12,7 +12,7 @@ Open your Windmill workspace. Start the review app. [Installing Windmill-hosted 
 
 The app reads the same store as the CLI. A changeset you leave pending in one appears in the other.
 
-## The Menu, and Where Each Entry Is Documented
+## Review App Menu Entries
 
 | Menu entry | What it does | Procedure |
 |---|---|---|
@@ -25,7 +25,7 @@ The app reads the same store as the CLI. A changeset you leave pending in one ap
 | **Connectors** | Configure a connector instance: read its fields, map them, collect from it, and write back to it | [Recipe](/docs/prism/install/bootstrap) § Part 4 |
 | **Upload** | Put a JSON document into a remote source's inbox by hand, for a source whose collector cannot run | No terminal equivalent, see below |
 
-### Browse Data Holds Three Views
+### Browse Data Views
 
 Data moves inbox to local table to outbox, and each step answers a different question about the same records.
 
@@ -37,13 +37,13 @@ Data moves inbox to local table to outbox, and each step answers a different que
 
 **Inboxes is where you confirm a collection.** A collector reports success even where the transmit is skipped, and a local table stays empty until a sync rule runs against the inbox.
 
-### Local Datasets Are Declared, Not Collected
+### Declared Local Datasets
 
 A connector's dataset appears the first time that connector collects. A consolidated dataset belongs to no connector, so this hosting declares one as a `prism_local_table` resource in the workspace, alongside the storage and manifest resources. Duplicate one and change its `id` to add another.
 
 The engine reads its table registry from the store rather than from Windmill, so a declaration is reconciled into it before it counts. **Rules** does that when it reads its dataset list, and **Re-run** does it before a rule starts. Both are idempotent, so neither costs anything on a workspace that is already in step.
 
-### Connectors Is Where an Instance Is Configured
+### Connector Instance Configuration
 
 A connector instance is one manifest resource, holding its identity, its credentials and its settings. The screen lists them, and drilling into one gives the run controls and what that instance collects.
 

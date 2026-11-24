@@ -16,7 +16,7 @@ One row per member pair of a finding, grouped by category:
 
 A pair covered by two different findings is one row listing both.
 
-## Nothing Is Filtered out for You
+## Resolved Findings in the Coverage View
 
 The view does not hide a pair because its finding is `resolved`. Finding status
 is a filterable column. Use the grid's **Filter** control to narrow to open

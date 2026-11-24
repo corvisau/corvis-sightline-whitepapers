@@ -3,7 +3,7 @@ model's `outputs/` folder. A dialog collects the filename and whether to frame
 the diagram to a fixed aspect ratio. The diagram draws one Risk. Export PNG and
 Export Draw.io are disabled until you pick a Risk.
 
-## The Export Renders Separately from What Is on Screen
+## Offscreen Rendering for PNG Export
 
 The diagram is re-rendered in a dedicated, offscreen view and captured there.
 The picture therefore does not depend on the state of the editor when you press
@@ -37,7 +37,7 @@ Every picture in a batch is framed at 24:11 and carries a physical size of 24 ×
 
 The batch reads the saved model. It skips unsaved edits, so save first when the pictures must show an unsaved Risk. A Risk with no path produces no file, and the closing message counts it as skipped. A model that defines no Risks writes no file, and the message says that there are no Risks to export.
 
-## Draw.io Export Is Unaffected
+## Draw.io Export Behaviour
 
 Export Draw.io builds its file from the diagram's structure rather than from a
 picture of the canvas, so the editor's state does not affect it.

@@ -1,13 +1,13 @@
 An organisation's asset inventory is spread across the systems that manage its assets. Each system holds the part of the picture that its own job needs. No system holds all of it, and the parts disagree.
 
-## Each Source Sees Part of the Estate
+## Partial Views from Each Source
 
 | Kind of source | What it knows well | What it misses |
 |---|---|---|
 | Cloud platform | Instance size, image, network placement and power state | Assets outside that cloud, and the business owner |
 | Endpoint security agent | Host name, operating system, agent health and the last time it saw the host | Devices that cannot run an agent, such as network and control equipment |
 | Directory service | Computer accounts and where they sit in the directory | Hardware detail, and assets that are not joined to the domain |
-| CMDB or asset register | Owner, cost centre, criticality and lifecycle state | Technical detail as it changes, because a person updates it |
+| CMDB or asset register | Owner, cost centre, criticality and lifecycle state | Technical detail from systems it does not integrate with, which a person must update |
 | Spreadsheet | What one team recorded, often the only record of operational technology | Currency, because it was correct on the day someone saved it |
 
 An inventory taken from one of these sources is accurate for that source's job and incomplete for every other job.
@@ -27,14 +27,11 @@ flowchart LR
     DIR --- A
     A --- CMDB
     A --- XLS
-    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
-    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
-    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
-    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
-    classDef muted fill:#eceff3,stroke:#7b8594,color:#1f2630
     class EDR,DIR,CMDB,XLS src
     class A store
 ```
+
+*Figure 1. Example: four sources describe the same server, and each disagrees with the others.*
 
 The disagreements fall into four kinds:
 
@@ -63,6 +60,6 @@ A durable answer meets each of these needs. The right-hand column names the part
 | Notice when a source stops reporting an asset | The engine tracks presence per source, and demotes a value whose source has been missing past a grace period. |
 | Ask a person before a change with consequences | A field in `review` mode waits for an operator. An asset that matches nothing waits for an operator by default. |
 | Explain every value | Every field in the consolidated dataset records its source, its priority and the time it changed. |
-| Correct the source systems | A reverse rule queues a write-back, and the connector at that source performs it. |
+| Correct the source systems | A reverse rule queues a write-back. A connector with a writer performs it, or an operator completes it by hand. |
 
 [How Prism works](/docs/prism/methodology/how-prism-works) follows one asset through each of these steps.

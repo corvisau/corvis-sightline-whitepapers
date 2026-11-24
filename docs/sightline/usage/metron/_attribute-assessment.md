@@ -51,7 +51,7 @@ and progression-group assessment relies on that (see
 [worklist filtering](/docs/sightline/usage/metron/worklist-filtering)). A bulk edit would apply one
 practice's findings to many selected pairs.
 
-## It Never Derives the Outcome
+## Attribute State and Assessment Outcomes
 
 Attribute state never maps onto the outcomes of the assessment scheme, and it
 does not change the outcome or the state of a pair.

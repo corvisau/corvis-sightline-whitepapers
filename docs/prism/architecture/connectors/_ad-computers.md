@@ -10,7 +10,11 @@ flowchart TD
     end
     C -->|YAML file| P
     P --> M[("MongoDB")]
+    class C,P proc
+    class M store
 ```
+
+*Figure 1. The AD Computers connector: one script collects to a YAML file, and a second script pushes that file to MongoDB.*
 
 Both scripts can run on the same Windows machine. If the AD machine cannot reach MongoDB directly, copy the YAML file to a machine that can reach it. Run `Push-ADSnapshot.ps1` there.
 

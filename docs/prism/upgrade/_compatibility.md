@@ -27,7 +27,7 @@ Two consequences follow, and both surprise people:
 1. **A CLI release contains a specific Prism build, not a Prism version.** The workflow pins a commit.
 2. **A released CLI needs no `sightline-prism` checkout to run.** The engine travels inside it. The two-checkout requirement applies to building the CLI from source, not to installing a release.
 
-### The Record You Cannot Look Up
+### Missing Build Record in a CLI Release
 
 **No CLI release records which Prism commit it was built from.** The release notes are a fixed line of text, and the packed artifact carries no build stamp.
 
@@ -67,7 +67,7 @@ Both breaks surface at build time rather than at run time, which is deliberate. 
 
 **An unrecognised `STORAGE_BACKEND` now stops the runtime at startup.** In 2.x, any value that was not `local` selected MongoDB, so a typo wrote to the wrong store and nothing reported it. Read [Storage backends](/docs/prism/install/storage-backends) and set the value you meant. Its records are in whichever store it has been writing to.
 
-## Schema Versions Are a Second Axis
+## Schema Versions as a Second Compatibility Axis
 
 Schema versions are a second compatibility question. The records already in your store carry their own version.
 
@@ -75,7 +75,7 @@ Every record carries a `schemaVersion`, and the schema registry holds more than 
 
 That axis has its own page, because it decides whether your existing snapshots survive an upgrade: [Schema versions and rule migration](/docs/prism/upgrade/schema-migration).
 
-## Before You Upgrade
+## Pre-Upgrade Checks
 
 1. Find your current version of each component you run.
 2. Find the combination you intend to move to in the matrix above.

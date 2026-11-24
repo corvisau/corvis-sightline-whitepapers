@@ -90,7 +90,7 @@ Two sources that share no key type cannot be matched to each other at all. Check
 
 A full-inventory source can still fail. If a collection returns almost nothing, every asset would look decommissioned. `presenceGuard` sets a limit: when more than `maxDropRatio` of the previously present assets vanish in one run, the engine skips presence reconciliation for that run. The guard applies only when at least `minAssets` assets were present. The defaults are 0.5 and 10.
 
-## Decide How Long a Missing Source Keeps Its Say
+## Decide the Grace Period for a Missing Source
 
 When the source that owns a field stops reporting the asset, its value keeps its priority for a grace period. After the grace period, a value from any source that still reports the asset can replace it.
 
@@ -112,18 +112,14 @@ flowchart TD
     D -- equal --> T{"tieBreak?"}
     T -- newer --> AP
     T -- keep --> SH
-    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
-    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
-    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
-    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
-    classDef muted fill:#eceff3,stroke:#7b8594,color:#1f2630
-    classDef q fill:#f4f5f7,stroke:#5b6472,color:#1f2630
     class A src
     class B,C,D,T q
     class AP proc
     class P person
     class SH,X muted
 ```
+
+*Figure 1. The decision the sync engine makes for one incoming value that differs from the master record.*
 
 ## Sending Values Back to a Source
 

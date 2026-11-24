@@ -10,7 +10,7 @@ Everything the popover writes goes to the **active data slice**, never to the
 model. See [Per-Slice Layout & Nudge Overrides](/docs/sightline/usage/tetra/per-slice-layout) for the storage,
 inheritance and reset rules that apply to every field below.
 
-## Opening It
+## Opening the Segment Popover
 
 **Alt+right-click a channel or flow** (Option+right-click on a Mac) on the canvas. The popover opens scoped
 to the run of line you clicked. Its title bar reads **Layout**, like the container and annotation panels. A header names the two nodes that segment joins:
@@ -293,7 +293,7 @@ structure in the model itself. **Edit routing** changes nothing itself: it opens
 popover, which stays the only place routing (attach edges, offsets, ports and via
 offset) gets edited.
 
-## Degradations Worth Knowing
+## Routing Degradations
 
 - **A via-routed relationship glows like any other, unless it lost a hop.** It
   opens on the clicked segment and glows that segment. When a hop has no

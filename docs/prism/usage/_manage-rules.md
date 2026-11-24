@@ -39,11 +39,11 @@ Disabling a rule leaves it in place and stops it running. A sync against a disab
 
 The kind sets the shape; the direction that actually applies at run time follows the target table. [Run a sync rule](/docs/prism/usage/sync) covers how that direction applies.
 
-## The Editor Has Two Levels
+## Rule Editor Levels
 
 This is the part that is not obvious from the screen.
 
-### The Form and Its Grid
+### Rule Form and Field-Mapping Grid
 
 `enter` opens a form over the rule. It carries the header fields and a field-mapping grid.
 
@@ -75,7 +75,7 @@ The form covers the rule's common shape: its id, its name, whether it is enabled
 
 The browser editor gives `identityKeys`, `tieBreak` and `mirror` controls of their own. See [The review app](/docs/prism/usage/review-app) for what those panels hold.
 
-### Your Ungridded Fields Survive a Form Save
+### Ungridded Fields on a Form Save
 
 **A field the grid does not show is preserved untouched when you save from the form.** Saving does not blank the seven fields above, and it does not rewrite anything you set through the JSON view.
 

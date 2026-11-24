@@ -16,11 +16,11 @@ A field that an entity does not set shows the template value. The field is read-
 
 Overrides always win. A nested object in the template merges key by key with the entity's own.
 
-## A Template Does Not Own Members
+## Members in a Template
 
 The Problems panel reports a template that has members as a model error, and names the template. Members are child nodes with their own ids. If you copy them into every entity that uses the template, you duplicate those ids and break reference resolution across the model. Add members to each entity that uses the template.
 
-## Saving Keeps Your Own Values
+## Saving an Entity That Inherits from a Template
 
 When you edit an entity that inherits from a template, Tetra does not copy the template values into the entity. Tetra saves only what you set. Change the label of a device and save, and the device still inherits its other fields from the template.
 

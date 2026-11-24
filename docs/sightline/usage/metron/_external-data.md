@@ -76,7 +76,7 @@ Follow these syntax rules:
 - Combine conditions with `&&`. The word `and` is not accepted.
 - Do not write arrow functions such as `r => r.x`. Use the `.field` form. Alternatively, filter into a register with `where` first, because `where` takes a full condition.
 
-### The Rule Outcome Is a Draft
+### Draft Outcomes from Rules
 
 A rule-suggested outcome shows on a draft pair, so a person owns the completion. A rule never moves a pair to a `done` status. The assessor reviews the suggested outcome and completes the pair.
 

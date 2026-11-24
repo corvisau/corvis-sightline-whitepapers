@@ -5,11 +5,16 @@ The connector imports asset data from Excel (`.xlsx`) files using a JSON mapping
 ```mermaid
 flowchart TD
     A["XLSX file + mapping JSON"] --> B["ExcelLoader<br/>parses and transforms"]
-    B --> C["YAML intermediate file<br/>human-readable, editable"]
+    B --> C[("YAML intermediate file<br/>human-readable, editable")]
     C --> D["BaseAsset transformation"]
     D --> E["Schema validation (Zod)"]
     E --> F[("MongoDB snapshot")]
+    class A src
+    class B,D,E proc
+    class C,F store
 ```
+
+*Figure 1. The spreadsheet connector's data flow, from a workbook and its mapping to a MongoDB snapshot.*
 
 ## Usage
 

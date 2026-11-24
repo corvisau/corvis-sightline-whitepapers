@@ -6,7 +6,7 @@ A connector depends on the **connector SDK**, `@sightline/prism-connector-sdk`. 
 
 **A connector does not need the sync engine.** It does not link against it, call it, or require access to it. You can build a connector, run it against a Prism store, and never touch the engine. This is what makes connectors an extension surface rather than an internal detail.
 
-## Connectors Are Language-Agnostic
+## Connector Languages
 
 A connector is any program that can read your source and transmit a snapshot. Prism ships collectors in three languages, and you can add a fourth.
 
@@ -27,7 +27,10 @@ flowchart LR
     A["1. Fetch<br/>read the source"] --> B["2. Transform<br/>map to a Prism schema"]
     B --> C["3. Snapshot<br/>validate and package"]
     C --> D["4. Transmit<br/>send to the instance inbox"]
+    class A,B,C,D proc
 ```
+
+*Figure 1. The four steps that every connector performs, in order.*
 
 1. **Fetch.** Read the source, using the credentials your manifest references. Handle the source's paging here, not later.
 2. **Transform.** Map each source record to a Prism schema. Recognised fields go to their schema positions; everything else goes to `extendedData`. See [Data model](/docs/prism/architecture/data-model) for the placement rule.
@@ -56,7 +59,7 @@ Choose the example by shape, not by vendor. A connector for any paged REST API r
 
 Your connector's type is its directory name. It must be lowercase, and may contain letters, digits and hyphens. It must not contain a dot: the dot separates the type from the instance in the derived table identifier.
 
-### 3. Declare Your Credentials as References
+### 3. Declare Credentials as References
 
 A manifest names an environment variable for each credential. It never holds the value. See [Connector model](/docs/prism/architecture/connector-model) for what the manifest holds.
 
@@ -78,7 +81,7 @@ Run the two mock connectors before you point yours at a live system. They need n
 
 Confirm the snapshot arrived and the table registered. Until the first transmit succeeds, no sync rule can target your connector: a rule pointing at an unregistered table fails rather than defaulting.
 
-## Practices Worth Following
+## Connector Development Practices
 
 **Handle the source's paging.** A source that returns 100 records per page will silently give you 100 records and no error. Page until the source says it is done.
 

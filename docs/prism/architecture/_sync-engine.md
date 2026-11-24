@@ -8,7 +8,7 @@ A sync rule names a source, a target, and the fields to map between them. When y
 
 The engine never edits your source systems during a sync; it only reads.
 
-## Identity: How Records Match
+## Identity Matching
 
 Before the engine can merge two records, it must decide they describe the same thing.
 
@@ -28,7 +28,7 @@ When no cross-reference exists, the engine falls back to **natural keys**.
 
 Prism normalises before it compares, so `AA:BB:CC:11:22:33` and `aabbcc112233` are the same MAC address.
 
-### The Ranking, and Why It Matters
+### Natural Key Ranking and Match Strength
 
 The keys rank: serial number, then MAC address, then host name.
 
@@ -56,7 +56,7 @@ Two causes account for most of them.
 
 A source record with no native identifier and no natural keys is **skipped with a warning**. The engine cannot reconcile it and cannot tell it apart from a duplicate, so it does not guess. The rest of the collection proceeds.
 
-## Merging: How a Value Is Chosen
+## Field Merging
 
 When a record matches a master, the engine compares each mapped field.
 
@@ -88,7 +88,7 @@ The engine tracks which sources still report each asset.
 
 Presence reconciliation is on by default. Turn it off per rule for a source that reports only part of your estate. A partial inventory otherwise looks like a set of disappearances.
 
-## Applying: What Happens Automatically
+## Change Modes and Automatic Application
 
 Each proposed change carries a mode.
 
@@ -105,13 +105,13 @@ A source record that matches no master does not create a master by default. The 
 
 This is the safe default, and it is deliberate. Automatic creation on every unmatched record turns one mis-configured key mapping into thousands of duplicate masters. A rule can opt into automatic creation where you know the source is authoritative.
 
-### A Change Has One of Eight Outcomes
+### Change Outcomes
 
 `pending`, `applied`, `shadowed`, `approved`, `rejected`, `rolled_back`, `superseded`, `linked`.
 
 `superseded` deserves a note. When a rule runs again while a review item from the previous run is still waiting, the engine retires the old item.
 
-## Provenance: Why You Can Audit a Value
+## Field Provenance
 
 Every field in a consolidated dataset records the source that supplied it, the priority that source held, and when it was last updated.
 
@@ -139,15 +139,17 @@ sequenceDiagram
     E->>E: fold the confirmation into the master record
 ```
 
+*Figure 1. A write-back: the sync engine queues the write in the outbox, and the connector at the source performs it and records the result.*
+
 Nothing is recorded as written until the connector confirms it. A queued item is `pending`, `done` or `failed`, and carries an attempt count and, on failure, the error.
 
 Two kinds of write-back exist. A **write** updates a field on a record that already exists in the source. A **create** provisions a new record in the source, and returns the identifier the source assigned, which the engine stores as a cross-reference.
 
-### Direction Is Not a Property of the Rule
+### Sync Direction
 
 A rule does not declare whether it merges inward or writes outward. The engine decides from where the target lives. A rule whose target is a remote table produces write-backs; a rule whose target is a local dataset produces a merge. An operator runs both through the same command.
 
-## Designed Behaviour You May Mistake for a Fault
+## Expected Behaviours That Resemble Faults
 
 | What you see | What it means |
 |---|---|

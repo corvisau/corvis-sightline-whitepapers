@@ -142,7 +142,7 @@ A `direct` channel is drawn as network plumbing. It runs straight from a device 
 
 Use `direct` for the short link between a device and the network it sits on. Leave `avoid` for a channel that crosses the diagram.
 
-## Linking a Device from Its Drawer
+## Linking a Device from the Device Drawer
 
 The device drawer links a device to another node by creating a channel. There are two ways.
 

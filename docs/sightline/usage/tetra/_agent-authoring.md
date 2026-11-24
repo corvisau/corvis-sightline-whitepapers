@@ -22,7 +22,7 @@ The file is reread on each command. After the operator updates it, the next comm
 
 Drafts contain model data and stay on the computer running the helper. Item commands read the server version before editing the local draft. Saving sends model file contents to the configured storage API. The image helper works entirely locally and never uploads an image. Neither helper calls an LLM service.
 
-## Give the Agent Your Conventions
+## Give the Agent Modelling Conventions
 
 Write your organisation's modelling conventions at the root of the working directory: the instructions for all models in `SIGHTLINE.md`, and the Tetra conventions in `SIGHTLINE_TETRA.md`, such as zone types, tags, label formats, and what to model and what to leave out. The agent reads these files before each task on a Tetra model and follows them. Without the files, the agent follows only the method. When `SIGHTLINE.md` also names a security standard, such as `SIGHTLINE_SECURITY.md`, the agent still records what the source shows, even where the system breaks the standard, and reports each breach it sees with the requirement it breaks.
 

@@ -57,7 +57,7 @@ The delete dialog lists every entity that goes with the one you delete, and offe
 
 A delete that takes nothing with it shows no dialog and joins the pending changes at once.
 
-The Model Tree lists and reveals every kind of entity. It opens in Browse, which lists only what the active data slice shows and changes nothing. In Build, its row toggles choose what the slice shows, and the row menu offers **Hide others** and **Revert all** on those toggles. See [Choosing what a slice shows from the Model Tree](/docs/sightline/usage/tetra/data-slice-filtering#choosing-what-a-slice-shows-from-the-model-tree). In Build, its only edit actions organise flows, channels and annotations into folders. See [Build and Browse](/docs/sightline/usage/shared/tree-browser-panel#build-and-browse) and [Tree browser panel](/docs/sightline/usage/shared/tree-browser-panel).
+The Model Tree lists and reveals every kind of entity. It opens in Browse, which lists only what the active data slice shows and changes nothing. In Build, its row toggles choose what the slice shows, and the row menu offers **Hide others** and **Revert all** on those toggles. See [Slice selection from the Model Tree](/docs/sightline/usage/tetra/data-slice-filtering#slice-selection-from-the-model-tree). In Build, its only edit actions organise flows, channels and annotations into folders. See [Build and Browse](/docs/sightline/usage/shared/tree-browser-panel#build-and-browse) and [Tree browser panel](/docs/sightline/usage/shared/tree-browser-panel).
 
 ## Related
 

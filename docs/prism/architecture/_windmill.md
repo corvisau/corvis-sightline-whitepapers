@@ -11,11 +11,15 @@ flowchart TD
     subgraph ws["Windmill workspace"]
         T["Collector scripts<br/>one per connector"]
         A["Review app<br/>browser interface"]
-        D["Data tables<br/>workspace-managed"]
+        D[("Data tables<br/>workspace-managed")]
     end
     T --> M[("Prism store<br/>MongoDB")]
     A --> M
+    class T,A proc
+    class D,M store
 ```
+
+*Figure 1. The parts of Windmill-hosted Prism inside a Windmill workspace, and the store they share.*
 
 | Part | What it does |
 |---|---|
@@ -25,7 +29,7 @@ flowchart TD
 
 The workspace tree lives under `f/`. The review app is at `f/prism/review_app__raw_app`, with its compiled output, its backend and the SQL it applies to the workspace tables.
 
-## It Carries Its Own Compiled Copy of the Engine
+## Bundled Engine in the Windmill Release
 
 An install needs no `sightline-prism` checkout. The release tarball ships compiled bundles under `vendor/`, and every script imports them from there. They hold the sync engine, the connector SDK, the shared review logic, and the CrowdStrike, Cylance, Azure VMs and Jira Assets connectors. The deployment configuration names `./vendor` as its only code base, so nothing resolves outside the install directory.
 
@@ -43,7 +47,7 @@ Two things about that configuration are worth knowing before you deploy.
 
 **Resources are synchronised; resource types and secrets are not.** That split is intentional. It lets you version the shape of your deployment without versioning what is in it.
 
-## It Requires a Shared Backend
+## Shared Storage Backend Requirement
 
 **Windmill-hosted Prism uses MongoDB or PostgreSQL.** Its storage resource names one of the two and carries that backend's connection details. The local JSON store is a single-process backend, intended for a workstation and for a single operator. It is not an option here.
 

@@ -15,7 +15,7 @@ The result depends on the link.
 | Names no model | A warning says that the link names no Tetra model to open. |
 | Names a model that the workspace does not list | A warning gives the reason that the model did not open. |
 
-## From a Channel or Flow to Its Causes
+## From a Channel or Flow to Lamina Causes
 
 The props drawer of a channel or flow has a Causes section. It lists each Lamina cause that covers the channel or flow, with the cause id, its label and the name of its Lamina model. **Open** opens that Lamina model with the cause selected and its props drawer open. A channel or flow with no cause shows the text "No Lamina cause covers this".
 

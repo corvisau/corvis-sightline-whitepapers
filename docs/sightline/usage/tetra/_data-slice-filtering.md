@@ -4,7 +4,7 @@ Tetra uses **bonsai filter expressions** to project the full model into a narrow
 
 ## Creating, Editing, and Duplicating Slices
 
-A data slice has a name, an optional description, an optional query and a saved view perspective (zoom, pan and display settings). A slice that has no query and no included entries from the Model Tree shows the whole model. A slice made with **New** starts empty instead; see [Choosing what a slice shows from the Model Tree](#choosing-what-a-slice-shows-from-the-model-tree).
+A data slice has a name, an optional description, an optional query and a saved view perspective (zoom, pan and display settings). A slice that has no query and no included entries from the Model Tree shows the whole model. A slice made with **New** starts empty instead; see [Slice selection from the Model Tree](#slice-selection-from-the-model-tree).
 
 A data slice narrows the diagram, and the Table view always lists the whole model. The active slice stays selected while the Table view is open. The toolbar names the active slice, or reads "No slice open", and its **Close slice** button closes the slice in either view. The **Slices** view chooses the active slice and creates, edits, duplicates and deletes slices; see [Choosing slices from the Slices view](#choosing-slices-from-the-slices-view).
 
@@ -89,7 +89,7 @@ A model that you cannot edit shows its buttons and its menu items disabled, with
 
 Each slice needs its own id. When the model file defines two slices with the same id, Tetra loads the first one and ignores the others. The Problems panel shows a warning for each ignored slice. Remove or rename the extra copy in the model file.
 
-## Choosing What a Slice Shows from the Model Tree
+## Slice Selection from the Model Tree
 
 The Model Tree opens in Browse. Browse lists only the rows that the active data slice shows, and it carries no toggle. Select **Build** at the left of the tree toolbar to choose what the slice shows. A model that you cannot edit always shows Browse. See [Build and Browse](/docs/sightline/usage/shared/tree-browser-panel#build-and-browse).
 
@@ -411,7 +411,7 @@ A |> follow("parent", 1) |> follow("children", 1) |> add()   # 1-hop neighbourho
 
 `includeKinds("a", "b")` keeps the items whose `item.kind` is one of the listed kinds. `excludeKinds("a", "b")` keeps the items whose kind is none of them, including an item with no kind. Both take quoted kind names. `includeKinds()` with no kinds keeps nothing, and `excludeKinds()` with no kinds keeps everything. Neither adds to the result by itself.
 
-### `removeRecursiveDown()` — Remove a Set and Its Whole Children Subtree
+### `removeRecursiveDown()` — Subtree Removal
 
 A shorthand for the two-statement pattern below, scoped to a whole subtree instead of
 one entity type. Removes the piped set from the result, then walks their

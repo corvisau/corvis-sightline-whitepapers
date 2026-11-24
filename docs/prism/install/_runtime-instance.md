@@ -1,6 +1,6 @@
 Read this page before you run any install command. It explains the one idea that the rest of the installation documentation depends on.
 
-## Two Directories, and Only One of Them Runs Commands
+## Install Directory and Runtime Instance
 
 Sightline Prism separates what you install from what you operate.
 

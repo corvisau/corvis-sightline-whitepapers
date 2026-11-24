@@ -91,7 +91,7 @@ Adding an annotation does not put an empty bubble on the canvas. The drawer hold
 
 The canvas bubble is display-only. To edit an annotation, right-click it and choose **Edit**, or select it. The drawer opens on the annotation's text, style, colour, icon and tags together.
 
-### A Created Entity Is an Unsaved Change
+### Unsaved State of a Created Entity
 
 Creating an entity stages it. It does not write to disk until you save. In the Table, the new row shows the same highlight as an edited cell, across the whole row, until you save or discard it. Any other pending change marks its row the same way.
 

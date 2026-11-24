@@ -79,7 +79,7 @@ An assessed control has a fixed set of effectiveness ratings: `Not Assessed`, `N
 
 The control on the canvas, the **Target Effectiveness** and **Current Effectiveness** fields in the props drawer, the draw.io export and the generated reports show the label. A rating with no label shows its own name. The model file keeps the rating, and the colour of the cell follows the rating.
 
-## Reuse Comes from a Template
+## Control Reuse Through Templates
 
 A template holds the shared part of a control. Each control that uses it
 stores only the fields that differ.
@@ -237,7 +237,7 @@ A cause that links no flow draws no Source box and no path boxes. Its control
 boxes run in the order the first control of each zone appears, except that the
 box for the zone of the cause's events comes last, before the Invalid zone box.
 
-## A Template Can Derive from Another Template
+## Template Inheritance
 
 Reuse is hierarchical: define the shared part once, then derive the specific
 case from it. A control that uses the specific template takes the shared values

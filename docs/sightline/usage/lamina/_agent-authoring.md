@@ -13,7 +13,7 @@ node "$SKILL_DIR/scripts/lamina.mjs" open example-pump-station-flooding
 
 `new` creates a dedicated directory and a starter model on the server, then opens its local draft. `open` reads an existing model. The default draft is `.sightline-drafts/lamina.json`. A Lamina draft and a Tetra draft are kept apart: each helper refuses the other's draft.
 
-## Use Your Own Risk Matrix
+## Use a Custom Risk Matrix
 
 A new model uses the built-in risk matrix. When your organisation rates on its own matrix, set it before any rating:
 

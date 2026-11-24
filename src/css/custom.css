@@ -47,3 +47,156 @@
 [data-theme='dark'] .markdown img[src$='#light'] {
   display: none;
 }
+
+/* Prism Mermaid diagrams, styled to match the hand-built SVG diagrams. A node's role
+   class (src, proc, store, person, wb, muted) picks its colours; the source repo's
+   docs/internal/style-guide.md lists the roles. The palette is the one in its
+   docs/internal/diagrams/svg-kit.mjs. Scoped to the Prism pages. */
+:root {
+  --dg-text: #1f2630;
+  --dg-muted: #5b6472;
+  --dg-line: #6b7380;
+  --dg-bg: #ffffff;
+  --dg-panel-fill: #f6f8fa;
+  --dg-panel-stroke: #d5dbe3;
+  --dg-src-fill: #e3eefb; --dg-src-stroke: #3d6fa8; --dg-src-text: #13263d;
+  --dg-proc-fill: #dff3f0; --dg-proc-stroke: #1f8a80; --dg-proc-text: #0d2e2b;
+  --dg-store-fill: #fbf0dc; --dg-store-stroke: #b07d1f; --dg-store-text: #3a2806;
+  --dg-person-fill: #f7e4ef; --dg-person-stroke: #a2477f; --dg-person-text: #3a1029;
+  --dg-wb-fill: #ede8fb; --dg-wb-stroke: #6d4fc2; --dg-wb-text: #24154f;
+  --dg-muted-fill: #eceff3; --dg-muted-stroke: #8a93a0; --dg-muted-text: #3b4350;
+}
+[data-theme='dark'] {
+  --dg-text: #e6e9ee;
+  --dg-muted: #a9b3c1;
+  --dg-line: #9aa4b2;
+  --dg-bg: #1b1b1d;
+  --dg-panel-fill: #1f232a;
+  --dg-panel-stroke: #363e4a;
+  --dg-src-fill: #16263a; --dg-src-stroke: #6f9fd8; --dg-src-text: #dbe8f7;
+  --dg-proc-fill: #10302d; --dg-proc-stroke: #4fc1b5; --dg-proc-text: #d4f1ed;
+  --dg-store-fill: #352812; --dg-store-stroke: #d9a648; --dg-store-text: #f6e6c6;
+  --dg-person-fill: #3a1a2c; --dg-person-stroke: #d77fb3; --dg-person-text: #f7dcec;
+  --dg-wb-fill: #251c45; --dg-wb-stroke: #a58cf0; --dg-wb-text: #e6defc;
+  --dg-muted-fill: #262b33; --dg-muted-stroke: #6b7482; --dg-muted-text: #c9d0da;
+}
+
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container {
+  --n-fill: var(--dg-panel-fill);
+  --n-stroke: var(--dg-line);
+  --n-text: var(--dg-text);
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container svg {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* Nodes: each role sets the three node variables, and every shape reads them. */
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node).src { --n-fill: var(--dg-src-fill); --n-stroke: var(--dg-src-stroke); --n-text: var(--dg-src-text); }
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node).proc { --n-fill: var(--dg-proc-fill); --n-stroke: var(--dg-proc-stroke); --n-text: var(--dg-proc-text); }
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node).store { --n-fill: var(--dg-store-fill); --n-stroke: var(--dg-store-stroke); --n-text: var(--dg-store-text); }
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node).person { --n-fill: var(--dg-person-fill); --n-stroke: var(--dg-person-stroke); --n-text: var(--dg-person-text); }
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node).wb { --n-fill: var(--dg-wb-fill); --n-stroke: var(--dg-wb-stroke); --n-text: var(--dg-wb-text); }
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node):is(.muted, .q) { --n-fill: var(--dg-muted-fill); --n-stroke: var(--dg-muted-stroke); --n-text: var(--dg-muted-text); }
+
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node) :is(rect, polygon, circle, ellipse, path.basic, .label-container) {
+  fill: var(--n-fill) !important;
+  stroke: var(--n-stroke) !important;
+  stroke-width: 1.6px !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node) rect:not(.label rect) {
+  rx: 10px;
+  ry: 10px;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node) .label rect {
+  fill: none !important;
+  stroke: none !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.node, .block-node) :is(.nodeLabel, .nodeLabel *, text, tspan) {
+  color: var(--n-text) !important;
+  fill: var(--n-text) !important;
+}
+
+/* Subgraphs read as the labelled panels of the hand-built diagrams. */
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container .cluster rect {
+  fill: var(--dg-panel-fill) !important;
+  stroke: var(--dg-panel-stroke) !important;
+  stroke-width: 1px !important;
+  rx: 14px;
+  ry: 14px;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container .cluster-label :is(.nodeLabel, .nodeLabel *, text, tspan) {
+  color: var(--dg-muted) !important;
+  fill: var(--dg-muted) !important;
+}
+/* Mermaid sizes each label box to the text it measured, so nothing here may make a
+   label wider. Let a label draw past its box rather than lose its last letters. */
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container foreignObject {
+  overflow: visible;
+}
+
+/* Connectors and their labels. */
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.flowchart-link, path.relation, .transition, .messageLine0, .messageLine1, .edge) {
+  stroke: var(--dg-line) !important;
+  stroke-width: 1.8px !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(marker path, .arrowheadPath, .arrowMarkerPath, #arrowhead path, #crosshead path, #filled-head path) {
+  fill: var(--dg-line) !important;
+  stroke: var(--dg-line) !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.edgeLabel, .edgeLabel p, .labelBkg, .edgeLabel span) {
+  background-color: var(--dg-bg) !important;
+  color: var(--dg-muted) !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container .edgeLabel rect {
+  fill: var(--dg-bg) !important;
+  opacity: 1 !important;
+}
+
+/* Sequence diagrams. */
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container rect.actor {
+  fill: var(--dg-proc-fill) !important;
+  stroke: var(--dg-proc-stroke) !important;
+  stroke-width: 1.6px !important;
+  rx: 10px;
+  ry: 10px;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(text.actor, text.actor tspan) {
+  fill: var(--dg-proc-text) !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container .actor-line {
+  stroke: var(--dg-panel-stroke) !important;
+  stroke-dasharray: 4 4;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.messageText, .loopText, .loopText tspan, .labelText, .labelText tspan) {
+  fill: var(--dg-text) !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container rect.note {
+  fill: var(--dg-person-fill) !important;
+  stroke: var(--dg-person-stroke) !important;
+  rx: 8px;
+  ry: 8px;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.noteText, .noteText tspan) {
+  fill: var(--dg-person-text) !important;
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container :is(.loopLine, .labelBox) {
+  stroke: var(--dg-muted) !important;
+  fill: var(--dg-panel-fill) !important;
+}
+
+/* State diagrams: a state reads as a store, and the start and end markers as solid dots. */
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container .node.statediagram-state {
+  --n-fill: var(--dg-store-fill); --n-stroke: var(--dg-store-stroke); --n-text: var(--dg-store-text);
+}
+html[class*='docs-doc-id-prism/'] .docusaurus-mermaid-container .node :is(circle.state-start, circle.state-end, .state-end) {
+  fill: var(--dg-line) !important;
+  stroke: var(--dg-line) !important;
+}
+
+/* A figure caption: the emphasised paragraph straight after a diagram. */
+.markdown :is(.docusaurus-mermaid-container, p:has(> img)) + p:has(> em:only-child) {
+  margin-top: -0.25rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+  text-align: center;
+}

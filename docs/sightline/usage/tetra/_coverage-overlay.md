@@ -3,7 +3,7 @@ see how far each entity has been assessed without opening Metron. The overlay
 sits beside the findings badges described in [Findings overlay](/docs/sightline/usage/tetra/findings-overlay). See
 the Metron pages for how assessments are authored.
 
-## Switching It On
+## Turning On the Coverage Overlay
 
 The overlay is off by default. Select the coverage button in the diagram's
 title bar, beside **View Findings on Diagram**, or run **Tetra: Toggle

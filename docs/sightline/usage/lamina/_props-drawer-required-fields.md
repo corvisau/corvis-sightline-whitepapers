@@ -18,7 +18,7 @@ in the drawer is optional.
 The drawer does not block saving a required-but-blank field, so you can still
 save a Cause without a label.
 
-## Selecting a Different Entity Always Shows a Clean Form
+## Form Reset on Selection Change
 
 Selecting a different node on the canvas, or a different row in the Tabular
 Editor, resets every field editor to the new entity's data. This applies to

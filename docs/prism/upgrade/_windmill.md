@@ -5,7 +5,7 @@ Read [Version compatibility](/docs/prism/upgrade/compatibility) for what the tar
 **The updater and its archive sit together in one directory**, the way an install does. Every other path on this page is inside the deployment directory you name with `--dir`.
 
 
-## Upgrading to 3.0.0 Is a Breaking Change
+## Breaking Changes in Windmill-Hosted Prism 3.0.0
 
 **Every script's first parameter changed.** It was `mongodb`, a Windmill built-in `mongodb` resource; it is now `storage`, a `prism_storage` resource at `f/prism/storage`. Until an install is migrated, its scripts have no resource to bind and the review app does not run.
 
@@ -21,7 +21,7 @@ The updater does not do this for you, because it never touches your resources.
 
 Read [Storage backends](/docs/prism/install/storage-backends) before choosing PostgreSQL: it is now a supported backend for this layer, and it must be reachable from the Windmill workers.
 
-## Before You Start
+## Requirements for the Updater
 
 The updater refreshes an **existing** install.
 
@@ -98,7 +98,7 @@ A collector script the archive does not ship is always yours, so the updater alw
 
 Variables, secrets and resources are all managed outside the sync. The installer pushes them directly, and an instance created by duplicating a manifest in the Windmill user interface has no local file at all. In sync scope each of those reads as deleted, so a `wmill sync push` with any of the three flags left `false` removes them from the workspace. A secret variable is the only copy of a credential.
 
-## The Update Does Not Deploy
+## Update Preview and Deployment
 
 The updater finishes with a **preview**, not a deployment, exactly as the installer does. It runs the deploy command in preview mode and prints what would change.
 

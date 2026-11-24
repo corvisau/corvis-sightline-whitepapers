@@ -4,7 +4,7 @@ Tetra and Lamina offer bulk edit in the Tabular Editor, over fields that come fr
 
 ---
 
-## Using It
+## Running a Bulk Edit
 
 1. Select two or more rows.
 2. Right-click any selected row. The context menu shows only **Bulk edit (N rows)**, where N is the number of selected rows. It replaces the row's normal menu.
@@ -69,7 +69,7 @@ Bulk edit copies values once. To keep many pairs on one assessment, link them to
 
 Every edit in the worklist stages into a shared pool of unsaved changes instead of writing immediately. This covers inline cells, bulk edit and the Assess drawer. Nothing reaches the disk until you click **Save all**, or **Save** in the Assess drawer. See the Saving your changes section below.
 
-### Using It
+### Bulk Editing Metron Pairs
 
 1. Select two or more pairs in the worklist. Check the row checkbox, which is the same checkbox that selects pairs for **Promote to finding**. The click, Shift-click and Ctrl-click or Cmd-click selection methods work as described earlier.
 2. Right-click any selected row. The context menu shows only **Bulk edit (N pairs)**, in place of the usual **Open** item.
@@ -95,7 +95,7 @@ The cells of a pair in a done status cannot be edited inline. Reopen the pair in
 
 The **Req** and **Entity** columns are never editable, inline or in the dialog. They form the pair's composite key: which requirement, on which entity.
 
-### Saving Your Changes
+### Saving Metron Bulk Edits
 
 Every staged edit lands in one pool that is keyed by pair. The edit can come from an inline grid cell, the bulk edit dialog or the Assess drawer. A field edited in the drawer and another field edited inline on the same pair count as one unsaved change to that row.
 

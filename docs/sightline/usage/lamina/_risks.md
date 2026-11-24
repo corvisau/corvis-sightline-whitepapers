@@ -399,7 +399,7 @@ The **Default Risk aggregation** block of the drawer sets `riskDefaults`. The re
 
 A model with no `riskMatrixDef` has no matrix cells. Its ratings carry the likelihood and consequence keys and no level. An invalid file gives no rating for any Risk, and `problems` names the file.
 
-## Query a Risk Without Defining It
+## Ad Hoc Risk Queries
 
 `POST /cross-app/models/<model-id>/risks/query` rates one Risk that the manifest does not need to define. The request body is JSON and takes one of two forms. The route only reads. It stores nothing, and a read-only token can call it.
 

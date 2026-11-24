@@ -136,7 +136,7 @@ The **Filter** popover's **Outcome** field (see [Worklist Filtering, Grouping, a
 narrow the worklist to specific fundamental outcomes directly. For example,
 `Outcome = no OR Outcome = partial` surfaces everything that needs attention.
 
-## Rollup: A Distribution, Not a Score
+## Rollup as a Distribution
 
 The Dashboard tab's rollup counts the `done`-fundamental pairs for each
 fundamental outcome, at every tree level (requirement, category, package
@@ -146,7 +146,7 @@ Draft and in-progress pairs are excluded from the count. A pair whose live
 requirement or entity has drifted past what was assessed still counts under
 its last-assessed outcome.
 
-## Per-Attribute State Is a Separate, Unscored Axis
+## Per-Attribute State as a Separate Axis
 
 Per-attribute assessment (see [Per-attribute assessment](/docs/sightline/usage/metron/attribute-assessment))
 records, for each practice, whether each typed attribute is `met`, `partial`

@@ -36,15 +36,13 @@ block-beta
     CONS -- "reverse rule" --> OUT
     OUT --> DRAIN
     DRAIN --> SRC
-    classDef src fill:#e3eefb,stroke:#3d6fa8,color:#13263d
-    classDef proc fill:#dff3f0,stroke:#1f8a80,color:#0d2e2b
-    classDef store fill:#fbf0dc,stroke:#b07d1f,color:#3a2806
-    classDef person fill:#f7e4ef,stroke:#a2477f,color:#3a1029
     class SRC src
     class CON,ENG,DRAIN proc
     class SNAP,CONS,OUT store
     class OP person
 ```
+
+*Figure 1. The Prism cycle, from a source system back to the same source.*
 
 Collection and write-back run near each source, because only those machines can reach it. Matching, merging and review run centrally. [Deployment options](/docs/prism/architecture/deployment-options) describes how the two halves map onto machines.
 
@@ -116,7 +114,7 @@ The master record now holds the merged view. Each field carries its evidence.
 
 Each field also records the time it changed and the changeset that changed it.
 
-### 6. the Spreadsheet Is Loaded Again
+### 6. Spreadsheet Reload
 
 A week later the team saves the spreadsheet again, still with the host name `web01`. The sync proposes `web01` at priority 50 against `web-01` at priority 85. The engine records the change as shadowed and leaves the master record unchanged.
 
@@ -138,6 +136,8 @@ sequenceDiagram
     S-->>C: Result
     C->>O: Mark done or failed
 ```
+
+*Figure 2. Example: the sync engine queues the write of web-01, and the CMDB connector performs it.*
 
 The engine holds no connection to the CMDB and no credentials for it. The connector near the CMDB performs the write. A queued write stays pending until that connector reports a result. [Run a write-back](/docs/prism/usage/write-back) gives the procedure.
 
@@ -163,5 +163,7 @@ stateDiagram-v2
     approved --> rolled_back: rollback
     applied --> rolled_back: rollback
 ```
+
+*Figure 3. The outcomes a proposed change can reach.*
 
 [Sync engine](/docs/prism/architecture/sync-engine) states each rule exactly. [Designing sync rules](/docs/prism/methodology/designing-rules) covers the choices that set the priorities and modes in this example.

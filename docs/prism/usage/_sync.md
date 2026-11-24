@@ -42,7 +42,7 @@ Every field rule carries a mode:
 
 Priority still governs an `auto` change. A lower-priority source does not overwrite a higher-priority value simply because its rule says `auto`.
 
-## Direction Follows the Target, Not the Rule
+## Rule Direction and the Target
 
 There is one rule shape for both directions. A reverse rule is run by the same command as a sync rule.
 

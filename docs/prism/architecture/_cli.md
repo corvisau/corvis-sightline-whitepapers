@@ -2,7 +2,7 @@ The operator CLI is the terminal interface to Prism. An operator runs syncs from
 
 It is one of the two interfaces to a single product. The other is the review app, in a browser. Neither is a product of its own, and the two mirror each other entry for entry. [Deployment options](/docs/prism/architecture/deployment-options) covers the two hostings and how to choose between them.
 
-## It Arrives with Standalone Prism
+## CLI Delivery with Standalone Prism
 
 The installer puts the CLI in a runtime instance when the operator passes `--role central` or `--role both`. There is nothing separate to obtain.
 

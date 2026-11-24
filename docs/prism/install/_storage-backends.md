@@ -1,6 +1,6 @@
 Sightline Prism writes its records to one of three backends: **MongoDB**, **PostgreSQL**, or a **local JSON store**. You choose with one environment variable.
 
-Choose before you collect anything. The choice is easy to change and the consequence is not, for the reason in [The backends do not share data](#the-backends-do-not-share-data).
+Choose before you collect anything. The choice is easy to change and the consequence is not, for the reason in [Data separation between backends](#data-separation-between-backends).
 
 ## Choose a Backend
 
@@ -48,7 +48,7 @@ If you select `postgres` without it, the runtime stops at startup and tells you 
 
 **`POSTGRES_URI` is optional.** Leave it blank and the driver reads the standard PostgreSQL variables instead: `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`. Use whichever your environment already provides; do not set both.
 
-### Object Key Order Is Not Preserved
+### PostgreSQL Object Key Order
 
 PostgreSQL stores documents as `jsonb`, which normalises the keys of every JSON object, ordering them by key length, then by bytes. So a record written with its keys in one order reads back with them in another.
 
@@ -58,7 +58,7 @@ This matters in one place beyond display: deciding whether a field changed. Pris
 
 Array order is preserved.
 
-### A Managed Server Needs TLS, and Will Not Say so Clearly
+### TLS on a Managed PostgreSQL Server
 
 A managed PostgreSQL (Azure Database for PostgreSQL among them) refuses a connection that does not negotiate TLS. The refusal does not mention TLS:
 
@@ -78,13 +78,13 @@ The local store is a zero-dependency backend that writes one JSON file for each 
 
 The default resolves against the **current working directory**, not against the directory you installed from. This is one of the reasons operational commands run from the runtime instance. Read [The runtime instance](/docs/prism/install/runtime-instance) for the rest.
 
-### The Local Store Runs One Process at a Time
+### Local Store Concurrency Limit
 
 **The local store is single-process.** It is intended for one operator on one machine, and for local development. It is not built for concurrent workers, and Windmill-hosted Prism must not use it.
 
 Two processes writing to the same local store at the same time can lose a write. There is no lock between them. When more than one process needs the data, use MongoDB or PostgreSQL.
 
-## The Backends Do Not Share Data
+## Data Separation Between Backends
 
 **Nothing is copied between the backends, in any direction, at any time.** They are separate stores. A record written under one backend is not visible under another. If you switch the value of `STORAGE_BACKEND`, nothing migrates.
 
@@ -94,7 +94,7 @@ Your records are still in the first backend. Set `STORAGE_BACKEND` back to its p
 
 Plan the switch as a data move, not as a configuration change.
 
-## Every Backend Runs the Whole Product
+## Backend Independence of Prism Components
 
 Every connector, the sync engine and the operator CLI work against any backend, with no change to any code. Prism reaches its store through one narrow interface, and all three backends implement it; the same interface test suite runs against each of them.
 

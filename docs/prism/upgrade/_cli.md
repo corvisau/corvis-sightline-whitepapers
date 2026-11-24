@@ -2,7 +2,7 @@ The operator CLI upgrades with the rest of the node. It travels inside the insta
 
 Read [Version compatibility](/docs/prism/upgrade/compatibility) for what the target version is coupled to.
 
-## The Pairing Check Comes First
+## Pairing Check Between the CLI and Prism
 
 **A CLI carries its engine inside it.** The release workflow compiles the sync engine, the connector SDK and the shared review logic into the CLI's own entry points. The version you install therefore decides the engine you run.
 

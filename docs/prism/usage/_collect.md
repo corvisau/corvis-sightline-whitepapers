@@ -49,7 +49,7 @@ npx prism-collect-crowdstrike prod
 
 A missing credential fails the run and names the variable.
 
-## The PowerShell Agents Are Different
+## PowerShell Agent Connectors
 
 Two connectors run as PowerShell agents on the Windows machine being inventoried. They do not use the commands above, and they do not work the same way as each other.
 

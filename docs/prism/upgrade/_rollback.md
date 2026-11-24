@@ -8,7 +8,7 @@ An upgrade sometimes has to be undone. Prism, the operator CLI and Windmill-host
 | Operator CLI | Supported — reinstall the previous version |
 | Windmill-hosted Prism | **Not supported** |
 
-## Changeset Rollback Is a Different Thing
+## Changeset Rollback Versus Version Rollback
 
 Prism has an operation called rollback that is **not** a version rollback, and the two are easy to confuse.
 

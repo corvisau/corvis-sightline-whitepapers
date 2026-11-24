@@ -104,4 +104,4 @@ A zone id on an outcome, objective or control names a zone in a Tetra model. An 
 | How severe an outcome is after its controls act | The residual consequence of the outcome |
 | A set of paths rated together | A Risk |
 
-Repeated bodies belong in a template. See [Reuse comes from a template](/docs/sightline/usage/lamina/authoring-controls#reuse-comes-from-a-template).
+Repeated bodies belong in a template. See [Control reuse through templates](/docs/sightline/usage/lamina/authoring-controls#control-reuse-through-templates).

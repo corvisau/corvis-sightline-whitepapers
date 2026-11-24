@@ -37,7 +37,7 @@ You are not deciding whether the new value is newer. The engine already settled 
 
 **`space` folds; it does not decide.** On a field row it clears the decision, which is the same as `s`. On an asset row it collapses the group. Use `s` when you mean to clear, and the meaning never changes under you.
 
-## Reject and Decline Are Not the Same
+## Reject Versus Decline
 
 This is the part the key names do not tell you. All three of `r`, `d` and `D` reject the change. They differ in what they leave behind.
 

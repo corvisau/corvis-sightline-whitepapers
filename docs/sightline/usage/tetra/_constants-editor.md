@@ -2,7 +2,7 @@ A panel for editing the shared constants that your template files declare. Templ
 reference a constant, so one change here updates every template that uses it. See
 [Tetra templates](/docs/sightline/usage/tetra/templates) for how templates work.
 
-## Opening It
+## Opening the Constants Editor
 
 Select **Constants** in the toolbar of an open Tetra diagram. You can also run
 **Tetra: Edit Constants** from the command palette with a Tetra model

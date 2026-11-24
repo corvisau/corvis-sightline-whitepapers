@@ -1,7 +1,9 @@
-This example is a corporate IT estate with cloud workloads, managed endpoints and an existing CMDB. Windmill-hosted Prism consolidates five sources and keeps a Jira Assets CMDB current. The organisation, its systems and every setting on this page are illustrative.
+This example is a corporate IT estate with cloud workloads, managed endpoints and an existing CMDB. Windmill-hosted Prism consolidates five sources, keeps a Jira Assets CMDB current, and tags each CrowdStrike host with its asset criticality. The organisation, its systems and every setting on this page are illustrative.
 
-![Five sources feed Prism. Three are collected by scripts in the Windmill workspace and two by connectors on a Windows host. All of them write to a MongoDB store. The sync engine and review app work from the store, and a write-back script updates Jira Assets.](./img/it-estate-light.svg#light)
-![Five sources feed Prism. Three are collected by scripts in the Windmill workspace and two by connectors on a Windows host. All of them write to a MongoDB store. The sync engine and review app work from the store, and a write-back script updates Jira Assets.](./img/it-estate-dark.svg#dark)
+![Five sources feed Prism. Three are collected by scripts in the Windmill workspace and two by connectors on a Windows host. All of them write to an Atlas-hosted MongoDB store. The sync engine and review app work from the store. Write-back scripts update Jira Assets and tag each CrowdStrike host with its criticality.](./img/it-estate-light.svg#light)
+![Five sources feed Prism. Three are collected by scripts in the Windmill workspace and two by connectors on a Windows host. All of them write to an Atlas-hosted MongoDB store. The sync engine and review app work from the store. Write-back scripts update Jira Assets and tag each CrowdStrike host with its criticality.](./img/it-estate-dark.svg#dark)
+
+*Figure 1. Example architecture 1: Windmill-hosted Prism collects from five IT sources, and writes back to Jira Assets and CrowdStrike.*
 
 ## The Estate
 
@@ -21,9 +23,10 @@ Jira Assets is both a source and the target. Prism reads the owner and criticali
 |---|---|---|
 | Collector scripts for Azure VMs, CrowdStrike and Jira Assets | The Windmill workspace, on a schedule | Each one reads a cloud API that the workspace can reach. |
 | Active Directory and spreadsheet connectors | A domain-joined Windows host, from a scheduled task | The directory and the file share are reachable only from inside the domain. |
-| Prism store | MongoDB | The PowerShell Active Directory connector sends its snapshots to MongoDB. |
+| Prism store | Atlas-hosted MongoDB | The PowerShell Active Directory connector sends its snapshots to MongoDB. |
 | Sync engine and review app | The Windmill workspace | Operators review changes in a browser. |
 | Jira Assets write-back script | The Windmill workspace | The Jira Assets connector supplies its own writer. |
+| CrowdStrike write-back script | The Windmill workspace | Prism ships no CrowdStrike writer, so this design adds one. |
 
 Windmill-hosted and standalone parts mix freely, because every part reads and writes the same store. [Deployment options](/docs/prism/architecture/deployment-options) explains how to choose between the two hostings.
 
@@ -49,7 +52,9 @@ One reverse rule maps the consolidated dataset to Jira Assets. It sends the host
 
 The Jira Assets write-back script drains that outbox on a schedule. It writes each value to the matching Jira issue, and records the issue key of each record it creates.
 
-A second reverse rule can send criticality from the consolidated dataset to CrowdStrike as a device tag. That gives the security team the business context of each endpoint. It needs a CrowdStrike connector that supplies its own writer. Until one does, an operator can complete the queued writes by hand. [Run a write-back](/docs/prism/usage/write-back) covers completing a write-back by hand or automatically.
+A second reverse rule sends each asset's criticality from the consolidated dataset to CrowdStrike, as a host tag. The security team then sees the business importance of each endpoint in the Falcon console, beside its detections.
+
+Prism ships no CrowdStrike writer, so this design adds a CrowdStrike write-back script. A write-back script is an ordinary program: it drains the outbox, writes each value, and records the result. [Writing a connector](/docs/prism/architecture/writing-a-connector) gives the method, and [Run a write-back](/docs/prism/usage/write-back) covers completing a write-back by hand while the script is in development.
 
 ## Operator Tasks in the IT Estate
 

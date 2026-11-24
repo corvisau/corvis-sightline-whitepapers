@@ -34,6 +34,6 @@ Promote the pairs that fail into a finding. See [Findings](/docs/sightline/usage
 
 In Lamina, open the Findings view with **Lamina: Open Findings Inbox** and run **Create cause from finding**. See [Findings inbox](/docs/sightline/usage/lamina/findings).
 
-## Saving Your Work
+## Saving Model Changes
 
 You need a licence to save your work. See [Licensing](/docs/sightline/usage/shared/licensing).

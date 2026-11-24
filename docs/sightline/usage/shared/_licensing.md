@@ -62,7 +62,7 @@ A refused save reports its reason where you asked for it, and the refused change
 
 A write that fails on a disk error or a validation refusal reports itself the same way. The pool save bar shows the reason beside its own button.
 
-## Managing Your Licence
+## Licence Management
 
 In a Tetra tab in the web shell, the bottom-right badge shows **Saving allowed by server** or **Saving unavailable**. It follows the server's permission for your account in the current app. Your server administrator manages the licence and your access permissions. There is no licence paste dialog in the web shell.
 
@@ -94,7 +94,7 @@ A licence can carry a grant that this version of Sightline does not know. That g
 
 An expired licence still lists the grants it holds, struck through and in grey. A line under the list says that the grants are not in effect. A licence that is absent or invalid shows no **Grants** list.
 
-## A Read-Only View Is a Different Thing
+## Licence Versus Read-Only View
 
 The licence answers whether a change can be saved. It never stops you making a change.
 
@@ -133,7 +133,7 @@ Undo reaches only what is staged. Recover an earlier commit with git.
 
 In a Tetra browser tab, select **Tools**, then **Staged changes journal**. Its **Undo** and **Redo** controls act on that tab. Close the panel and open it again to see the current staged changes. A reader token disables both controls.
 
-## Structural Changes Wait for Save
+## Pending Structural Changes
 
 Structural changes wait in the pending pool with your field edits, and the unsaved count includes them. A change is visible at once, although nothing has reached disk. A new entity appears on the canvas, in the Tabular Editor and in the drawer as soon as you create it. A deleted entity disappears as soon as you delete it.
 

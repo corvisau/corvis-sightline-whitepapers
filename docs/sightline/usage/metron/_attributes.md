@@ -52,7 +52,7 @@ Merging is per-attribute and deep, so overriding the owner keeps the type of the
 An attached set that the package does not hold contributes nothing and does not
 stop the package from loading. The package editor raises a warning.
 
-## Target-State Requirements Have the Same Two Fields
+## Target-State Requirement Fields
 
 A **target-state requirement** is one pair of a requirement and an entity on the
 assessment worklist. It carries the same attached sets and the same attributes
@@ -78,7 +78,7 @@ Each layer folds onto the one beneath it by the same rule: collision overrides,
 no collision adds, per-attribute and deep. So a pair that supplies only an owner
 keeps the type that the set of the requirement established.
 
-### A Pair Stores Only What It Owns
+### Stored Versus Resolved Attribute Values
 
 The resolved map of all four layers, which the worklist, the drawer and the filters display, is
 never stored. A pair stores only the sets it attaches and the attributes

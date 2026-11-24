@@ -120,11 +120,11 @@ from the outcome you picked.
 Also here: [Licensing](/docs/sightline/usage/shared/licensing) (what edit-gating applies) and
 [Telemetry](/docs/sightline/usage/shared/telemetry).
 
-## Two Mechanics Worth Understanding Early
+## Two Core Metron Mechanics
 
 Both behaviours are deliberate.
 
-### 1. References Are Version-Pinned, and That Is the Point
+### 1. Version-Pinned References
 
 A finding does not point at a live pair. It records a copy, stamped with
 the requirement and entity versions it was raised against, plus the outcome at
@@ -149,7 +149,7 @@ is deliberately absent from generated documents. See the "Formal record vs live
 signal" section of the [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model)
 guide for the full reasoning.
 
-## Nothing Is Filtered out for You
+## Unfiltered Reports
 
 Every Metron report shows everything and gives you the controls to narrow it.
 Resolved findings and met attributes all stay visible, with their state as

@@ -3,7 +3,7 @@ aggregated across every assessment of a requirement package,
 anywhere in the workspace. It is a cross-model view, unlike the roll-up dashboard inside an open
 assessment, which covers only that one assessment.
 
-## Opening It
+## Opening the Portfolio Roll-Up
 
 Run **Metron: View Portfolio Roll-Up** from the command palette. The web
 version of Sightline does not open the roll-up yet. The command

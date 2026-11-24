@@ -37,7 +37,7 @@ Choose **Browse a dataset's records**, then pick a dataset. From there you can f
 
 The available keys are shown along the bottom of each view. Read that line rather than memorising a set; it changes with the view you are in.
 
-### Field-Level Provenance Is the Point
+### Field-Level Provenance in a Record
 
 Opening a record is worth doing because of what the record carries beside each value.
 

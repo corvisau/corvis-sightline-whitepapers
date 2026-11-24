@@ -156,7 +156,7 @@ kind. Referenced rules are offered in the requirement drawer's rule pickers for
 the scope rule and the assessment rule. Referenced attribute sets are offered in the
 drawer's attribute-set picker and attach exactly as a local set does.
 
-### A Requirement Package Does Not Author Rules or Attribute Sets
+### Rules and Attribute Sets in a Requirement Package
 
 A requirement package holds no rules or attribute sets of its own. Its **Rules**
 and **Attribute sets** tabs are read-only lists of what the packages on the
@@ -170,7 +170,7 @@ A notice above each tab says where its entries are authored. The host also
 refuses any rule or attribute-set write against a requirement package,
 whatever sends it.
 
-### A Package That Still Holds Its Own Files
+### Legacy Files in a Requirement Package
 
 Metron does not load rules, attribute sets or schemes that sit in a requirement
 package's own folder. Such a file contributes nothing, and Metron raises one
@@ -212,7 +212,7 @@ A scheme package that is missing, pinned to a version that does not exist, or
 invalid still fails the load. A selected scheme other than the built-in one also
 fails the load when no scheme package supplies it.
 
-### A Requirement Package Does Not Author Its Scheme
+### Scoring Scheme of a Requirement Package
 
 The **Scoring scheme** tab is read-only. Edit a scheme in the scheme package that
 owns it.

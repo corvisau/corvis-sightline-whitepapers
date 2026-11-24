@@ -12,7 +12,7 @@ The report never shows attribute satisfaction. Satisfaction is a live working si
 
 The report does not filter by status. Finding status appears as a column.
 
-## The Template Is Yours
+## Custom Report Template
 
 The report ships no template. Your template supplies the layout, and the report fills it with the coverage rows.
 

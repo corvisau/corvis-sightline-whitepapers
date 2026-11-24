@@ -2,7 +2,7 @@ Windmill-hosted Prism runs the collectors and the review app inside a Windmill w
 
 Windmill-hosted Prism and Standalone Prism are two hostings of one product. Read [Prerequisites](/docs/prism/install/prerequisites) before you start, and [Windmill-hosted Prism](/docs/prism/architecture/windmill) for what the hosting adds.
 
-## This Hosting Runs on MongoDB or PostgreSQL
+## Supported Storage Backends for Windmill
 
 **This layer does not support the local storage backend.** The local store is single-process, and Windmill runs concurrent workers. The installer sets up one storage resource and asks which of the two shared backends it names.
 
@@ -10,7 +10,7 @@ If you tried Prism on a workstation with the local backend, that choice does not
 
 **The database must be reachable from the Windmill workers.** For a self-hosted Windmill in the same network, that condition is a small one. For Windmill Cloud it is real: the workers reach your database from the public internet. A firewalled PostgreSQL server must allow their egress, and an Atlas cluster must carry their addresses in its IP access list. Windmill publishes no static egress IP list for its cloud. Ask their support for the worker group's external range, run a self-hosted worker inside your network, or use a private endpoint. A worker that cannot get through reports `connect ETIMEDOUT`, not a credentials error.
 
-## Before You Run the Installer
+## Requirements for the Windmill Installer
 
 You need three things beyond the [prerequisites](/docs/prism/install/prerequisites):
 
@@ -61,7 +61,7 @@ The installer takes no other flag.
 6. It regenerates the script and app metadata.
 7. It previews the deployment, and stops.
 
-**Step 7 is where the installer ends.** Read [The install does not deploy](#the-install-does-not-deploy) before you expect a working workspace.
+**Step 7 is where the installer ends.** Read [Install preview and deployment](#install-preview-and-deployment) before you expect a working workspace.
 
 **Nothing in this list overwrites existing work.** Each step tests for what it would create and skips when it finds it. To add a connector later, run the installer again on the installed directory.
 
@@ -140,7 +140,7 @@ For each connector you name, the installer asks for an instance name first, then
 
 Four connectors ship in the catalogue: `crowdstrike`, `cylance`, `azure-vms` and `jira-assets`.
 
-### Every Connector Reports What It Collects
+### Connector Field Discovery
 
 Each catalogue entry names a `discoverTemplate`, and the installer deploys that script beside the collector. After the deploy, open the review app. Choose **Connectors**. Configure an instance. Choose **Refresh fields**.
 
@@ -155,7 +155,7 @@ Refresh an instance before you collect from it. The [recipe](/docs/prism/install
 
 A connector's fixed shape is fixed until the connector changes it. Refresh after an upgrade so a newly collected path reaches the operator.
 
-## The Install Does Not Deploy
+## Install Preview and Deployment
 
 The installer finishes with a **preview**, not a deployment. It runs the deploy command in preview mode and prints what would change.
 

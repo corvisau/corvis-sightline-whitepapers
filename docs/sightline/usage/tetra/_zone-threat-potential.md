@@ -18,7 +18,7 @@ Lamina reads a zone's Threat Potential and suggests a likelihood for each cause
 whose source zone it is. The cause keeps its own likelihood until you choose to
 use the suggested one.
 
-## Setting It
+## Setting a Zone's Threat Potential
 
 1. Select the zone to open its props drawer.
 2. Enter a value from 0 to 4 in **Threat Potential**.

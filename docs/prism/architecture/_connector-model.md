@@ -16,17 +16,22 @@ The **collector** is the runnable entry point of a connector: the thing an opera
 ```mermaid
 flowchart LR
     subgraph checkout["Code checkout"]
-        C["Connector<br/>packages/connectors/crowdstrike/"]
+        C["CrowdStrike connector<br/>packages/connectors/crowdstrike/"]
     end
     subgraph instance["Runtime instance"]
-        M1["manifest<br/>crowdstrike.eu"]
-        M2["manifest<br/>crowdstrike.us"]
+        M1["Manifest<br/>crowdstrike.eu"]
+        M2["Manifest<br/>crowdstrike.us"]
     end
     C --> M1
     C --> M2
-    M1 --> T1["table: crowdstrike.eu"]
-    M2 --> T2["table: crowdstrike.us"]
+    M1 --> T1[("Table<br/>crowdstrike.eu")]
+    M2 --> T2[("Table<br/>crowdstrike.us")]
+    class C proc
+    class M1,M2 muted
+    class T1,T2 store
 ```
+
+*Figure 1. Example: one CrowdStrike connector serves two CrowdStrike tenants. Each manifest configures one instance of the connector, and each instance writes its own table.*
 
 ## The Manifest
 
@@ -47,7 +52,7 @@ A manifest has six fields.
 
 The reason is the identifier they combine into. A manifest feeds a table named `connectorType.instance` (`crowdstrike.eu` in the diagram above). A dot inside either segment would make that identifier ambiguous, so Prism refuses it at validation rather than producing a table nobody can address.
 
-### Credentials Are References, Never Values
+### Credential References in a Manifest
 
 **A manifest never holds a credential.** Each entry in `credentials` maps a logical name to an environment variable reference, in the form `env:VARIABLE_NAME`.
 

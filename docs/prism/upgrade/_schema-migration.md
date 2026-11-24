@@ -14,7 +14,7 @@ The schema registry holds schemas by name and by version. It can hold more than 
 | The schemas themselves, by name and version | The schema registry |
 | The current version for each schema | A constant in the registry |
 
-## Nothing Migrates Your Records
+## Record Schema Versions After an Upgrade
 
 **When a schema version advances, your existing records are not rewritten.** No migration runs, at upgrade time or at read time. There is no migration command, and there is nothing for you to run.
 
@@ -24,13 +24,13 @@ One thing does change. A data-quality check evaluates an assembled master record
 
 **That check is advisory.** Records are built up across sources over time, so incompleteness is an ordinary intermediate state rather than an error. It reports; it does not block a merge and it does not stop a collection.
 
-### This Has Not Happened Yet
+### Current Schema Versions
 
 **Every schema is currently at version 1.** No schema in the product has advanced past its first version, so no installation has yet been through a schema-version change.
 
 The model above is what the code does. It is not a description of an upgrade anyone has performed. Treat your first schema-version change as unverified, and read [Rollback](/docs/prism/upgrade/rollback) before you take it.
 
-## Rules Migrate on a Command You Run
+## Rule Migration Command
 
 Rules are the other half, and they behave differently. Rules move into storage only when you run the migration command.
 
@@ -45,7 +45,7 @@ It reads `rules/` by default. Pass a different directory as the first argument t
 
 **Expected output.** A line reporting how many rules of how many files were migrated, the backend they went into, and the split between sync and reverse rules.
 
-### Running It Twice Overwrites Your Edits
+### Re-Running the Rule Migration
 
 **The command is an upsert keyed on the rule's `id`.** The command replaces a rule already in storage with the file's version, and inserts a rule not yet in storage.
 

@@ -25,7 +25,11 @@ flowchart LR
   INBOX -->|crowdstrike-sync| CONS[("consolidated dataset")]
   JIRA["Jira issues"] -->|jira-assets-sync| CONS
   CONS -->|"technical-to-jira<br/>(mirror creates the missing ones)"| JIRA
+  class CS,JIRA src
+  class INBOX,CONS store
 ```
+
+*Figure 1. The finished recipe: CrowdStrike data reaches the consolidated dataset, and a reverse rule writes it to Jira, creating the issues Jira does not hold.*
 
 The round trip takes three rules.
 
@@ -37,7 +41,7 @@ The round trip takes three rules.
 
 The second and third rules make a loop rather than two one-way feeds. Jira's static entries arrive at a low priority. CrowdStrike's live values win, and the winner then goes back out over Jira's stale copy.
 
-## Before You Start
+## Recipe Prerequisites
 
 Read [Prerequisites](/docs/prism/install/prerequisites), then [Installing Windmill-hosted Prism](/docs/prism/install/windmill).
 
@@ -91,7 +95,7 @@ The same installer run asks for four values.
 
 The installer writes one resource, `f/prism/crowdstrike_prod_manifest`, and copies the collector script to `f/prism/crowdstrike_collect.ts`.
 
-### The Manifest Is the Instance
+### Manifest Resource as the Connector Instance
 
 That resource holds the whole deployment: which connector it is, the instance name, the credentials it authenticates with, and the settings it collects by. A secret is stored as a pointer to a Windmill variable, never as text.
 
