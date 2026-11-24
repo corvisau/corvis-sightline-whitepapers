@@ -127,11 +127,6 @@ const config: Config = {
           label: 'Knowledge Base',
         },
         {to: '/blog', label: 'Whitepapers', position: 'left'},
-        {
-          href: 'https://github.com/corvisau/sightline-v2',
-          label: 'GitHub',
-          position: 'right',
-        },
       ],
     },
     footer: {
@@ -157,10 +152,6 @@ const config: Config = {
             {
               label: 'Whitepapers',
               to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/corvisau/sightline-v2',
             },
           ],
         },
