@@ -2,7 +2,7 @@ When another program or person changes a model file while a diagram is open, Tet
 
 ---
 
-## The notice
+## The Notice
 
 If the diagram holds unsaved changes when the reload happens, a notice appears under the toolbar:
 
@@ -19,7 +19,7 @@ The notice leaves by itself when no unsaved change remains, for example after a 
 
 In a browser page, a save made in that page does not raise the notice. Only a change made elsewhere does.
 
-## Review before saving
+## Review Before Saving
 
 The **Journal** lists every unsaved change. Read it against the reloaded model before you select **Save all**. The **Save changes** dialog that **Save all** opens does not list the changes. Where the other writer changed the same field, the value in your unsaved change is the one that saves.
 
@@ -29,7 +29,7 @@ The **Refresh Diagram** command rebuilds the diagram from disk. When the diagram
 
 ---
 
-## Per-app differences
+## Per-App Differences
 
 | App | Behaviour |
 |---|---|

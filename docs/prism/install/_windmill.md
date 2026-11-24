@@ -1,8 +1,8 @@
 Windmill-hosted Prism runs the collectors and the review app inside a Windmill workspace. It installs into a Windmill repository directory, not into a Prism [runtime instance](/docs/prism/install/runtime-instance).
 
-This is the other hosting of the same product, not a second product. Read [Prerequisites](/docs/prism/install/prerequisites) before you start, and [Windmill-hosted Prism](/docs/prism/architecture/windmill) for what the hosting adds.
+Windmill-hosted Prism and Standalone Prism are two hostings of one product. Read [Prerequisites](/docs/prism/install/prerequisites) before you start, and [Windmill-hosted Prism](/docs/prism/architecture/windmill) for what the hosting adds.
 
-## This hosting runs on MongoDB or PostgreSQL
+## This Hosting Runs on MongoDB or PostgreSQL
 
 **This layer does not support the local storage backend.** The local store is single-process, and Windmill runs concurrent workers. The installer sets up one storage resource and asks which of the two shared backends it names.
 
@@ -10,7 +10,7 @@ If you tried Prism on a workstation with the local backend, that choice does not
 
 **The database must be reachable from the Windmill workers.** For a self-hosted Windmill in the same network, that condition is a small one. For Windmill Cloud it is real: the workers reach your database from the public internet. A firewalled PostgreSQL server must allow their egress, and an Atlas cluster must carry their addresses in its IP access list. Windmill publishes no static egress IP list for its cloud. Ask their support for the worker group's external range, run a self-hosted worker inside your network, or use a private endpoint. A worker that cannot get through reports `connect ETIMEDOUT`, not a credentials error.
 
-## Before you run the installer
+## Before You Run the Installer
 
 You need three things beyond the [prerequisites](/docs/prism/install/prerequisites):
 
@@ -26,7 +26,7 @@ wmill workspace add <profile-name> <workspace-id> <remote-url>
 
 See [the Windmill workspace management page](https://www.windmill.dev/docs/advanced/cli/workspace-management) for what each argument holds. Then run the installer.
 
-### What Corvis supplies
+### Release Files from Corvis
 
 Two files. Put them in the same directory.
 
@@ -37,7 +37,7 @@ Two files. Put them in the same directory.
 
 The installer reads the archive from its own directory. It downloads nothing, and it needs no access token. Without the archive beside it, the installer stops and names the file it expected.
 
-## The install command
+## The Install Command
 
 ```bash
 node install.mjs --dir ./acme-prism-windmill --connectors crowdstrike,jira-assets
@@ -51,7 +51,7 @@ node install.mjs --dir ./acme-prism-windmill --connectors crowdstrike,jira-asset
 
 The installer takes no other flag.
 
-## What the installer does
+## Windmill Installer Steps
 
 1. It checks for the `wmill` CLI, and stops when it is absent.
 2. It copies the layer's content into the target directory, unless content is already there.
@@ -63,13 +63,13 @@ The installer takes no other flag.
 
 **Step 7 is where the installer ends.** Read [The install does not deploy](#the-install-does-not-deploy) before you expect a working workspace.
 
-**Nothing in this list overwrites existing work.** Each step tests for what it would create and skips when it finds it. Re-running the installer on an installed directory is how you add a connector later.
+**Nothing in this list overwrites existing work.** Each step tests for what it would create and skips when it finds it. To add a connector later, run the installer again on the installed directory.
 
-### The compiled code travels with the install
+### The Compiled Code Travels with the Install
 
 The archive carries the compiled engine, connector SDK, shared review logic and connectors inside the directory it installs. It reads no other checkout, and it needs none. The operator CLI ships the same way: it compiles those packages into its own entry points.
 
-## The storage resource
+## The Storage Resource
 
 `install/setup-resource.mjs` sets up the connection to your store. The installer calls it, and it asks which backend first (`mongo` or `postgres`), then only for that backend's values.
 
@@ -98,17 +98,17 @@ For **PostgreSQL**:
 
 **Leave `sslmode` at `require` unless your server genuinely does not use TLS.** A managed server refuses a plain connection and reports it as `no pg_hba.conf entry for host ...`, which reads like a firewall or permissions problem and is neither.
 
-Either way the script stores the password as a Windmill secret variable and writes the resource to `f/prism/storage`. The password is not written to a file in the repository. It also pushes the `prism_storage` resource type, so a first-ever install works against a workspace that has never seen it.
+Either way the script stores the password as a Windmill secret variable and writes the resource to `f/prism/storage`. It never writes the password to a file in the repository. It also pushes the `prism_storage` resource type, so a first-ever install works against a workspace that has never seen it.
 
 ## Connectors
 
 For each connector you name, the installer asks for an instance name first, then the credentials, then the settings. It writes one resource, `f/prism/<connector>_<instance>_manifest`, and copies that connector's scripts into `f/prism/`.
 
-**That manifest is the instance.** It holds which connector it is, the instance name, the credentials it authenticates with, and the settings it collects by. A second instance of the same connector is a duplicate of the resource with `instance` changed. There is no second place that has to agree with the first.
+**That manifest is the instance.** It holds which connector it is, the instance name, the credentials it authenticates with, and the settings it collects by. A second instance of the same connector is a duplicate of the resource with `instance` changed.
 
 **A secret never reaches a file in the repository.** The installer pushes it as a Windmill secret variable and stores a `$var:` pointer to it in the manifest. Two instances of one connector point at the same variable, so a rotated token is one edit in one place.
 
-### The catalogue
+### The Catalogue
 
 `install/connectors.json` is the catalogue of connectors this layer can deploy.
 
@@ -136,13 +136,13 @@ For each connector you name, the installer asks for an instance name first, then
 | `default` | Offered at the prompt. Press enter to accept it. |
 | `hint` | Shown beside the prompt, to say where the value comes from. |
 
-**To change which connectors are available, edit this file.** Add an entry, name a template that exists, and list the fields that connector needs. A connector name the installer cannot find in this file is rejected, and the installer tells you to add it.
+**To change which connectors are available, edit this file.** Add an entry. Name a template that exists. List the fields that connector needs. A connector name the installer cannot find in this file is rejected, and the installer tells you to add it.
 
 Four connectors ship in the catalogue: `crowdstrike`, `cylance`, `azure-vms` and `jira-assets`.
 
-### Every connector reports what it collects
+### Every Connector Reports What It Collects
 
-Each catalogue entry names a `discoverTemplate`, and the installer deploys that script beside the collector. After the deploy, open the review app, choose **Connectors**, configure an instance, and choose **Refresh fields**.
+Each catalogue entry names a `discoverTemplate`, and the installer deploys that script beside the collector. After the deploy, open the review app. Choose **Connectors**. Configure an instance. Choose **Refresh fields**.
 
 What comes back depends on how the connector knows its fields.
 
@@ -153,9 +153,9 @@ What comes back depends on how the connector knows its fields.
 
 Refresh an instance before you collect from it. The [recipe](/docs/prism/install/bootstrap) works an example through in full.
 
-A connector's fixed shape is fixed until the connector changes it. Refreshing after an upgrade is how a newly collected path reaches the operator.
+A connector's fixed shape is fixed until the connector changes it. Refresh after an upgrade so a newly collected path reaches the operator.
 
-## The install does not deploy
+## The Install Does Not Deploy
 
 The installer finishes with a **preview**, not a deployment. It runs the deploy command in preview mode and prints what would change.
 
@@ -176,7 +176,7 @@ wmill sync push --dry-run
 
 **Expected output.** No remaining changes. A second preview that still lists the same scripts and resources means the push did not complete. Read the output of the push itself for the reason.
 
-## Verify the install
+## Verify the Install
 
 Confirm the resource setup completed, from inside the install directory:
 
@@ -203,7 +203,7 @@ wmill sync push --dry-run
 
 **Expected output.** A list of the scripts, apps and resources that would deploy. An authentication error here means the workspace binding did not complete.
 
-## Add a connector later
+## Add a Connector Later
 
 Run the installer again against the same directory:
 
@@ -214,12 +214,3 @@ node install.mjs --dir ./acme-prism-windmill --connectors cylance
 The installer detects the existing install and adds to it. It skips the workspace binding and the storage resource, and sets up only the new connector.
 
 To redo a connector's credentials, delete its manifest file first. The installer skips a connector that already has one, and it names the file to delete when it does.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What does this hosting add? | [Windmill-hosted Prism](/docs/prism/architecture/windmill) |
-| Which storage backend do I choose? | [Storage backends](/docs/prism/install/storage-backends) |
-| How do I install the other hosting? | [Installing Standalone Prism](/docs/prism/install/prism) |
-| What is the terminal equivalent of the review app? | [The operator CLI](/docs/prism/architecture/cli) |

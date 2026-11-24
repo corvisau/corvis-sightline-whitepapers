@@ -1,12 +1,12 @@
 Collects local system information from the machine it runs on, and pushes an `AssetComputer` snapshot straight to MongoDB. It runs entirely in PowerShell, and needs neither Python nor Node.js.
 
-Native counterpart to the [`local-host-python`](/docs/prism/architecture/connectors/local-host-python) connector: same data, same `AssetComputer` schema — just collected via `Get-CimInstance` instead of `psutil`, and written to its own `snapshots_local-host-powershell` collection. Use this variant on Windows machines where you don't want to install Python.
+Native counterpart to the [`local-host-python`](/docs/prism/architecture/connectors/local-host-python) connector: same data, same `AssetComputer` schema, just collected via `Get-CimInstance` instead of `psutil`, and written to its own `snapshots_local-host-powershell` collection. Use this variant on Windows machines where you don't want to install Python.
 
 ## Features
 
 - Gathers CPU, memory, storage, and network information via CIM (`Win32_OperatingSystem`, `Win32_ComputerSystem`, `Win32_Processor`, `Win32_LogicalDisk`, `Win32_NetworkAdapterConfiguration`)
 - Detects operating system, build, and architecture
-- Single script — collects and pushes to MongoDB in one run, no intermediate file
+- Single script: collects and pushes to MongoDB in one run, no intermediate file
 - No external API dependencies
 
 ## Prerequisites

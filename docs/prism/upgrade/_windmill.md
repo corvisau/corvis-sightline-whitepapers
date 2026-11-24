@@ -5,11 +5,11 @@ Read [Version compatibility](/docs/prism/upgrade/compatibility) for what the tar
 **The updater and its archive sit together in one directory**, the way an install does. Every other path on this page is inside the deployment directory you name with `--dir`.
 
 
-## Upgrading to 3.0.0 is a breaking change
+## Upgrading to 3.0.0 Is a Breaking Change
 
 **Every script's first parameter changed.** It was `mongodb`, a Windmill built-in `mongodb` resource; it is now `storage`, a `prism_storage` resource at `f/prism/storage`. Until an install is migrated, its scripts have no resource to bind and the review app does not run.
 
-The updater does not do this for you, because it never touches your resources - that is what keeps your credentials through an upgrade.
+The updater does not do this for you, because it never touches your resources.
 
 1. Create the new resource. Either run `node install/setup-resource.mjs storage <install-dir> <archive-dir>`, or lift your existing `f/prism/mongodb` value into a `prism_storage` resource at `f/prism/storage`. Lifting it keeps the `$var:` password reference, so you do not re-enter the secret.
 2. Push the resource type, then the resource, then the scripts, then the app - in that order. A script deployed before its resource exists has nothing to bind.
@@ -21,15 +21,15 @@ The updater does not do this for you, because it never touches your resources - 
 
 Read [Storage backends](/docs/prism/install/storage-backends) before choosing PostgreSQL: it is now a supported backend for this layer, and it must be reachable from the Windmill workers.
 
-## Before you start
+## Before You Start
 
-The updater refreshes an **existing** install. It is not a first-time install.
+The updater refreshes an **existing** install.
 
 It stops when the target directory has no `f/` directory or no `wmill.yaml`, and tells you to use the installer instead. [Installing Windmill-hosted Prism](/docs/prism/install/windmill) covers that path.
 
 You also need the archive for the version you are moving to. Corvis supplies it, with the updater beside it, exactly as it supplies an install. The updater reads the archive from its own directory and downloads nothing.
 
-## The flags
+## The Flags
 
 ```bash
 node update.mjs --dir ../acme-prism-windmill
@@ -42,11 +42,11 @@ node update.mjs --dir ../acme-prism-windmill
 | `--dry-run` | Shows the file changes and stops. Changes nothing. | No |
 | `--help` | Prints the usage. `-h` also works. | No |
 
-That is the whole list. The updater takes no other flag.
+The updater takes no other flag.
 
 `--archive` names a file beside the updater, or a path. It is how you refresh from a named version rather than the latest archive.
 
-## Run the dry run first
+## Run the Dry Run First
 
 **A dry run is available and worth the minute it costs.** It shows what the release changes in your install before anything moves.
 
@@ -60,7 +60,7 @@ Each directory's line also counts the files your install holds that this release
 
 The dry run stops after the file listing. It does not go on to preview the deployment.
 
-## What is replaced and what is kept
+## Replaced and Kept Files
 
 The refresh copies one way and deletes nothing. An install directory is not a checkout of the archive. Operators create resources in it, connectors are set up into it, and instances live there as files. A file the archive does not carry was put there by someone, so the updater leaves it and reports it as `kept`.
 
@@ -92,13 +92,13 @@ Your credentials survive an upgrade. You do not re-enter them.
 
 A collector script the archive does not ship is always yours, so the updater always keeps it. That includes one left behind by a connector setup you interrupted before entering its credentials. Where the archive does ship a collector, an instance manifest decides. With one present, the install has its own copy to keep. Without one, the archive's copy refreshes normally.
 
-## The updater corrects three wmill.yaml flags
+## The Updater Corrects Three wmill.yaml Flags
 
 `skipVariables`, `skipSecrets` and `skipResources` must all be `true`. The updater sets any that is not, and reports which it changed.
 
 Variables, secrets and resources are all managed outside the sync. The installer pushes them directly, and an instance created by duplicating a manifest in the Windmill user interface has no local file at all. In sync scope each of those reads as deleted, so a `wmill sync push` with any of the three flags left `false` removes them from the workspace. A secret variable is the only copy of a credential.
 
-## The update does not deploy
+## The Update Does Not Deploy
 
 The updater finishes with a **preview**, not a deployment, exactly as the installer does. It runs the deploy command in preview mode and prints what would change.
 
@@ -117,7 +117,7 @@ wmill sync push --dry-run
 
 **Expected output.** No remaining changes. A second preview that still lists the same scripts and resources means the push did not complete. Read the output of the push itself for the reason.
 
-## Verify the upgrade
+## Verify the Upgrade
 
 From inside the install directory, confirm the deployment state survived:
 
@@ -135,12 +135,3 @@ ls f/prism/*_manifest.resource.yaml f/prism/*_collect.ts
 ```
 
 **Expected output.** A matching pair for each connector you run. A manifest with no matching collect script means the script was lost before this updater, and the connector cannot run until it is back. Delete that manifest and re-run the installer for the connector, which asks for the credentials again.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| Which combination should I move to? | [Version compatibility](/docs/prism/upgrade/compatibility) |
-| How do I install this hosting for the first time? | [Installing Windmill-hosted Prism](/docs/prism/install/windmill) |
-| Can I go back? | [Rollback](/docs/prism/upgrade/rollback) |
-| What happens to my existing records? | [Schema versions and rule migration](/docs/prism/upgrade/schema-migration) |

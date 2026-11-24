@@ -2,7 +2,7 @@ An overlay is a render-only shaded region drawn on top of the diagram around a s
 
 Neither Tetra nor Lamina has a dialog or panel to create or edit overlays yet. A model that already holds overlays shows them on the canvas.
 
-## What an overlay shows
+## Overlay Rendering
 
 - A region that encloses its member entities, shaded in the overlay colour.
 - An optional label in the top-left corner of the region, in the overlay colour.

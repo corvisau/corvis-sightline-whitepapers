@@ -1,11 +1,11 @@
-Collects asset data from Jira issues and normalizes to the `BaseAsset` schema.
+Collects asset data from Jira issues and normalises to the `BaseAsset` schema.
 
 ## Overview
 
 This connector treats Jira issues as asset records. Common use cases:
 - **Asset tracking project**: Dedicated Jira project for hardware/software inventory
 - **CMDB integration**: Jira as lightweight CMDB
-- **IT asset management**: Track laptops, servers, licenses as issues
+- **IT asset management**: Track laptops, servers, licences as issues
 
 ## Configuration
 
@@ -50,12 +50,12 @@ Add custom fields for asset properties:
 **Field ids are per-instance.** Every Jira site numbers its own custom fields, so this
 connector ships no ids of its own. Set `config.fieldIds` in
 `.connectors/jira-assets.<instance>/manifest.json` to the ids your site assigned. Section 3
-reads them for you.
+reads them.
 
 `hostName` is required. Both sync directions match on it, and a collect without it stops
 and names the missing key.
 
-The ids below are illustrative. Every site numbers its own fields, so yours are different.
+The ids below are illustrative. Every site numbers its own fields.
 
 ```json
 {
@@ -67,7 +67,7 @@ The ids below are illustrative. Every site numbers its own fields, so yours are 
 }
 ```
 
-### 3. Read the field ids
+### 3. Read the Field IDs
 
 Run discovery against the instance:
 
@@ -185,9 +185,9 @@ async function fetchJiraAssets(): Promise<JiraIssue[]> {
    JIRA_API_TOKEN=your_generated_token
    ```
 
-### JQL Query Customization
+### JQL Query Customisation
 
-Customize the JQL query to filter assets:
+Customise the JQL query to filter assets:
 
 ```typescript
 // Only active assets
@@ -267,7 +267,7 @@ Creates snapshots in MongoDB collection: `snapshots_jira-assets`
 Each snapshot contains:
 - Timestamp
 - Schema version (typically BaseAsset v1)
-- Array of normalized assets
+- Array of normalised assets
 - Metadata (item counts, validation errors, duration)
 
 ## Use Cases
@@ -278,9 +278,9 @@ Track laptops, monitors, peripherals with:
 - Lifecycle management (requisition → deployment → retirement)
 - Warranty and support information
 
-### License Management
-Track software licenses as Jira issues:
-- License keys
+### Licence Management
+Track software licences as Jira issues:
+- Licence keys
 - Seat counts
 - Renewal dates
 - Cost tracking

@@ -1,6 +1,6 @@
-Collects local system information from the machine it runs on and normalizes it to the `AssetComputer` schema.
+Collects local system information from the machine it runs on and normalises it to the `AssetComputer` schema.
 
-Python implementation — requires Python 3.8+ and `psutil`. For a Windows machine without Python, use the native [`local-host-powershell`](/docs/prism/architecture/connectors/local-host-powershell) connector. It collects the same data through `Get-CimInstance`, and needs only PowerShell and the `Mdbc` module.
+Python implementation: requires Python 3.8+ and `psutil`. For a Windows machine without Python, use the native [`local-host-powershell`](/docs/prism/architecture/connectors/local-host-powershell) connector. It collects the same data through `Get-CimInstance`, and needs only PowerShell and the `Mdbc` module.
 
 ## Features
 
@@ -59,7 +59,7 @@ python.exe C:\path\to\sightline-prism\connectors\local-host-python\collect.py
 If Python isn't installed on the target machine, use the native
 [`local-host-powershell`](/docs/prism/architecture/connectors/local-host-powershell) connector instead.
 
-### systemd Service (Linux)
+### Systemd Service (Linux)
 
 Create `/etc/systemd/system/prism-agent.service`:
 
@@ -111,7 +111,7 @@ sudo systemctl start prism-agent.timer
 
 ## Output
 
-Creates snapshots in MongoDB collection: `snapshots_local-host-python`
+The connector creates snapshots in the MongoDB collection `snapshots_local-host-python`.
 
 Each snapshot contains:
 - Timestamp

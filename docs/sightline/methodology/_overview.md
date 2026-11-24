@@ -9,7 +9,7 @@ The method models the security architecture of a system with security zones, and
 | [Lamina elements](/docs/sightline/methodology/lamina-elements) | Which bow-tie element, control kind, control type or rating field records a part of a risk? |
 | [Metron assessment](/docs/sightline/methodology/metron-assessment) | Which part of an assessment holds a practice, a scope, an outcome, a shared answer or a finding? |
 
-## The method in short
+## The Method in Short
 
 1. Model the security architecture, not the physical architecture. A zone groups nodes that share common security requirements and need a common boundary. A zone can follow an existing network security control, such as a firewall, but it does not have to.
 2. Draw relationships between the nodes. A channel states that information could move between two nodes, and a flow states what information moves.

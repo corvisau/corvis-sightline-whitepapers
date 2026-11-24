@@ -1,6 +1,6 @@
 An organisation's asset inventory is spread across the systems that manage its assets. Each system holds the part of the picture that its own job needs. No system holds all of it, and the parts disagree.
 
-## Each source sees part of the estate
+## Each Source Sees Part of the Estate
 
 | Kind of source | What it knows well | What it misses |
 |---|---|---|
@@ -12,7 +12,7 @@ An organisation's asset inventory is spread across the systems that manage its a
 
 An inventory taken from one of these sources is accurate for that source's job and incomplete for every other job.
 
-## The parts disagree
+## The Parts Disagree
 
 When two sources describe the same asset, they rarely describe it the same way. The diagram shows one server as four sources report it.
 
@@ -43,7 +43,7 @@ The disagreements fall into four kinds:
 - **Presence.** A machine that was retired from the cloud stays in the CMDB. A device that cannot run an agent appears only in a spreadsheet.
 - **Time.** Each source refreshes on its own cycle, from minutes for an agent to months for a spreadsheet.
 
-## Why the usual fixes do not hold
+## Limits of the Usual Fixes
 
 A one-off import at the start of a project is accurate on the day it runs. From then on it drifts, because nothing connects it to the sources that keep changing.
 
@@ -51,7 +51,7 @@ A hand merge in a spreadsheet resolves each conflict once. It does not record wh
 
 A scheduled sync that keeps the most recent value lets the least trusted source win whenever it happens to run last. A spreadsheet loaded on a Friday then overwrites the agent's Thursday reading.
 
-## What a fix needs
+## Requirements for a Durable Fix
 
 A durable answer meets each of these needs. The right-hand column names the part of Prism that meets it.
 

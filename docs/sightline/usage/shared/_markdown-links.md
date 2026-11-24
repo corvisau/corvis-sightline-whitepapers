@@ -13,7 +13,7 @@ Type the object's id after `sightline:` as the link target, for example `[the hi
 
 The picker below writes the link for you. Each app section lists the objects it can link to.
 
-## Insert a link from the picker
+## Insert a Link from the Picker
 
 The picker writes the link, so you do not type an id.
 
@@ -29,7 +29,7 @@ The list sorts each type by id. It renders the first 50 matches, and typing narr
 
 The list leaves out an object whose id another object also owns, because a link to that id renders as broken. It also leaves out an id that a link cannot carry, such as one containing `/`.
 
-## What the link does
+## Markdown Link States
 
 | Link state | How it renders | On click or Enter |
 |---|---|---|
@@ -43,7 +43,7 @@ A resolved link opens the object through the same path as selecting it on the ca
 
 A broken link stays focusable, so a keyboard or screen-reader user can read its tooltip.
 
-## Which fields
+## Fields That Support Markdown Links
 
 Every multiline field in the drawer renders as Markdown and supports links.
 
@@ -51,7 +51,7 @@ A link resolves against the model as staged in the drawer, whichever Tetra data 
 
 An object you created and have not saved yet is linkable. An object you have staged for deletion stops resolving, and its links render as broken.
 
-## Annotation bubbles on the canvas
+## Annotation Bubbles on the Canvas
 
 A `sightline:` link in a `markdown` annotation uses the same syntax and shows the same three states as a link in a drawer field. Clicking a resolved link opens the object in the drawer.
 
@@ -74,7 +74,7 @@ An information item uses its composite id, such as `d-plc-1.i-func`.
 
 The picker inserts a link such as `[PLC 1](sightline:d-plc-1)`. It lists objects in this order: zones, groups, devices, networks, information items, systems, channels, flows, annotations. A blank or multi-line selection is replaced with the object's label, or with its id when the object has no label.
 
-The picker also leaves out a synthetic channel and an orphans bucket, which Tetra creates and you did not add.
+The picker also leaves out an orphans bucket, which Tetra creates and you did not add.
 
 Tetra ids are unique within a type, not across types, so a device and a flow can share an id. A link to that id renders as broken. Rename one of the two ids to link to either object.
 

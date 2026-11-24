@@ -2,7 +2,7 @@ Sightline is source-available software under the Sightline Licence. It is not op
 
 The binding terms are in the `LICENSE.md` file that ships with the product. The summary at the top of that file is not the licence.
 
-## How the apps enforce the licence
+## Licence Enforcement in the Apps
 
 - **A commercial licence names the apps that it unlocks.** The licence carries one grant for each app: `edit:lamina`, `edit:tetra` and `edit:metron`.
 - **Reading Metron data from Tetra needs its own grant.** The `view:metron` grant covers the findings badges and the coverage overlay in Tetra. It does not unlock editing.
@@ -12,7 +12,7 @@ The binding terms are in the `LICENSE.md` file that ships with the product. The 
 
 See [Licensing](/docs/sightline/usage/shared/licensing) for the banner, the licence badge and the behaviour of each app.
 
-## Deployment options
+## Deployment Options
 
 The licence applies in the same way to each of the three deployment options.
 

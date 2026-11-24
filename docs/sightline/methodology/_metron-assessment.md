@@ -1,6 +1,6 @@
 A Metron assessment applies a requirement package to a Tetra model. Each requirement selects the entities it applies to, and each requirement and entity together make one pair. A person assesses each pair, and raises findings over the pairs that need action. Each part of an assessment has one job, and an assessment stays readable when each part does only that job.
 
-## The parts of an assessment
+## The Parts of an Assessment
 
 | Part | What it represents | Where it lives |
 |---|---|---|
@@ -28,7 +28,7 @@ The requirement type is `control` or `architecture`. The type describes the requ
 
 The category is a path of group names. The Dashboard tab and the portfolio roll-up count outcomes at each level of that path, so give the category the structure of the framework.
 
-## Scope and pairs
+## Scope and Pairs
 
 The scope rule of a requirement selects the entities that the requirement applies to. Metron runs the rule over the whole bound model, and each entity that the rule selects becomes a pair. Nobody authors a pair by hand.
 
@@ -36,7 +36,7 @@ Choose the entity kind that holds the practice. A practice that a boundary enfor
 
 A pair follows the model. Add a zone and its pairs appear. Narrow the rule, or remove an entity, and its pairs become orphans, which keep their assessment.
 
-## Outcomes and statuses
+## Outcomes and Statuses
 
 Each pair carries two independent values. The status records how far the assessment has progressed, and the outcome records what the assessor found. A pair can be done with a failing outcome.
 
@@ -52,7 +52,7 @@ The scheme has no weighted score. The fundamental of the chosen outcome is the c
 
 A requirement can replace the statuses of the scheme with its own list. Use this only when that requirement has a different review workflow. Each list covers all three fundamentals. See [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model).
 
-## Manual and rule assessment
+## Manual and Rule Assessment
 
 A requirement sets its assessment method to `manual` or `rule`. With `manual`, the assessor picks each outcome. With `rule`, an assessment rule suggests an outcome for each pair it returns.
 
@@ -60,7 +60,7 @@ Use `rule` when the model holds the fact that settles the requirement. A rule th
 
 A rule never completes a pair. An outcome that the assessor sets takes precedence over the outcome of the rule, and only a person moves a pair to done. A pair for which the rule returns no row stays unassessed. See [Rules](/docs/sightline/usage/metron/rules).
 
-## Attributes and tags
+## Attributes and Tags
 
 An attribute is a named property with an optional value, such as `mil` with the value `MIL3`. A typed attribute is also a check that the assessor records against each pair as met, partial or not met. These per-attribute states never change the outcome or the Dashboard count.
 
@@ -68,7 +68,7 @@ A tag is a free label with no value, such as `EDR`. Use an attribute when the pr
 
 Put attributes that many requirements share in an attribute set. A requirement attaches the set and overrides any attribute of the set by name. A pair can override attributes in the same way, which records a target state for one entity without a change to the requirement. See [Attributes, attribute sets and tags](/docs/sightline/usage/metron/attributes).
 
-## Reusing an assessment
+## Reusing an Assessment
 
 Many pairs often get the same answer, such as one control that applies the same way in fifteen zones. Metron has four ways to reuse work across pairs:
 
@@ -91,13 +91,13 @@ A finding records each member as it was when the member was added. When the outc
 
 A person can promote a finding into a Lamina cause, which links the gap to the risk register. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 
-## Component package versions
+## Component Package Versions
 
 A requirement package names each component package that it uses. Each entry is pinned to one version or floats to the installed version. Pin an entry when an assessment must stay stable against the rules and the scheme it was assessed with. Let an entry float while the catalogue still changes.
 
 An assessment stays on the version of the requirement package that it was made against. To assess a new version of the package, make a new binding. The portfolio roll-up counts only the assessments of one package version. See [Portfolio roll-up](/docs/sightline/usage/metron/portfolio-rollup).
 
-## Choosing between them
+## Choosing Between Them
 
 | You want to | Use |
 |---|---|

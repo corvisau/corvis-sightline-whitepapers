@@ -3,7 +3,7 @@ architect can see that a node is flagged without switching apps. See
 [Findings Tab](/docs/sightline/usage/metron/findings) for how findings are created and
 reviewed in Metron itself. This page covers only how they appear here.
 
-## The badge
+## The Badge
 
 A small `⚠` badge appears in the corner of any Zone, Group, Device, Network,
 Information, or System node that one or more Metron findings reference. It sits in the
@@ -27,7 +27,7 @@ kind that Metron can bind an assessment to. Overlays are not one of them. They
 have no edit schema, never appear in the Tabular Editor, and are excluded from
 the entity kinds an assessment scope can select.
 
-## The popup
+## The Popup
 
 Hovering a badge opens a popup listing every finding attached to that
 entity: label, a severity dot (low, medium, high or critical), and status
@@ -49,7 +49,7 @@ entity: label, a severity dot (low, medium, high or critical), and status
   extension. If the extension is not installed or cannot activate, a warning
   appears instead of the jump.
 
-## "View Findings on Diagram" command
+## "View Findings on Diagram" Command
 
 In the browser, select **Tools**, then **View findings on diagram**. The item is disabled when no authored finding references the model.
 
@@ -61,7 +61,7 @@ the **Slices** view does not list it. Picking any slice in the **Slices** view
 exits back to normal browsing. If no findings reference the
 current model, an info message says so and nothing changes.
 
-## Coverage overlay
+## Coverage Overlay
 
 Metron's assessment coverage is painted on the same entities through a separate,
 opt-in overlay. See [Coverage overlay](/docs/sightline/usage/tetra/coverage-overlay).

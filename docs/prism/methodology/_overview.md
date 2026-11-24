@@ -8,7 +8,7 @@ The methodology pages explain the problem Sightline Prism solves, the model it u
 | [How Prism works](/docs/prism/methodology/how-prism-works) | What happens to an asset record between its source and the consolidated dataset? |
 | [Designing sync rules](/docs/prism/methodology/designing-rules) | Which source speaks for which field, which changes need a person, and when is an asset missing? |
 
-## The method in short
+## The Method in Short
 
 1. Collect from every system that knows about an asset, and change none of them during collection. Each source keeps its own connected dataset.
 2. Match records on identity, not on name. A serial number outranks a MAC address, and a MAC address outranks a host name.

@@ -1,7 +1,7 @@
 A panel for authoring the templates your entities inherit from. How templates
 behave is covered in the [Tetra templates](/docs/sightline/usage/tetra/templates) page.
 
-## Opening it
+## Opening It
 
 Select **Templates** in the toolbar of an open Tetra diagram. You can also run
 **Tetra: Edit Templates** from the command palette with a Tetra model
@@ -17,12 +17,13 @@ If no Tetra model is open, the command tells you so and does nothing.
 
 In the browser, select **Templates** to open an editor tab in the web shell. The diagram keeps its unsaved changes while you use the editor. A reader token opens the editor with every editing control disabled. A standalone Tetra page opens the editor in another browser tab.
 
-## What it lists
+## Template Editor File List
 
 In the browser, **Import file…** asks for the path of an existing YAML file relative to the model directory on the server. This registers that file as a template file. **Create file…** creates a new file in the same model directory.
 
 Every template in every template file the model registers, one row per
-template:
+template. The rows sit in a grid. With **All types** selected, the grid shows
+these columns:
 
 | Column | Meaning |
 |---|---|
@@ -33,6 +34,15 @@ template:
 
 Two dropdowns narrow the list: **File** (one template file, or all of
 them) and **Type** (one entity type, or all of them).
+
+When you select one type, the grid shows that type's own fields as columns, after
+the id and the label, with the source file last. A device template shows device
+fields, and a zone template shows zone fields.
+
+The grid header has **Columns**, **Filter** and **Group** controls. **Columns**
+shows, hides and reorders columns. **Filter** narrows the rows by conditions.
+**Group** groups the rows by a column. Each column header also has its own
+filter. The grid remembers the columns you choose for each type.
 
 The type is one of the eight templatable types that the [Tetra templates](/docs/sightline/usage/tetra/templates) page lists: zone,
 group, device, network, information, channel, flow, system. The recommended id
@@ -45,24 +55,35 @@ A model that registers no template file shows **No template files declared in
 this manifest.** with **Import existing template file…** and **Create new
 template file…**. They work as **Import file…** and **Create file…** below.
 
-## Editing a template
+## Editing a Template
 
-Click a row to open the props drawer for that template. The form is the
+Click a row, outside a cell you can edit, to open the props drawer for that
+template. Double-clicking such a cell, or pressing Enter in it, does the same. In
+a cell you can edit, a click, a double-click or Enter edits the cell instead.
+Right-click a row for its menu: **Open** first, then **Move up** and **Move
+down** where the order can change, then **Delete**. The form is the
 edit schema for the row's own type, so a device template offers device fields
 and a zone template offers zone fields.
 
-A channel or flow template's `nodeA`/`nodeB` render the same node picker the
-canvas gives channels and flows. It is a searchable dropdown over the model's
-existing nodes. A system template's `members` renders
-a chip multi-select over the same nodes. Both pickers are closed: an id typed but not selected
-from the dropdown is not committed.
+A channel or flow template's `nodeA` renders the same node picker the canvas
+gives channels and flows. It is a searchable dropdown over the model's existing
+nodes. Its `nodeB` renders the same target rows as the drawer. A system
+template's `members` renders a chip multi-select over the same nodes. These
+pickers are closed: an id typed but not selected from the dropdown is not
+committed.
 
-A field edit in the drawer stays pending. Select **Close** to keep the edit pending and return to the list. Select **Save all** on the save bar at the bottom of the editor to write every pending edit. **Undo** and **Discard all** on the same bar revert pending edits.
+With one type selected, a cell for a text, number, true/false or choice field
+edits in place. Click the cell, change the value, and press **Enter**. Press
+**Escape** to cancel. A number field refuses text that is not a number. The id
+and the source file are read-only. A field with its own editor, such as the
+template parent, properties or links, opens in the drawer.
+
+A field edit in the drawer or in a cell stays pending. Select **Close** to keep the edit pending and return to the list. Select **Save all** on the save bar at the bottom of the editor to write every pending edit. **Undo** and **Discard all** on the same bar revert pending edits.
 
 Edits go back to the template file the row came from. The other template
 files stay unchanged, even when several are open in the list.
 
-## Adding, deleting and reordering
+## Adding, Deleting and Reordering
 
 - **+ New template** opens the props drawer in create mode, which is the
   same drawer that edits a row. Choose the type at the top of the form. Then
@@ -79,10 +100,10 @@ files stay unchanged, even when several are open in the list.
   template. If any do, the confirmation lists them and the button becomes
   **Force delete**. Deleting anyway leaves those entities pointing at a
   template that no longer exists, which Tetra reports as a warning.
-- **Drag a row** to reorder templates inside a file. Reordering is only
-  available once you have narrowed to a single file and a single type.
+- **Move up** and **Move down** on a row reorder templates inside a file.
+  They appear once you have narrowed to a single file and a single type.
 
-## Managing template files
+## Managing Template Files
 
 The toolbar's file controls change which template files the model registers:
 

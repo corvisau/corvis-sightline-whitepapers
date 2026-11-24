@@ -1,7 +1,7 @@
 A requirement's scope and its assessment both route through the same catalog:
 a **Rule**.
 
-## One Rule catalog, two reference points
+## One Rule Catalog, Two Reference Points
 
 A Rule has an id, a title and a program, a named Bonsai set-pipeline program.
 You author a rule in a **rule package**, and a requirement package uses it by
@@ -28,6 +28,10 @@ Open the rule package in its own editor. Its **Rules** tab is a full-width grid,
 and every create and edit happens in the rule drawer, the slide-in panel. The
 Rules panel of Tetra uses the same drawer.
 
+The rule drawer opens 720 pixels wide. Drag its left edge to resize it, and
+double-click the edge to return to 720 pixels. The drawer keeps the width you set
+for the next rule you open.
+
 1. Select **+ Add rule**. The drawer opens as **New rule**.
 2. Enter a **Rule id** and a **Title**. A rule needs a title.
 3. Choose a **Mode**. The drawer selects `generator` and gives each mode a one-line explanation.
@@ -52,9 +56,16 @@ The drawer says what is wrong in three places:
 
 A help icon beside each field opens a short explanation. It opens on hover and when you tab to it.
 
+**Test rule** runs the edited rule over the package without saving it. The panel under the drawer lists each record the run would create, change, close or return as a row of a table: the key of the record, a name, and the kind as the status (Created, Changed, Closed or Returned). A line above the table counts the rows for each kind. Hover over the status of a row, or tab to it, to read the data of the record as one `field: 'value'` line for each field. The **Details** button on the row shows the same lines under the row. The table shows the first 20 rows, and **Show more** lists the rest.
+
+In a rule package with the domain `tetra`, **Test rule** runs the rule over one Tetra model that uses the package. When more than one model uses the package, a list beside the button chooses the model. When one model uses it, the list does not appear and the test runs over that model. When no Tetra model uses the package, **Test rule** stays off and the line above the buttons says so. The button also stays off while the editor reads which models use the package.
+
+In a rule package with the domain `metron`, **Test rule** runs the rule over one assessed model. An assessed model is a Tetra model with an assessment whose requirement package uses the rule package. The list beside the button, and the line that says **Test rule** is off, work as they do for a `tetra` package. A Tetra model that only lists the package in its own `uses` list is not an assessed model of a `metron` package.
+
 The rule waits in the save bar until you select **Save all**. To edit a rule,
-right-click its row and select **Edit**. The same menu carries **Delete**.
-Left-clicking a row does nothing.
+click its row, or focus a cell and press Enter. A double-click also opens it.
+Right-click a row for a menu that starts with **Open** and also carries
+**Delete**.
 
 ⚠️ **A rule's id is fixed once created.** It is what the **Scope rule** and
 **Assessment rule** pickers point at, and neither is rewritten on rename, so the drawer
@@ -75,6 +86,10 @@ Key parts, data fields and the rules it depends on are lists of rows. Add a row,
 remove a row, or drag a row by its handle to change the order. The Tetra page
 [Rules and findings](/docs/sightline/usage/tetra/rules-and-findings) lists the controls.
 
+A `generator` rule can end its program with the **Emit record** step of the query
+builder. When the program ends in a readable **Emit record** step, the key parts
+and the data field names come from that step. The same page describes the step.
+
 A mode shows only the fields it uses. When you change the mode, a line under the
 choice names the values that the new mode drops on **Save**.
 
@@ -82,18 +97,18 @@ A requirement runs only a rule whose mode is `generator` or `transform` and whos
 input is the model. A `manual` rule, or a rule that reads records, cannot scope or
 assess a requirement.
 
-The drawer shows the program as a list of steps. Each statement is a numbered
-row, with a badge that says what it does and a short description of what it
-selects. A generator's last step has the **Emit** badge. A comment shows as a
-caption, and a disabled statement stays in its place with an **off** badge.
-**Show code** shows the program as text, one statement on each line, with a Copy
-button. A line above the program reads **(no query)**, **1 statement** or
-the number of statements. Select **Edit query** to open the shared query builder in a
-dialog, the same pipeline editor Requirements and the Worklist use for their own
-filters. Select **Apply** to return the edited program to the drawer, or
-**Cancel** to keep the program as it was. Escape closes only the dialog, and the
-drawer stays open. Applying marks the rule as changed, and it is written with
-**Save all** like every other edit.
+The drawer shows the program as one summary line, for example **Custom query · 1 statement**. The type is one of these:
+
+| Type | Meaning |
+|---|---|
+| **Filter** | The Basic tab of the query builder can show the program |
+| **Adds** | Every enabled statement only adds items |
+| **Removes** | Every enabled statement only removes items |
+| **Custom query** | Any other program |
+
+A program with no enabled statement shows no type. The count reads **(no query)**, **1 statement** or the number of statements, and adds the number of disabled statements.
+
+Select **Edit query** to open the shared query builder in a dialog. It is the same pipeline editor that Requirements and the Worklist use for their own filters. **Show code** in the dialog shows the program as text, with a Copy button. Select **Apply** to return the edited program to the drawer, or **Cancel** to keep the program as it was. Escape closes only the dialog, and the drawer stays open. Applying marks the rule as changed, and **Save all** writes it like every other edit.
 
 On a rule with no program, **Edit query** opens the builder on one starter
 statement. A new rule and a manual rule that you switch to `generator` start from
@@ -124,7 +139,7 @@ reference, and reports an unresolved-reference diagnostic on its next load.
 Read the rule package's **References** tab before you delete: its count covers
 every requirement package in the workspace.
 
-## Rules in a requirement package
+## Rules in a Requirement Package
 
 A requirement package's **Rules** tab lists every rule the package can use, and
 changes none of them. It has no **+ Add rule** button and no drawer, and it offers no delete.
@@ -139,7 +154,7 @@ changes none of them. It has no **+ Add rule** button and no drawer, and it offe
 The host refuses any rule write against a requirement package, whatever sends
 it.
 
-## Column visibility
+## Column Visibility
 
 The Rules grid renders in two places: a rule package's own editor, and a
 requirement package's read-only **Rules** tab. It is the grid of the Rules panel
@@ -147,17 +162,20 @@ of Tetra. Each place has its own **Columns** button in the grid header to show,
 hide and reorder columns, and the header also carries **Filter** and **Group**:
 
 - The rule package's own editor starts with **rule**, **title**, **mode**,
-  **used by** and **links**. The requirement package's Rules tab starts with
-  **package**, **rule**, **title**, **used by** and **links**. **package** names
-  the rule package each rule comes from.
-- The picker also offers **input**, **depends on**, **hide**, **severity**,
-  **records** and **problems**.
+  **used by**, **records** and **problems**. The requirement package's Rules tab
+  starts with **package**, **rule**, **title**, **used by** and **own links**.
+  **package** names the rule package each rule comes from.
+- **own links** summarises the links that the author of the rule attached to it.
+  The rule package's own editor hides it until you choose it.
+- The picker also offers **input**, **depends on**, **hide** and **severity**. The
+  requirement package's Rules tab also offers **records** and **problems**, which
+  stay empty there.
 - Drag the handle at the left of a column header to move that column. To use the keyboard, focus the handle, press Space, press the left or right arrow key, then press Space again. The picker shows the same order, and a drag never sorts the column.
 - The choice is personal and local, and each place keeps its own.
 - A column's width saves the same way after the reader drags its resize
   handle.
 
-## Scope execution: the whole program, over the whole model
+## Scope Execution: The Whole Program, over the Whole Model
 
 When a requirement's scope is resolved,
 the referenced Rule's entire program runs over every entity in the
@@ -165,7 +183,26 @@ bound tetra model. No separate kind pre-filter applies before the
 program runs. The program's `result` register (populated by `save`/`add`/
 `remove`) becomes the in-scope entity set.
 
-## Assessment execution: rows with an outcome, matched against the scheme
+A scope rule reads each entity as an assessment rule does, so a program selects
+the same entities in either place. Besides the entity's own fields, it can read:
+
+| Field | On | Holds |
+|---|---|---|
+| `zoneId` | Zones, groups, devices, networks and information items | The id of the nearest enclosing zone; a zone holds its own id |
+| `parent`, `children` | The same | The containment edges that `follow("parent")` and `follow("children")` walk |
+| `zoneA`, `zoneB`, `isCrossZone` | Channels and flows | The zones of the two ends, and whether they differ |
+| `isCrossZoneExposed` | Zones | Whether a cross-zone channel or flow ends in the zone |
+
+For example, a requirement that applies to every device in a zone at security
+level target 3, including the zones nested inside it:
+
+```
+model |> where("item.kind == 'zone' && item.slT == 3") |> follow("children") |> includeKinds("device") |> add()
+```
+
+An assessment slice's entity filter reads the same fields.
+
+## Assessment Execution: Rows with an Outcome, Matched Against the Scheme
 
 When a requirement's **Assessment method** is `rule`, the referenced Rule is a
 `transform`. It ends in `save(result)` or `add()` and returns one row for each
@@ -204,7 +241,7 @@ completed pair.
 A row with no string `outcome`, or a program that saves a single value, produces
 a warning and assesses nothing.
 
-## Rule catalog vs. Requirement scope/assessment - quick reference
+## Rule Catalog vs. Requirement Scope/Assessment - Quick Reference
 
 | Concept | Where you set it | What it does |
 |---|---|---|

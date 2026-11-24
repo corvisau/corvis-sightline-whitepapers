@@ -1,18 +1,18 @@
 A Lamina model describes risk as a bow-tie diagram. An event sits in the centre. The causes that can lead to it sit on the left, and the outcomes that can follow it sit on the right. Controls sit on the lines between them. Each part of the model has one job, and a model stays readable when each element does only that job.
 
-## The elements
+## The Elements
 
 | Element | What it represents | Owns |
 |---|---|---|
 | Event | The moment control is lost, between its causes and its outcomes | Nothing; it lists the outcomes it can produce |
-| Cause | A way the event can start | Its actor, vector, exposure, likelihoods and controls; it lists the events it can lead to |
+| Cause | A way the event can start | Its actors, likelihoods and controls; it lists the events it can lead to |
 | Outcome | A result that can follow the event | Its consequence ratings and controls |
 | Control | A barrier on the line between a cause and the event, or between the event and an outcome | The fields of its kind. See [Controls](#controls) |
 | Risk | A group of cause-event-outcome paths that is rated as one | Nothing; it names its members. See [Risks](/docs/sightline/usage/lamina/risks) |
 
 A path runs from a cause through one of its events to one outcome of that event. A cause can point at several events, and several causes can point at one event. An event can point at several outcomes, and several events can point at one outcome. These links are references, so one outcome serves every event that names it.
 
-## Causes, events and outcomes
+## Causes, Events and Outcomes
 
 Choose the event first. An event is the point where a hazard is released or control of a system is lost. An example is loss of control of a pumping station. An event sits between the trigger and the damage. A candidate event that reads as a trigger belongs on the left as a cause. A candidate that reads as damage belongs on the right as an outcome.
 
@@ -20,21 +20,23 @@ A cause is one specific way the event can start, such as malware brought in on a
 
 An outcome is one specific result of the event, such as an untreated discharge to a river. An outcome carries its consequence ratings, one for each consequence category of the risk matrix. It also records the lines of business it affects and whether you judge it a material risk. Neither of those two fields changes the rating.
 
-## Actor, vector and exposure
+## Actor, Source Zone and Flows
 
-A cause describes its threat with three attributes. Each one answers a different question.
+A cause describes its threat with three pieces of information. Each one answers a different question.
 
-| Attribute | Question it answers | Fields |
+| Piece | Question it answers | Where it comes from |
 |---|---|---|
-| Actor | Who or what can trigger the cause? | Intent, capability and motivation |
-| Vector | By which route does the cause reach the target? | Complexity, source zones and interfaces |
-| Exposure | What is the cause able to reach, and in which zones? | Zones |
+| Actor | Who or what can trigger the cause? | The `actor` property of the cause, a list of text items shown as chips |
+| Source zone | Where does the cause start? | The source zone of the Tetra flows that the cause links |
+| Flows | By which route does the cause reach the target? | The Tetra flows that the cause links |
 
-A cause owns its actor, vector and exposure. Reuse comes from a template, so two causes with the same actor each name the same actor template. A vector can link the records that Tetra rules create for a channel or flow, and Lamina reports when a linked record changes. See [Record links](/docs/sightline/usage/lamina/finding-links).
+The cause node on the Risk canvas shows them under **Actor**, **Exposure** and **Vector**. A cell reads a dash when the cause has no value for it. A cause that links no flow has a dash in the **Exposure** and **Vector** cells.
 
-Each attribute can carry a base likelihood and a list of suggested control templates. The base likelihood is a starting point to read when you set the likelihoods of the cause. The rating reads the likelihoods of the cause, never the base likelihood of an attribute. A suggested control template appears in the drawer of a cause that uses the attribute, ready to add.
+Add the actors of a cause as chips in its **Properties** field. A cause template can set the chips as a default, and a cause that sets its own list replaces the whole list from the template. See [Entity properties](/docs/sightline/usage/shared/entity-properties). A cause takes its source zone and its flows from the Tetra records that it links. See [Record links](/docs/sightline/usage/lamina/finding-links).
 
-The exposure and vector of a cause also group the causes of an event when the model uses a grouped likelihood rule. See [Choose the aggregation rule](/docs/sightline/usage/lamina/risks#choose-the-aggregation-rule).
+A cause template can list control templates that it suggests. They appear in the drawer of a cause that uses the template, ready to add.
+
+The source zone of a cause also groups the causes of an event when the model uses the `exposure-grouped` likelihood rule. See [Choose the aggregation rule](/docs/sightline/usage/lamina/risks#choose-the-aggregation-rule).
 
 ## Controls
 
@@ -63,7 +65,7 @@ Mark a control as critical when the risk depends on it. The critical flag and th
 
 A conditional modifier never changes the residual rating, and Lamina does not evaluate its condition. Effectiveness ratings do not change the rating either. They record the state of each barrier, and you carry that judgement into the likelihoods and consequences below. See [Authoring controls](/docs/sightline/usage/lamina/authoring-controls).
 
-## Inherent and residual
+## Inherent and Residual
 
 A rating has two sides. The inherent side rates the risk with no controls in place. The residual side rates it with the controls in place today.
 
@@ -78,18 +80,18 @@ A Risk takes the level of its worst event and outcome pair, unless its aggregati
 
 ## Zones
 
-A zone id on a cause, outcome, exposure, vector or control names a zone in a Tetra model. A cause passes its zones to its preventative controls, and an outcome passes its zones to its mitigative controls. A control that sets its own zones uses those instead. The zones decide which zone assessments colour the element badges of a control. See [Zone ids name Tetra zones](/docs/sightline/usage/lamina/authoring-controls#zone-ids-name-tetra-zones).
+A zone id on an outcome, objective or control names a zone in a Tetra model. An outcome passes its zones to its mitigative controls, and a control that sets its own zones uses those instead. A preventative control states its own zones. A cause takes its zones from the Tetra flows that its vector links. The zones decide which zone assessments colour the element badges of a control. See [Zone ids name Tetra zones](/docs/sightline/usage/lamina/authoring-controls#zone-ids-name-tetra-zones).
 
-## Choosing between them
+## Choosing Between Them
 
 | You want to record | Use |
 |---|---|
 | The point where control is lost | An event |
 | A way the event can start | A cause |
 | A result of the event | An outcome |
-| Who or what triggers a cause | The actor of the cause |
-| The route a cause takes to the target | The vector of the cause |
-| What a cause can reach, and where | The exposure of the cause |
+| Who or what triggers a cause | The actor chips of the cause |
+| The route a cause takes to the target | The flows that the cause links |
+| Where a cause starts | The source zone of those flows |
 | A barrier whose effectiveness you rate | An assessed control |
 | A baseline barrier that is either in place or not | An inherent control |
 | A barrier on an outcome that counts only under a condition | A conditional modifier |

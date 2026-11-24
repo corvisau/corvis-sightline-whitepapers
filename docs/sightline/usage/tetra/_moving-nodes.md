@@ -1,14 +1,14 @@
 Use **Move…** to place one node, or several nodes at once, under a different
 parent on the Tetra canvas.
 
-## Moving one node
+## Moving One Node
 
 Right-click a zone, group, device or network and choose **Move…**. The
 picker dialog shows the zones and groups that can hold it.
 Select a parent and choose **Move here**. The node keeps its place in the
 canvas until you save, and **Undo** returns it to its previous parent.
 
-## Moving several nodes
+## Moving Several Nodes
 
 1. Hold **Cmd** (macOS) or **Ctrl** (Windows and Linux) and click each node to select it.
 2. Right-click one of the selected nodes.
@@ -19,7 +19,7 @@ Every selected node moves to the parent you picked, in the order you selected
 them. The nodes do not need to share a parent. **Undo** returns all of them in
 one step.
 
-## When Move… is not available
+## Selections That Cannot Move
 
 The menu omits **Move…** for a selection that contains:
 

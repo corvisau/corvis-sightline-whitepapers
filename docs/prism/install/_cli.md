@@ -4,7 +4,7 @@ This page covers what you get, and how to confirm you got it. [Installing Standa
 
 Read [Prerequisites](/docs/prism/install/prerequisites) before you start.
 
-## How to get it
+## Install the Operator CLI
 
 Pass `--role central` or `--role both` to the installer.
 
@@ -16,7 +16,7 @@ node install.mjs --dir ../acme-central --role central --connectors spreadsheet
 
 The CLI carries its own copy of the engine. Its build compiles the sync engine, the connector SDK and the shared review logic into each command. The install therefore reaches no registry, and it puts no source on the machine.
 
-## What the install produces
+## Operator CLI Entry Points
 
 Five entry points.
 
@@ -28,7 +28,7 @@ Five entry points.
 | `prism-seed-tables` | Seeds table definitions |
 | `prism-migrate-rules` | Migrates rules into storage |
 
-## Verify the install
+## Verify the Install
 
 Change into the runtime instance. List its entry points.
 
@@ -41,17 +41,8 @@ ls node_modules/.bin/
 
 If none of the five appears, the node was installed as a collector. Re-run the installer against the same directory with `--role central`.
 
-## Where it runs
+## Runtime Instance for the Operator CLI
 
 The CLI runs from a runtime instance, not from the directory the installer ran in. It reads that instance's environment and data, exactly as a collector does.
 
 One consequence matters for write-back: `prism-drain` must run somewhere the source system is reachable. That is often not the machine that runs the sync.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I install Prism? | [Installing Standalone Prism](/docs/prism/install/prism) |
-| What is the operator CLI? | [The operator CLI](/docs/prism/architecture/cli) |
-| What is a runtime instance? | [The runtime instance](/docs/prism/install/runtime-instance) |
-| Which storage backend do I choose? | [Storage backends](/docs/prism/install/storage-backends) |

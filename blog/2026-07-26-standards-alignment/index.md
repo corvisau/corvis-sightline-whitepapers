@@ -9,9 +9,7 @@ draft: true
 Status: outline. Secondary, reference-style paper - publish after the three
 core papers have landed. Shorter and more direct than the others; reuses
 the Standards & Framework Alignment structure from the existing reference
-architecture documents. See also the living
-[Standards & framework alignment](/docs/standards-alignment) knowledge base
-page, which this paper expands on.
+architecture documents.
 
 {/* truncate */}
 

@@ -6,7 +6,7 @@ A collector reads one source and transmits a snapshot into Prism. This page cove
 cd acme-prism
 ```
 
-## One collector, many instances
+## One Collector, Many Instances
 
 A connector is code. An instance of it is a [connector manifest](/docs/prism/architecture/connector-model), at `.connectors/<type>.<instance>/manifest.json`.
 
@@ -14,7 +14,7 @@ You name the instance when you run the collector. The collector reads that manif
 
 So a single `crowdstrike` connector can serve two tenants as `crowdstrike.prod` and `crowdstrike.test`, with separate manifests and separate inboxes.
 
-## Start with a mock
+## Start with a Mock
 
 Two connectors need no credentials at all: `aws-ec2-mock` and `jira-assets-mock`. They generate synthetic records.
 
@@ -32,7 +32,7 @@ npx prism-collect-aws-ec2-mock demo
 
 The last line is the one that matters. No transmit line means no data reached the store, whatever else the log says.
 
-## Run a credentialed collector
+## Run a Credentialed Collector
 
 A real connector needs its credentials in the instance's environment. The manifest holds references; the values live in `.env`.
 
@@ -49,7 +49,7 @@ npx prism-collect-crowdstrike prod
 
 A missing credential fails the run and names the variable.
 
-## The PowerShell agents are different
+## The PowerShell Agents Are Different
 
 Two connectors run as PowerShell agents on the Windows machine being inventoried. They do not use the commands above, and they do not work the same way as each other.
 
@@ -58,7 +58,7 @@ Two connectors run as PowerShell agents on the Windows machine being inventoried
 | `local-host-powershell` | One script. Collects and writes in a single run. |
 | `ad-computers` | **Two scripts.** Collect to a file, then push that file. |
 
-### `local-host-powershell` — one script
+### `local-host-powershell` — One Script
 
 It collects local system information and writes the snapshot in one run. There is no intermediate file and no second step.
 
@@ -70,7 +70,7 @@ It needs the `Mdbc` PowerShell module to reach MongoDB.
 
 **Expected output.** A run log ending with the snapshot written.
 
-### `ad-computers` — two scripts
+### `ad-computers` — Two Scripts
 
 ⚠️ **This one is a two-step operation, and stopping after the first step is the common mistake.**
 
@@ -96,11 +96,11 @@ The first script queries Active Directory and writes a YAML file on disk. It doe
 
 The two scripts can run on the same machine. When the domain-joined host cannot reach MongoDB, copy the YAML file to a machine that can. Run the push there. `Push-ADSnapshot.ps1` accepts a path, a connection and a database.
 
-## Confirm the collection landed
+## Confirm the Collection Landed
 
 The transmit line in the run log is the first signal. To confirm independently, browse the dataset the collector wrote to; see [Browse datasets and changesets](/docs/prism/usage/browse).
 
-## Validate schemas
+## Validate Schemas
 
 Schema validation is a separate check. It confirms that the schema definitions themselves are sound, not that your collected data is correct.
 
@@ -112,19 +112,10 @@ node node_modules/@sightline/prism-connector-sdk/dist/schemas/metadata.js
 
 **Expected output.** A pass result with no reported failures.
 
-### What a failure means
+### Schema Validation Failures
 
 A validation failure here points at the schema definitions, not at your collected records. It means a schema in the registry does not hold together: a version is missing, or a definition is malformed.
 
 That is a code-level problem, not an operational one. It is not the check that tells you a collector produced bad data. A collector validates its own records as it runs, and reports the valid count in its snapshot summary. A total higher than the valid count is the signal that records were rejected.
 
 If schema validation fails after an upgrade, the installed packages are inconsistent. Read [Upgrading Prism](/docs/prism/upgrade/prism) for how to upgrade the instance.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I merge what I collected? | [Run a sync rule](/docs/prism/usage/sync) |
-| How do I see what arrived? | [Browse datasets and changesets](/docs/prism/usage/browse) |
-| What is a connector manifest? | [Connector model](/docs/prism/architecture/connector-model) |
-| How do I add a connector? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |

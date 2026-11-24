@@ -8,7 +8,7 @@ In Tetra, a data slice is a coarser mechanism that the model author defines, and
 
 ---
 
-## Entity type filter
+## Entity Type Filter
 
 The entity type filter selects which entity kinds the grid shows. Lamina offers a row of chips with **all** and **none** links. Tetra offers no chips and narrows by type through the filter button on the `type` column header.
 
@@ -24,17 +24,17 @@ The **Filter** and **Group** toolbar buttons open the shared query popovers. Lam
 
 The grid has no per-column text boxes under the header. Filter and Group replace them.
 
-### Disabling a statement
+### Disabling a Statement
 
 The query builder switches a statement off without deleting it. A disabled statement lets you test what a filter returns without that step, or park a step to finish later.
 
 To disable a statement, select the round button at the right of its row. The row dims and the button changes shape. Select the button again to enable the statement.
 
-A disabled statement keeps its steps and stays editable. The query does not run it, and the builder does not check it for errors. A register that a disabled statement saves does not exist for the statements after it. **Show code** lists a disabled statement with `//!` at the start of the line. A statement with no steps has nothing to disable. The summary beside **Edit query** counts disabled statements separately, for example `2 statements, 1 disabled`.
+A disabled statement keeps its steps and stays editable. The query does not run it, and the builder does not check it for errors. A register that a disabled statement saves does not exist for the statements after it. **Show code** lists a disabled statement with `//!` at the start of the line. A statement with no steps has nothing to disable. The summary line above **Edit query** counts disabled statements separately, for example `2 statements, 1 disabled`.
 
 When every statement is disabled, the query behaves like one that holds only comments. Tetra data slices then show the whole model, and Metron filters match nothing. The [Tetra](#tetra) and [Lamina](#lamina) sections and the Metron [worklist](/docs/sightline/usage/metron/worklist-filtering) page repeat this for their own filters.
 
-### Available Basic-tab filter fields
+### Available Basic-Tab Filter Fields
 
 Every filterable column is a Basic-tab field. The column set defines the fields. Operators follow the field type.
 
@@ -48,11 +48,11 @@ Per-type fields are Basic-tab fields as well as the fields common to every entit
 
 The `tags` field uses the `has any` operator (Bonsai `hasAny`). The `contains` operator does not match list members.
 
-### Available group-by fields
+### Available Group-by Fields
 
 Group offers only low-cardinality attributes. ID, Label and Description are near-unique per row, so Group does not offer them. The entity type filter narrows by entity kind, and Group organises the rows within whichever narrowing is active. The fields that Group offers differ by app.
 
-## Saved filters
+## Saved Filters
 
 In Lamina and Metron, the **Saved filters** button names and saves the current filter program. In Tetra, **Saved filters** is a section at the bottom of the **Filter** popover, and there is no separate button. You can re-apply or delete a saved filter later. Saved filters have these properties:
 
@@ -60,7 +60,7 @@ In Lamina and Metron, the **Saved filters** button names and saves the current f
 - Never part of the model. The app saves them nowhere in the model and does not share them with other users.
 - Named once. There is no rename or edit action. To change a saved filter, save a new one, or delete and re-save it, under the program you want.
 
-## Column visibility
+## Column Visibility
 
 The **Edit columns** toolbar button (**Columns** in Tetra, at the right of the table header) opens a popover that shows, hides and reorders columns. This is a different axis from the row-narrowing mechanisms above: it controls which of the available columns render. Every Metron grid with an **Edit columns** button has the same picker.
 
@@ -78,11 +78,11 @@ Tetra has five mechanisms: Filter, Group, the column header filter, column visib
 
 In the Table view, **Columns**, **Filter**, **Tree** and **Group** sit at the far right of the table header row. They stay in view when the table scrolls. **New** sits in the top toolbar, in place of the **View** menu. The **View** menu and the diagram **New** menu show only in the Diagram view.
 
-### Entity type
+### Entity Type
 
 The table opens with every entity type visible: the eight entity types plus `annotation`. No chips show. To narrow the rows by type, open the filter button on the `type` column header and untick the types that you do not want. **(Select All)** restores every type.
 
-### Source file
+### Source File
 
 A Tetra model can span several files. The grid shows the rows of every file by default, and no toolbar button selects files. The `sourceFile` column filters like any other column. Open its header filter, or add a `sourceFile` condition in **Filter** > Basic, to keep only some files.
 
@@ -90,11 +90,11 @@ The `sourceFile` popout opens with **(Blanks)** ticked. An entity that you creat
 
 The `sourceFile` condition composes (AND) with the `type` column filter and with every other condition of **Filter**. Lamina has no equivalent.
 
-### Advanced tab traversals
+### Advanced Tab Traversals
 
 The Advanced tab supports `follow('parent')`, `follow('children')`, `follow('nodeA')`, `follow('nodeB')` and `follow('path')`. They traverse the containment tree and the flow and channel endpoints.
 
-### Column header filter
+### Column Header Filter
 
 Every filterable column header carries a filter button. The button opens an Excel-style popout. The popout has these controls:
 
@@ -117,7 +117,7 @@ The header filter is available only while the program is Basic-representable. Af
 
 A multi-value condition that you set from a column header (`is one of`, `has any`) shows its values as removable chips. Remove one chip to narrow the condition, and remove the last chip to drop the condition. Build such a condition from the header popout. The Basic tab is where you see and prune it.
 
-### Tree view
+### Tree View
 
 The **Tree** button switches the grid between the flat list and a tree. The tree nests each row under the node that contains it, so a zone shows its groups, devices and networks beneath it. A chevron on a row expands and collapses its children. Every column, inline edit and row action works in the tree as it does in the flat list. Sorting orders the rows within each parent.
 
@@ -128,13 +128,13 @@ Two kinds of row have no containing node in the tree:
 - A row whose containing node is not in the model, such as a device in the orphaned devices group, shows at the top level.
 - Channels, flows, systems and annotations have no containing node. Each type that has rows sits under one folder row at the end of the tree, for example **Channels (12)**. A folder row is a label, with no checkbox, context menu or editable cell.
 
-A filter keeps the structure around each match. Suppose a row passes the type filter, a column filter or **Filter**, but the nodes that contain it do not. The grid still shows those nodes in muted italic text, and the tree expands to reveal every match. A muted row is a context row. It has no checkbox, and the select-all checkbox in the header skips it. A click on a context row opens its properties instead of selecting it. A context row still edits and still opens its context menu.
+A filter keeps the structure around each match. Suppose a row passes the type filter, a column filter or **Filter**, but the nodes that contain it do not. The grid still shows those nodes in muted italic text, and the tree expands to reveal every match. A muted row is a context row. It has no checkbox, and the select-all checkbox in the header skips it. A click does not select a context row. A double-click on it, or Enter in one of its cells, opens its properties, as on any other row. A context row still edits and still opens its context menu.
 
 Selecting a parent row selects only that row. Collapsed children stay unselected, so bulk edit changes only the rows that you tick. A new entity that you have not saved appears under its parent, and the tree expands to show it.
 
 The tree and **Group** exclude each other. Choosing **Tree** clears the grouping, and choosing a group returns the grid to the flat list.
 
-### Address filter fields
+### Address Filter Fields
 
 Tetra adds a fourth field type to the Basic-tab table.
 
@@ -146,7 +146,7 @@ The `covers` and `overlaps` operators take one address or one CIDR range (for ex
 
 The `addressing` column has no header filter, so build these conditions from the **Filter** Basic tab.
 
-### Group-by fields
+### Group-by Fields
 
 Tetra offers **Type** and **File**. The **Type** option organises rows by entity kind, and the **File** option organises them by source file, within whichever narrowing is active.
 
@@ -162,25 +162,25 @@ Three metadata columns are off by default. Enable them from the **Columns** popo
 
 Lamina has four mechanisms: the entity type chips, Filter, Group, and column visibility with Saved filters.
 
-### Entity type chips
+### Entity Type Chips
 
 The chip row at the left of the toolbar has the chips Causes, Events, Outcomes and Controls, plus **all** and **none** links. Metron has a compliance slice that folds into its **Filter**, but Lamina has no equivalent.
 
-### Advanced tab traversals
+### Advanced Tab Traversals
 
 The Advanced tab supports `follow('causes')`, `follow('events')` and `follow('outcomes')`. They traverse the forward and reverse edges of the bow-tie graph.
 
-### Filter fields
+### Filter Fields
 
 Per-type fields are Basic-tab fields. Examples are the `state` field of a cause, the `category` and `controlType` fields of a control, and the `materialRisk` field of an outcome. The `zones` field is a list field, like `tags`.
 
 Two kinds of field are Advanced-only:
 
 - `entityType`. The entity type chips already cover entity-kind filtering, so Lamina does not duplicate it as a Basic-tab field.
-- Any compound field, such as the `actor`, `vector` and `exposure` fields of a cause, `controls`, or the `consequence` field of an outcome. A compound field has no scalar shape that a Basic-tab condition can express.
+- Any compound field, such as `controls` on a cause or the `consequence` field of an outcome. A compound field has no scalar shape that a Basic-tab condition can express.
 
 Both stay reachable from the Advanced tab, for example with `item.state |> hasAny('...')` for the fields that apply.
 
-### Group-by fields
+### Group-by Fields
 
 Lamina offers only **Type** (cause, event, outcome or control). ID, Template, Label and Description are near-unique or high-cardinality per row, so Group does not offer them. Lamina has no File option.

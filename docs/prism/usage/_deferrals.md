@@ -9,7 +9,7 @@ npx prism-review
 
 Choose **Manage deferrals**.
 
-## Where deferrals come from
+## Deferral Creation at Review
 
 You do not create a deferral here. You create one at review, with `d` or `D`:
 
@@ -20,7 +20,7 @@ You do not create a deferral here. You create one at review, with `d` or `D`:
 
 Plain reject (`r`) creates no deferral at all. [Review and apply changesets](/docs/prism/usage/review-changesets) covers the distinction where you make it.
 
-## Why a mistake here is quiet
+## Silent Effect of a Wrong Deferral
 
 **A suppressed change does not reappear.** That is the point of the feature.
 
@@ -28,7 +28,7 @@ A deferral made in error raises no error or warning, and leaves no pending chang
 
 So the symptom of a wrong deferral is a field that never updates, from a connector that is running perfectly. **This list is the only place that shows it.** Check here before concluding a connector is broken.
 
-## Browse and remove
+## Browse and Remove
 
 | Key | What it does |
 |---|---|
@@ -40,11 +40,3 @@ So the symptom of a wrong deferral is a field that never updates, from a connect
 **Expected output when there are none.** A line confirming there are no permanent deferrals.
 
 Removing a deferral does not restore the value it suppressed. It stops the suppression. The next sync from that source proposes the value again, and it returns to the review queue like any other change.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| Where do I create one? | [Review and apply changesets](/docs/prism/usage/review-changesets) |
-| Why is a field not updating? | [Browse datasets and changesets](/docs/prism/usage/browse) |
-| How do I do this in a browser? | [The review app](/docs/prism/usage/review-app) |

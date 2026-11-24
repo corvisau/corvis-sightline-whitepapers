@@ -3,10 +3,10 @@ aggregated across every assessment of a requirement package,
 anywhere in the workspace. It is a cross-model view, unlike the roll-up dashboard inside an open
 assessment, which covers only that one assessment.
 
-## Opening it
+## Opening It
 
-Select **Portfolio Roll-Up** under Metron in the Models view, or run
-**Metron: View Portfolio Roll-Up** from the command palette. Either way it
+Run **Metron: View Portfolio Roll-Up** from the command palette. The web
+version of Sightline does not open the roll-up yet. The command
 prompts for a requirement package, then opens (or reveals) a
 read-only **Metron Portfolio** panel for that package. Opening it again
 for the same package reveals the existing panel rather than creating a
@@ -14,7 +14,7 @@ second one.
 
 The panel refreshes automatically when a relevant assessment, or the picked package, changes on disk.
 
-## Which assessments are included
+## Assessments in the Portfolio Roll-Up
 
 The panel includes every assessment in the workspace pinned to the
 exact same package id and version as the picked package. It folds the pairs
@@ -44,7 +44,7 @@ command palette, where each asks you to pick one of the workspace's requirement
 packages first. Either way, a save dialog lets you choose where to write the
 file.
 
-## Coverage on the Tetra diagram
+## Coverage on the Tetra Diagram
 
 Tetra paints per-entity coverage on its diagram with figures that match this
 panel's rules. Orphan pairs are left out, and entities newly in scope count as

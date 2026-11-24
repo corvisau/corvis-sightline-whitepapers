@@ -3,7 +3,7 @@ see how far each entity has been assessed without opening Metron. The overlay
 sits beside the findings badges described in [Findings overlay](/docs/sightline/usage/tetra/findings-overlay). See
 the Metron pages for how assessments are authored.
 
-## Switching it on
+## Switching It On
 
 The overlay is off by default. Select the coverage button in the diagram's
 title bar, beside **View Findings on Diagram**, or run **Tetra: Toggle
@@ -23,7 +23,7 @@ reload while it stays on. A diagram whose overlay is off makes no coverage reque
 During a reload the previous badges stay on the diagram until the new result
 arrives.
 
-## The badge
+## The Badge
 
 Any Zone, Group, Device, Network, Information or System node that Metron has
 assessed shows a small badge in its bottom-right corner. Channels and flows show
@@ -48,7 +48,7 @@ assessed, 1 in progress, 1 draft`.
 An entity that Metron has not assessed gets no badge. Overlay regions never get
 one, because an assessment cannot bind to an overlay.
 
-## The popup
+## The Popup
 
 Hover over a badge to open a read-only popup:
 
@@ -68,7 +68,7 @@ protocol. Moving a line's ports or its label positions leaves it alone. A model
 that has no version on its channels and flows needs no change, because each
 loads at version 1.
 
-## What the numbers mean
+## Coverage Overlay Figures
 
 The figures follow Metron's rules and match its worklist and the
 [Portfolio Roll-Up](/docs/sightline/usage/metron/portfolio-rollup). Tetra resolves every
@@ -81,7 +81,7 @@ When several packages assess the same entity, the badge adds their counts
 together, and the popup lists each package. Each binding uses the package
 version it is pinned to.
 
-## When nothing shows
+## Coverage Overlay with No Badges
 
 If the overlay is on but no badge appears, a notice at the bottom-left of the
 canvas gives the reason:

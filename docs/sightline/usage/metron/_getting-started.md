@@ -7,7 +7,7 @@ This is the entry point. Each feature has its own guide, linked below.
 
 ---
 
-## Creating a package
+## Creating a Package
 
 Select **New…** on a folder in the Models tree and choose **Metron: New Requirement Package** to open the new-package form.
 
@@ -18,7 +18,7 @@ Select **New…** on a folder in the Models tree and choose **Metron: New Requir
 | Id | The package id. It names the package. The Id fills in from the Name as you type, until you edit it. It has at most 64 characters: lowercase letters, digits and single hyphens. It must differ from the id of every other model in the workspace, and it does not change after Metron creates the package |
 | Description | Optional text for the package |
 
-Metron creates the package directly in the Location, with no folder of its own, and adds a starter requirement.
+Metron creates the package in a folder of its own inside the Location, named after the Id with the ending `.sightline`, and adds a starter requirement. The **Models** tree shows the package in the Location, not in its own folder.
 
 A requirement package authors no rule and no scheme of its own. Its **Packages**
 tab starts empty, and the rule and scheme packages it uses are packages you create
@@ -29,23 +29,27 @@ A new package opens on a built-in scheme with a Pass outcome and a Fail outcome.
 To use your own outcomes, add a scheme package on the **Packages** tab. Then select
 its scheme in the **Scheme** picker on the **Package meta** tab.
 
-One folder holds one Metron package, and it can also hold a Tetra model or a Lamina
-model. Metron creates nothing when the Location already holds a Metron package, or a
-file that the new package would need. Files that are not part of a model do not stop
-the create. Each file of a new package is named after its id, for example
-`my-pack.metron.yaml` and `my-pack.req.yaml`. Sightline cannot move or delete a model
-whose folder holds another model. See
-[Rename, move and delete models and folders](/docs/sightline/usage/shared/manage-models-and-folders#when-sightline-refuses).
+A folder can hold any number of Metron packages of any kind, and Tetra and Lamina
+models too, because each model sits in its own folder. Metron creates nothing when the
+Location already holds a folder of that name. Files that are not part of a model do not
+stop the create. Each file of a new package is named after its id and sits in the
+package's folder, for example `my-pack.sightline/my-pack.metron.yaml` and
+`my-pack.sightline/my-pack.req.yaml`. A model that you created before this layout keeps
+its files directly in its folder, and Sightline cannot move or delete such a model while
+its folder holds another model. See
+[Rename, move and delete models and folders](/docs/sightline/usage/shared/manage-models-and-folders#refused-model-and-folder-operations).
+To move such a package into its own folder, see
+[Model folders](/docs/sightline/upgrade/compatibility#model-folders).
 
 A workspace often holds several packages, one per site or project. Select **New…**
 on the folder the package belongs in. To make a folder for it, use **New folder…**
 in the web shell, or create the folder in your file explorer.
 
-## Packages and assessments outside the workspace
+## Packages and Assessments Outside the Workspace
 
 Metron opens only a package or an assessment that the Models tree lists. A file from outside the workspace folders does not open, and Metron shows a message that names the file. Add the folder that holds the file to the workspace, then open the file from the tree.
 
-## Requirement ids and labels
+## Requirement IDs and Labels
 
 Every requirement has two identifiers:
 
@@ -57,7 +61,11 @@ Every requirement has two identifiers:
 The Requirements grid's **+ Add** row shows the minted `id` as read-only text;
 type the `label` and title, then **Create**.
 
-## The shape of an assessment
+To open a requirement in the props drawer, click its row. Enter in a focused
+cell and a double-click also open it. A click in the **title** cell edits the
+title in place instead. Right-click a row for a menu that starts with **Open**.
+
+## The Shape of an Assessment
 
 Everything in Metron hangs off one idea: a **pair**.
 
@@ -81,7 +89,7 @@ They are orthogonal: a pair can be `done` with a failing outcome. See the
 [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model) guide for why Metron
 behaves this way.
 
-## The lifecycle
+## The Lifecycle
 
 ```
 requirement × entity   ->  pair
@@ -112,11 +120,11 @@ from the outcome you picked.
 Also here: [Licensing](/docs/sightline/usage/shared/licensing) (what edit-gating applies) and
 [Telemetry](/docs/sightline/usage/shared/telemetry).
 
-## Two mechanics worth understanding early
+## Two Mechanics Worth Understanding Early
 
 Both behaviours are deliberate.
 
-### 1. References are version-pinned, and that is the point
+### 1. References Are Version-Pinned, and That Is the Point
 
 A finding does not point at a live pair. It records a copy, stamped with
 the requirement and entity versions it was raised against, plus the outcome at
@@ -126,7 +134,7 @@ That is what makes a finding an **assertion** rather than a live query. It also
 means Metron has to tell you when the model has changed under a finding. It does
 this with a **Stale** signal rather than by quietly rewriting anything.
 
-### 2. Formal record vs live signal
+### 2. Formal Record vs Live Signal
 
 Metron holds two kinds of state:
 
@@ -141,7 +149,7 @@ is deliberately absent from generated documents. See the "Formal record vs live
 signal" section of the [Assessment overlay model](/docs/sightline/usage/metron/assessment-overlay-model)
 guide for the full reasoning.
 
-## Nothing is filtered out for you
+## Nothing Is Filtered out for You
 
 Every Metron report shows everything and gives you the controls to narrow it.
 Resolved findings and met attributes all stay visible, with their state as

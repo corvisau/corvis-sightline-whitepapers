@@ -6,7 +6,7 @@ The installer creates a [runtime instance](/docs/prism/install/runtime-instance)
 
 Read [Prerequisites](/docs/prism/install/prerequisites) before you start.
 
-## What Corvis supplies
+## Release Files from Corvis
 
 Two files. Put them in the same directory.
 
@@ -23,7 +23,7 @@ The installer reads the archive from its own directory. Without it, the installe
 node install.mjs --help
 ```
 
-## Install a collector node
+## Install a Collector Node
 
 A collector node collects from one or more sources. It does not run syncs.
 
@@ -31,7 +31,7 @@ A collector node collects from one or more sources. It does not run syncs.
 node install.mjs --dir ../acme-prism --connectors crowdstrike,jira-assets
 ```
 
-## Install a central node
+## Install a Central Node
 
 A central node runs the sync engine and the review TUI.
 
@@ -41,7 +41,7 @@ node install.mjs --dir ../acme-central --role central --connectors spreadsheet
 
 **The operator CLI is already in the archive.** `--role central` selects it.
 
-## The flags
+## The Flags
 
 The installer takes three options.
 
@@ -55,7 +55,7 @@ The installer takes three options.
 
 A rejected value stops the install before it writes anything. Where the name is a connector, the installer lists the ones the archive holds.
 
-## What the installer does
+## Standalone Installer Steps
 
 1. It checks for Node.js and npm, and stops when either is missing.
 2. It resolves the package list from `--role` and `--connectors`, and stops when the archive is not beside it.
@@ -70,7 +70,7 @@ Steps 6 and 8 warn or skip rather than fail. The install reports success even wh
 
 **Step 4 is what keeps a node small.** The archive carries every connector. The installer takes only the ones you asked for.
 
-### The environment file
+### The Environment File
 
 The installer builds the environment file from the template that each installed package ships. It drops the keys it has already seen, and writes one combined file.
 
@@ -81,19 +81,19 @@ It writes two files into the runtime instance:
 | `.env.example` | On every run. It is the current template. |
 | `.env` | Only when no `.env` is present. |
 
-**Your values survive a re-run.** The installer never overwrites an existing `.env`. After you add a connector, compare the refreshed `.env.example` against your `.env` and copy across any new key.
+**Your values survive a re-run.** The installer never overwrites an existing `.env`. After you add a connector, compare the refreshed `.env.example` against your `.env`. Copy across any new key.
 
 The installer supplies the variable names. You supply the values. Which variables appear depends on the connectors you installed. The storage variables always appear, because every install includes the SDK. [Storage backends](/docs/prism/install/storage-backends) explains how to set them.
 
 Never commit the runtime instance's `.env`.
 
-### Where the prerequisite list comes from
+### Connector-Declared Prerequisites
 
 The installer does not hold a list of which connector needs Python or PowerShell. Each connector declares its own requirement in its `package.json`, under a `prism.systemRequirements` field, and the installer reads the connectors that it installed.
 
 A connector that needs no extra runtime declares an empty list. [Writing a connector](/docs/prism/architecture/writing-a-connector) covers the field for connector authors. [Prerequisites](/docs/prism/install/prerequisites) lists what the shipped connectors declare today.
 
-## Verify the install
+## Verify the Install
 
 Change into the runtime instance. Then list the entry points that the install produced.
 
@@ -122,23 +122,14 @@ ls .env .connectors
 
 **Expected output.** The path `.env`, and a `.connectors` directory holding one manifest directory for the first connector you named.
 
-An empty `node_modules/.bin/` means the install did not complete. Re-run the installer and read its output from the top.
+An empty `node_modules/.bin/` means the install did not complete. Re-run the installer. Read its output from the top.
 
-## Add a connector later
+## Add a Connector Later
 
-Run the installer again against the same directory, and name the new connector.
+Run the installer again against the same directory. Name the new connector.
 
 ```bash
 node install.mjs --dir ../acme-prism --connectors cylance
 ```
 
-The installer adds the connector and leaves your `.env` alone. Compare the refreshed `.env.example` against your `.env` afterwards, and copy across any new key.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What is a runtime instance? | [The runtime instance](/docs/prism/install/runtime-instance) |
-| Which storage backend do I choose? | [Storage backends](/docs/prism/install/storage-backends) |
-| What is the operator CLI? | [Installing the CLI](/docs/prism/install/cli) |
-| How do I install the Windmill hosting instead? | [Installing Windmill-hosted Prism](/docs/prism/install/windmill) |
+The installer adds the connector and leaves your `.env` alone. Compare the refreshed `.env.example` against your `.env` afterwards. Copy across any new key.

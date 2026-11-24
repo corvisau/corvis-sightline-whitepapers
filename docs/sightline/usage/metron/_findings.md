@@ -51,7 +51,7 @@ another assessment of the same model appears in the same list.
 
 **Remove** on a member removes its link. The member's own record stays as it was.
 
-## Create a finding and add members
+## Create a Finding and Add Members
 
 **Promote to finding** on the worklist opens a dialog with two choices:
 
@@ -71,7 +71,7 @@ An earlier version stored a finding for one attribute in a different form. This
 tab does not list that finding, and nothing migrates it. Create a finding over
 the same pairs to replace it.
 
-## Toolbar (Filter / Group / Saved filters / Columns)
+## Toolbar (Filter / Group / Saved Filters / Columns)
 
 The Findings tab's toolbar uses the same popover
 components as the worklist tab. The **`[Filter]`**, **`[Group]`**, **`[Saved
@@ -81,7 +81,7 @@ list and column-visibility state. The "Filter + Group" section of
 [Worklist Filtering, Grouping, and Slices](/docs/sightline/usage/metron/worklist-filtering) covers the
 Basic and Advanced tabs and how conditions compile to a Bonsai program.
 
-### Available Basic-tab filter fields
+### Available Basic-Tab Filter Fields
 
 | Field | Type | Notes |
 |---|---|---|
@@ -94,13 +94,13 @@ strings and not a single scalar value. The worklist excludes `attributes` for
 the same reason. The Advanced tab still reaches it
 (`item.tags |> hasAny('...')`).
 
-### Available Group-by fields
+### Available Group-by Fields
 
 The Group menu offers **Status** and **Severity**, both low-cardinality. It does
 not offer Label, Description or Tags, which are too high-cardinality or not a
 scalar column value to be useful to group by.
 
-## Bulk review actions
+## Bulk Review Actions
 
 Check the row checkboxes of two or more findings to show a bulk action bar in
 the toolbar. The buttons **Mark N reviewed** and **Resolve N** stage the same

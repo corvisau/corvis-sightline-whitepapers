@@ -2,11 +2,11 @@ Sightline Lamina, Tetra and Metron enforce their commercial licence terms in the
 
 A commercial licence names the apps it unlocks. Editing is licensed per app. One licence covers every Sightline app on a machine.
 
-## What a licence contains
+## Licence Contents
 
 A licence names the person or organisation that it is issued to, and it carries an issue date and an expiry date. A licence that lacks an expiry date, or that names no app, is invalid.
 
-## Per-app grants
+## Per-App Grants
 
 The licence must name the app that you want to edit in.
 
@@ -20,7 +20,7 @@ A licence can name any subset of the apps. A licence for one app leaves the othe
 
 When a licence is valid but does not name an app, the licence badge in that app reads `Licensed to: <name> (no editing in <app>)`. The badge shows this state before you try to save. The exact badge text for each app is in the app sections below.
 
-## Metron data in Tetra
+## Metron Data in Tetra
 
 Tetra reads Metron findings and coverage to draw the findings badges and the coverage overlay. This read needs a licence that carries the `view:metron` grant. A licence that lacks it leaves Tetra fully usable. The findings badges do not load, and the coverage overlay shows a notice that gives the reason.
 
@@ -28,7 +28,7 @@ The Rules panel reads Metron rule packages and Metron records with the same gran
 
 The grant covers the read only. It does not unlock editing in any app.
 
-## Rule packages
+## Rule Packages
 
 A rule package names the app that runs its rules, its domain. The domain decides which grant reads the package and the records its rules produce:
 
@@ -39,9 +39,9 @@ A rule package names the app that runs its rules, its domain. The domain decides
 
 The list of installed rule packages shows each package's domain, and it omits the packages that your licence cannot read. A hosted deployment with no licence still lists and reads the `tetra` packages and their records. A list of records shows the records of the domains that your licence can read and omits the others.
 
-## Editing without a licence
+## Editing Without a Licence
 
-In a hosted deployment, the server tells each tab whether you may save in its app. Save is disabled in a tab when the licence does not name the app or when your account is read-only.
+In a hosted deployment, the server tells each tab whether you may save in its app. Save is disabled in a tab when the licence does not name the app or when your account is read-only. A folder holds models of every app, so you can create, rename, move and delete folders when the licence grants editing in at least one app.
 
 Every editing control stays enabled without a licence, with the exceptions listed for each app below. You can make changes, but the app does not save them.
 
@@ -52,17 +52,17 @@ The first pending change shows a banner: `Editing is not licensed. You can make 
 - **Save** writes the changes. Without a licence, **Save** is disabled and the dialog shows `Editing requires a valid commercial licence.`
 - **Cancel** closes the dialog and keeps every change pending.
 
-## Where the licence is checked
+## Licence Check on Write
 
 The app checks the licence again when a change is written, whatever the panel shows. The check covers every write to a model, a data slice or a query template. Changes that wait in the pending pool commit together, so one **Save** is one licence check.
 
-## When a save is refused
+## Refused Saves
 
 A refused save reports its reason where you asked for it, and the refused change stays pending. When the app refuses a save in the **Save changes** dialog, the dialog stays open and shows the reason. Fix the cause, then save again.
 
 A write that fails on a disk error or a validation refusal reports itself the same way. The pool save bar shows the reason beside its own button.
 
-## Managing your licence
+## Managing Your Licence
 
 In a Tetra tab in the web shell, the bottom-right badge shows **Saving allowed by server** or **Saving unavailable**. It follows the server's permission for your account in the current app. Your server administrator manages the licence and your access permissions. There is no licence paste dialog in the web shell.
 
@@ -72,7 +72,7 @@ Select the licence badge in the bottom-right corner to paste, view or clear the 
 
 Pasting or clearing a licence takes effect without reopening the panel. In the app where you paste it, the banner and the **Save** button in the dialog follow the new licence straight away. The app sections below list any further controls that follow it.
 
-## Grants in the licence dialog
+## Grants in the Licence Dialog
 
 The licence dialog shows who the licence is issued to, its ID and its dates. Under them, the **Grants** list names every grant that Sightline knows.
 
@@ -94,7 +94,7 @@ A licence can carry a grant that this version of Sightline does not know. That g
 
 An expired licence still lists the grants it holds, struck through and in grey. A line under the list says that the grants are not in effect. A licence that is absent or invalid shows no **Grants** list.
 
-## A read-only view is a different thing
+## A Read-Only View Is a Different Thing
 
 The licence answers whether a change can be saved. It never stops you making a change.
 
@@ -107,7 +107,7 @@ A VS Code panel always opens editable. A web shell tab opens with editing off wh
 
 A licence can be revoked. A revoked licence blocks editing for the rest of that VS Code session. [Telemetry](/docs/sightline/usage/shared/telemetry) describes the activation ping that runs beside this check.
 
-## Leaving with changes pending
+## Leaving with Changes Pending
 
 Tetra and Lamina keep pending changes when you leave, and ask first.
 
@@ -119,7 +119,7 @@ This covers a model that you open the normal way, by selecting it. A panel that 
 
 **Switching inside the panel.** Switching applies at once, and your pending changes stay staged and visible after the switch. What you can switch differs by app, as the Tetra and Lamina sections below list.
 
-## Undo, redo and the journal
+## Undo, Redo and the Journal
 
 Tetra and Lamina share these controls.
 
@@ -133,7 +133,7 @@ Undo reaches only what is staged. Recover an earlier commit with git.
 
 In a Tetra browser tab, select **Tools**, then **Staged changes journal**. Its **Undo** and **Redo** controls act on that tab. Close the panel and open it again to see the current staged changes. A reader token disables both controls.
 
-## Structural changes wait for Save
+## Structural Changes Wait for Save
 
 Structural changes wait in the pending pool with your field edits, and the unsaved count includes them. A change is visible at once, although nothing has reached disk. A new entity appears on the canvas, in the Tabular Editor and in the drawer as soon as you create it. A deleted entity disappears as soon as you delete it.
 
@@ -144,7 +144,7 @@ In the Tabular Editor, a row with any pending change shows the unsaved highlight
 ## Tetra
 
 **Badge.** A licence that does not name Tetra shows `Licensed to: <name> (no editing in Tetra)`.
-**Without a licence.** Viewing and export stay fully usable. Every editing control stays enabled. This includes the node, edge and pane menus, and **New** and **Bulk edit** in the Tabular Editor. The menu entry that opens the properties drawer reads **Edit…**. **Save all** appears in the pool save bar below the diagram and below the Tabular Editor. The **Save changes** dialog lists each change by the label and id of the entity.
+**Without a licence.** Viewing and export stay fully usable. Every editing control stays enabled. This includes the node, edge and pane menus, and **New** and **Bulk edit** in the Tabular Editor. On the canvas, the menu entry that opens the properties drawer reads **Edit…**. In the Tabular Editor, it reads **Open**. **Save all** appears in the pool save bar below the diagram and below the Tabular Editor. The **Save changes** dialog lists each change by the label and id of the entity.
 
 Collapsing a zone or group is a pending change like any other. It stages onto the active data slice and waits for **Save**. Without a licence you collapse as freely as you read, and you meet the refusal once, in the **Save changes** dialog. A collapse made with no active data slice persists nothing, licensed or not.
 

@@ -1,6 +1,6 @@
 Sightline Prism runs a cycle. It collects from each source, matches the records that describe one asset, and merges their fields. It puts the consequential changes in front of a person, and it sends corrections back to the sources. This page follows one server through that cycle.
 
-## The terms
+## The Terms
 
 | Term | Meaning |
 |---|---|
@@ -14,7 +14,7 @@ Sightline Prism runs a cycle. It collects from each source, matches the records 
 | reverse rule | A rule whose target is a source system. It queues write-backs instead of merging. |
 | outbox | The queue of write-backs for one source, which the connector at that source drains |
 
-## The cycle
+## The Cycle
 
 ```mermaid
 ---
@@ -48,7 +48,7 @@ block-beta
 
 Collection and write-back run near each source, because only those machines can reach it. Matching, merging and review run centrally. [Deployment options](/docs/prism/architecture/deployment-options) describes how the two halves map onto machines.
 
-## Follow one server
+## Follow One Server
 
 The example uses two sources: a spreadsheet that a team keeps, and the CrowdStrike endpoint security platform. The rule settings are examples for this page, and every value is invented.
 
@@ -114,15 +114,15 @@ The master record now holds the merged view. Each field carries its evidence.
 | Owner | `Platform team` | Spreadsheet | 55 |
 | Prevention policy | `standard` | CrowdStrike | 95 |
 
-Each field also records the time it changed and the changeset that changed it. Any value in the consolidated dataset can therefore answer three questions: where it came from, why it won, and when.
+Each field also records the time it changed and the changeset that changed it.
 
-### 6. The spreadsheet is loaded again
+### 6. the Spreadsheet Is Loaded Again
 
 A week later the team saves the spreadsheet again, still with the host name `web01`. The sync proposes `web01` at priority 50 against `web-01` at priority 85. The engine records the change as shadowed and leaves the master record unchanged.
 
 A shadowed change is not an error. The changeset keeps it with a reason that names the stronger source and both priorities. An operator can see from it that the spreadsheet is out of date.
 
-### 7. Write back
+### 7. Write Back
 
 The CMDB still calls the server `web01`. A reverse rule maps fields from the consolidated dataset to the CMDB. When it runs, the engine queues a write-back for the host name in the CMDB's outbox.
 
@@ -141,7 +141,7 @@ sequenceDiagram
 
 The engine holds no connection to the CMDB and no credentials for it. The connector near the CMDB performs the write. A queued write stays pending until that connector reports a result. [Run a write-back](/docs/prism/usage/write-back) gives the procedure.
 
-## What happens over time
+## Behaviour Across Repeated Collections
 
 Prism repeats the cycle on each collection. Three behaviours keep the consolidated dataset honest between collections.
 

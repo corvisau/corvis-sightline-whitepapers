@@ -11,7 +11,7 @@ A **tag** is a freeform label with no key and no value, such as `EDR` or
 
 ---
 
-## What an attribute holds
+## Attribute Properties
 
 An attribute has a name. It can also carry these properties, and all of them are optional:
 
@@ -29,7 +29,7 @@ An attribute with only a name declares that the attribute applies. Its value com
 because a number-like name would silently reorder a checklist. The app otherwise
 keeps the order in which you add attributes.
 
-## Reusing attributes: attribute sets
+## Reusing Attributes: Attribute Sets
 
 When the same attributes apply to many requirements, such as one control
 deployed across fifteen zones, create them once as an **attribute set**. Sets
@@ -42,7 +42,7 @@ example, a set can give `deployed` the type `indicator` and the owner
 `{system-owner}`. A requirement that attaches the set can then set the owner of
 `deployed` to `SCADA team`. The requirement keeps the type from the set.
 
-### The one rule
+### The One Rule
 
 A name that collides with an inherited attribute overrides it; a name that
 does not is an addition. There is no separate "overrides" field.
@@ -52,7 +52,7 @@ Merging is per-attribute and deep, so overriding the owner keeps the type of the
 An attached set that the package does not hold contributes nothing and does not
 stop the package from loading. The package editor raises a warning.
 
-## Target-state requirements have the same two fields
+## Target-State Requirements Have the Same Two Fields
 
 A **target-state requirement** is one pair of a requirement and an entity on the
 assessment worklist. It carries the same attached sets and the same attributes
@@ -67,7 +67,7 @@ overrides** section. A pair holds two things for this:
 - The attributes that this pair says itself, for example `deployed` with the
   value `partial` and the owner "SCADA team".
 
-### Precedence, lowest to highest
+### Precedence, Lowest to Highest
 
 1. The sets that the requirement attaches, in attachment order (later wins)
 2. The attributes of the requirement itself
@@ -78,7 +78,7 @@ Each layer folds onto the one beneath it by the same rule: collision overrides,
 no collision adds, per-attribute and deep. So a pair that supplies only an owner
 keeps the type that the set of the requirement established.
 
-### A pair stores only what it owns
+### A Pair Stores Only What It Owns
 
 The resolved map of all four layers, which the worklist, the drawer and the filters display, is
 never stored. A pair stores only the sets it attaches and the attributes
@@ -87,7 +87,7 @@ it declares itself.
 The reference to an attribute set therefore stays live. Edit the set and
 every pair that inherits from it moves, because none of them captured a copy.
 
-## Filtering on attributes
+## Filtering on Attributes
 
 Attributes are not offered in the Basic filter tab, because they are a record
 and not a scalar field. In the Advanced tab, a program reaches an attribute by
@@ -122,7 +122,7 @@ A slice matches the resolved attributes of a requirement. So `mil: MIL3` arrivin
 through an attached set satisfies it exactly as an attribute that the requirement
 declares itself does.
 
-## Column visibility
+## Column Visibility
 
 The Attribute sets grid renders in two places: an attribute-set package's own
 editor, and the read-only **Attribute sets** tab of a requirement package. Each

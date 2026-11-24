@@ -4,7 +4,7 @@ pattern as the Assessment Worklist (see [Worklist Filtering, Grouping, and Slice
 The Worklist's `[Group]`, `[Saved filters]`, and compliance-slice picker have
 no equivalent on the Requirements tab.
 
-## Filter (per-view, ad hoc)
+## Filter (per-View, Ad Hoc)
 
 The **`[Filter]`** toolbar button is the shared
 popover component, the same one the Worklist uses:
@@ -21,7 +21,7 @@ popover component, the same one the Worklist uses:
 Filtering narrows which requirement rows the grid shows; it does not affect
 the underlying package data.
 
-### Available Basic-tab filter fields
+### Available Basic-Tab Filter Fields
 
 | Field | Type | Notes |
 |---|---|---|
@@ -34,7 +34,7 @@ The Basic tab does not offer the Rule that scopes a requirement as a field.
 The Requirements grid's `rule` column already shows the title of that Rule; see
 the "One Rule catalog, two reference points" section of the [Rules](/docs/sightline/usage/metron/rules) page.
 
-## Column visibility
+## Column Visibility
 
 Column visibility is a separate axis from filtering. It controls the grid's
 id/ver/title/rule columns, not which rows are shown.

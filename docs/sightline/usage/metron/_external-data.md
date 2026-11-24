@@ -4,13 +4,13 @@ The tables come from systems that know nothing about Metron requirements or Tetr
 
 ---
 
-## Find the tables
+## Find the Tables
 
 The **External data** tab appears in an assessment only when the assessment has at least one table. If the tab is missing, no table applies to the model of this assessment. Your administrator loads tables into the workspace.
 
 The tab shows one grid for each table. The heading of a grid shows the table label and its row count. Each grid has a search box. The grid shows every column that the rows carry, in the order the source gives them.
 
-## Show and hide columns
+## Show and Hide Columns
 
 1. Open the **External data** tab.
 2. Select **Edit columns** above the grid of the table.
@@ -20,7 +20,7 @@ The tab shows one grid for each table. The heading of a grid shows the table lab
 
 Each table keeps its own choice, so a change in one table does not change another table. Metron keeps the choice on your computer.
 
-## Match rows to a practice
+## Match Rows to a Practice
 
 Some tables name the requirement and the entity that each row concerns. Metron matches those rows to the pairs on the worklist. When you open the **Assess** drawer of a pair, the drawer lists the matching rows below the pair, grouped by table.
 
@@ -30,11 +30,11 @@ A table that does not name a requirement or an entity never appears in the **Ass
 
 ---
 
-## Use a table from a rule
+## Use a Table from a Rule
 
 A rule that assesses a requirement can read any table that is visible to the assessment. In the program, the identifier of the table is the name of a register. See [Rules](/docs/sightline/usage/metron/rules) for how rules are written.
 
-### End the program on model entities
+### End the Program on Model Entities
 
 A rule returns one row for each entity it assesses. Metron records the outcome against the entity whose id the row carries. A program must therefore end on model entities.
 
@@ -57,7 +57,7 @@ The wrong program is valid, but it assesses nothing. Metron raises a warning tha
 
 If you see this warning, the program has this mistake.
 
-### Join rows to entities
+### Join Rows to Entities
 
 Inside `anyOf(...)` and `noneOf(...)`, `.field` is the field of the row and `item` is the entity under test.
 
@@ -76,13 +76,13 @@ Follow these syntax rules:
 - Combine conditions with `&&`. The word `and` is not accepted.
 - Do not write arrow functions such as `r => r.x`. Use the `.field` form. Alternatively, filter into a register with `where` first, because `where` takes a full condition.
 
-### The rule outcome is a draft
+### The Rule Outcome Is a Draft
 
 A rule-suggested outcome shows on a draft pair, so a person owns the completion. A rule never moves a pair to a `done` status. The assessor reviews the suggested outcome and completes the pair.
 
 ---
 
-## What external data does not do
+## Limits of External Data
 
 - It is not assessment state. Metron does not save a row onto a pair, and it matches rows again on every read.
 - It does not trigger revalidation. A completed pair is not flagged when its external rows change. Re-open the pair to assess it again.

@@ -2,7 +2,7 @@ When you select objects on the bow-tie canvas, Lamina dims every object that the
 selection is not connected to. An optional Pulse Glow runs travelling pulses
 along the lines between the objects that stay lit.
 
-## What stays lit
+## Lit Connections in Selection Focus
 
 Lamina lights the union of the connections of every selected object. A connection
 follows the risk path in both directions.
@@ -25,7 +25,7 @@ annotation alone does not dim anything.
 A line stays lit when both of its ends are lit. Every other line dims with the
 objects it joins.
 
-## View menu options
+## View Menu Options
 
 Two rows in the View menu control the behaviour.
 
@@ -41,7 +41,7 @@ Neither option is saved. Both return to their defaults when the
 panel reloads, and a PNG export or headless render, which has no selection, is
 unaffected.
 
-## Reduced motion
+## Reduced Motion
 
 With the operating system's reduced-motion setting on, the pulses stop moving and
 the lit lines keep a static dashed glow.
@@ -49,4 +49,7 @@ the lit lines keep a static dashed glow.
 ## Pulse Glow in Tetra
 
 Tetra's Pulse Glow view option draws the same effect on a selected channel or
-flow.
+flow. The pulses follow the line's direction. A line set to A to B pulses from A
+towards B, and a line set to B to A pulses the other way. A bidirectional line,
+which is the default, shows pulses moving both ways at once. With reduced motion
+on, the two sets of pulses stop and read as one static dashed glow.

@@ -1,6 +1,6 @@
 Lamina models risk as bow-tie diagrams. A Lamina model is a set of files in a model directory. The extension draws an interactive canvas, a Tabular Editor, a Template Editor and a report pipeline over them.
 
-## What you model
+## Elements of a Lamina Model
 
 A bow-tie diagram shows an event with its causes on one side and its consequences on the other. Controls sit on the paths between them. A risk matrix rates each outcome. Each matrix declares the consequence categories that Lamina rates. See [Risk matrix likelihood scale](/docs/sightline/usage/lamina/risk-matrix-likelihood-scale). For what each element is for and when to choose it, see [Lamina elements](/docs/sightline/methodology/lamina-elements).
 
@@ -15,11 +15,11 @@ A bow-tie diagram shows an event with its causes on one side and its consequence
 
 The canvas draws one Risk at a time, picked in the Model Tree. A Risk is dynamic, with a filter over the elements, or static, with a list of elements. See [Risks](/docs/sightline/usage/lamina/risks).
 
-## Data slices
+## Data Slices
 
 Earlier versions of Lamina saved a filter and the view settings of the diagram as a data slice. The Diagram no longer offers slices, and the version 4 migration turns each slice into a Risk. See [Compatibility](/docs/sightline/upgrade/compatibility).
 
-## Findings inbox
+## Findings Inbox
 
 The findings inbox lists the Metron findings that have no cause yet. **Create cause from finding** turns a finding into a draft cause. See [Findings inbox](/docs/sightline/usage/lamina/findings) and [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 
@@ -27,7 +27,3 @@ The findings inbox lists the Metron findings that have no cause yet. **Create ca
 
 - Lamina exports the diagram as a PNG. See [PNG export](/docs/sightline/usage/lamina/png-export).
 - Lamina generates a risk report for each Risk. See [Risk report (PPTX)](/docs/sightline/usage/lamina/risk-report-pptx).
-
-## Where to go next
-
-- [Open a Lamina model](/docs/sightline/usage/lamina/opening-a-model)

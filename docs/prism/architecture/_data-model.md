@@ -1,6 +1,6 @@
-Prism normalises asset data from every source into one schema hierarchy. This document describes the hierarchy and tells you where a given field belongs.
+Prism normalises asset data from every source into one schema hierarchy. This document describes the hierarchy and states where a given field belongs.
 
-## Why the model has tiers
+## Purpose of the Tiered Schemas
 
 Asset data from different sources shares some fields and not others.
 
@@ -16,7 +16,7 @@ flowchart TD
     B --> C["Tier 3 — extendedData<br/>fields one vendor has"]
 ```
 
-## Tier 1: base types
+## Tier 1: Base Types
 
 Three base types exist.
 
@@ -49,7 +49,7 @@ A network flow or a data transfer between two assets.
 
 Its significant fields are `source`, `destination`, `protocol` and `metadata`.
 
-## Tier 2: specific types
+## Tier 2: Specific Types
 
 A specific type extends `BaseAsset` with the fields its class of asset needs. Prism ships three.
 
@@ -57,7 +57,7 @@ A specific type extends `BaseAsset` with the fields its class of asset needs. Pr
 
 Servers, virtual machines, workstations and containers.
 
-It adds:
+AssetComputer adds:
 
 | Field | Holds |
 |---|---|
@@ -72,7 +72,7 @@ It adds:
 
 Switches, routers, firewalls and load balancers.
 
-It adds:
+AssetNetwork adds:
 
 | Field | Holds |
 |---|---|
@@ -88,7 +88,7 @@ It adds:
 
 Industrial control equipment: programmable logic controllers, remote terminal units, human-machine interfaces and supervisory systems.
 
-It adds:
+AssetControlDevice adds:
 
 | Field | Holds |
 |---|---|
@@ -104,11 +104,11 @@ It adds:
 
 Every specific type carries an `extendedData` object. It holds the fields that belong to one vendor and to no schema.
 
-### The placement rule
+### The Placement Rule
 
-Prism applies one rule, and you can predict it.
+Prism applies one rule.
 
-**A field that the schema recognises goes to its schema position. Every other field goes to `extendedData`.**
+A field that the schema recognises goes to its schema position. Every other field goes to `extendedData`.
 
 Worked example. A spreadsheet row arrives with these columns:
 
@@ -131,9 +131,9 @@ The connector recognises `id`, `name`, `type` and `owner`. It maps each to its s
 }
 ```
 
-The rule is mechanical. A connector does not decide field by field.
+The rule is mechanical.
 
-### What belongs in extendedData
+### Fields That Belong in extendedData
 
 **Put a field here when** any of these hold:
 
@@ -145,7 +145,7 @@ The rule is mechanical. A connector does not decide field by field.
 
 **Never put sensitive data here.** `extendedData` is stored and displayed like any other field. It is not masked.
 
-## Schema versions
+## Schema Versions
 
 Every record stores its own `schemaVersion`. Snapshots are immutable, so a record keeps the version it was written with.
 
@@ -155,16 +155,8 @@ The registry of schemas and their versions is `packages/connector-sdk/src/schema
 
 Upgrading between schema versions, and what happens to existing snapshots when a version advances, are covered in the [upgrade documentation](/docs/prism/upgrade/schema-migration).
 
-## Where a snapshot is stored
+## Snapshot Storage and Collection Names
 
 Prism names a snapshot collection after its source: `snapshots_` followed by the source identifier.
 
-A source identifier is lowercase, and uses hyphens between words. The connectors Prism ships use `azure-vms`, `crowdstrike`, `cylance`, `jira-assets`, `spreadsheet`, `ad-computers`, `local-host-python` and `local-host-powershell`. A connector you build chooses its own identifier and follows the same rule.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How does the engine merge these records? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| How does a connector produce them? | [Connector model](/docs/prism/architecture/connector-model) |
-| How do I add a field the schema does not have? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |
+A source identifier is lowercase, and uses hyphens between words. The connectors Prism ships use `azure-vms`, `crowdstrike`, `cylance`, `jira-assets`, `spreadsheet`, `ad-computers`, `local-host-python` and `local-host-powershell`. A custom connector chooses its own identifier and follows the same rule.

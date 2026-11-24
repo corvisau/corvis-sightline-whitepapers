@@ -1,6 +1,6 @@
 A Metron rule can create records from the assessed pairs and attributes of one Tetra model. The Records panel lists the rules, tests an edit and runs them. The panel also lists each finding that a person creates on the [Findings tab](/docs/sightline/usage/metron/findings), a record of the manual rule `finding`.
 
-## Which rules run
+## Rules in a Findings Run
 
 A run covers one Tetra model. It runs the rules of the rule packages that the requirement packages of that model name. A requirement package counts when an assessment binds it to the model.
 
@@ -16,7 +16,7 @@ A rule runs only when its rule package has the domain `metron` and the rule has 
 
 A model with no assessment runs no rule. An assessment that cannot load adds a warning to the run. When no assessment of the model loads, the run skips each package with a rule that reads pairs or attributes, and reports the reason. The existing records stay as they are.
 
-## Write a rule
+## Write a Rule
 
 Create and edit rules in the rule package editor. The **Rules** tab is a grid, and the rule drawer holds every create and edit.
 
@@ -38,28 +38,29 @@ A record stores what it depends on as links. A link names an entity of the Tetra
 
 A change to the notes or the evidence of a pair does not move a pair link or an attribute link.
 
-## Open the panel
+## Open the Panel
 
 Right-click an assessment in the Models tree and select **Metron: Open Records**. The panel opens for the Tetra model of the assessment. The command **Metron: Open Records** in the palette asks which assessment.
 
 Each model has one panel, and a second request reveals the open one. Two assessments of the same model open the same panel. The browser version of Metron does not show this panel.
 
-## The Rules tab and the Records tab
+## The Rules Tab and the Records Tab
 
-The panel has the two tabs and the controls of the Tetra Rules panel, including **Columns**, **Filter** and **Group** on both tabs. See [Rules and records](/docs/sightline/usage/tetra/rules-and-findings) for the drawer, **Test rule**, **Save** and **Run rules**. The records list is read-only; accept a finding in the assessment's **Findings** tab. Two differences apply in Metron:
+The panel has the two tabs and the controls of the Tetra Rules panel, including **Columns**, **Filter** and **Group** on both tabs. See [Rules and records](/docs/sightline/usage/tetra/rules-and-findings) for **Run rules**, and for the rule drawer that the rule package editor uses. The records list is read-only; accept a finding in the assessment's **Findings** tab. Double-click a record, or press Enter on it, to open the [record drawer](/docs/sightline/usage/shared/record-drawer). Three differences apply in Metron:
 
 - The tab lists the rules of the rule packages that the requirement packages name. The empty message says that no rule package is named.
 - The query builder offers the standard functions. A generator rule creates records with `emitRecord`.
+- The panel has no rule drawer. A click on a row selects the rule. Double-click a row, or press Enter in a cell of the row, to open the package of the rule in the rule package editor, with that rule selected. The row menu has one action, **Open in rule package editor**. Edit and test the rule there: **Test rule** runs it over a model whose assessment uses the package.
 
 A rule save changes only that rule in its package. Other models and requirement packages that use the package see the change.
 
-## Run rules
+## Run Rules
 
 **Run rules** shows how many records a run creates and how many it closes. **Confirm** writes them. A run never deletes a record and never changes the status, severity or description that a person set.
 
 A run covers each rule package once for the model. A package with a program error is skipped, and its records stay unchanged.
 
-### Manual records
+### Manual Records
 
 A run also refreshes the links of manual records. It resolves each link again. When a version or a hash moved, the run records the new value and the record shows **Source changed**. The data and the set of links stay as the person set them.
 

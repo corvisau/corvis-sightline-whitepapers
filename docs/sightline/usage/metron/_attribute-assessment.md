@@ -9,7 +9,7 @@ Current State  deployed   partial - 2 of 5 zones
 
 ---
 
-## Which attributes are assessable
+## Assessable Attributes
 
 **An attribute is assessable when it has a type.** An attribute without
 one is descriptive (a maturity level or a progression area). It has no current
@@ -51,7 +51,7 @@ and progression-group assessment relies on that (see
 [worklist filtering](/docs/sightline/usage/metron/worklist-filtering)). A bulk edit would apply one
 practice's findings to many selected pairs.
 
-## It never derives the outcome
+## It Never Derives the Outcome
 
 Attribute state never maps onto the outcomes of the assessment scheme, and it
 does not change the outcome or the state of a pair.
@@ -60,13 +60,13 @@ It does not appear in the Dashboard rollup distribution or CSV export.
 A practice keeps the single outcome it always had. The assessor chooses it in
 the outcome picker. The attributes inform that judgement.
 
-## Persistence and retention
+## Persistence and Retention
 
 The Assess drawer stores the assessment of each attribute on the pair. The pair owns these assessments and never inherits them from an attribute set. An attribute with no assessment has no stored entry.
 
 An assessment outlives its attribute. If you remove the attribute or detach its set, the row leaves the drawer. If the attribute returns with the same name, the work of the assessor reappears.
 
-## Promoting a pair
+## Promoting a Pair
 
 Promoting a pair to a finding adds the whole pair as a member of the finding. The
 attribute states stay on the pair; a finding does not copy them. See

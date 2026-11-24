@@ -1,12 +1,12 @@
 A connector reads one type of source and transmits normalised snapshots to Prism. This guide takes you from an empty directory to a transmitting collector.
 
-## What you need, and what you do not
+## Connector Dependencies
 
 A connector depends on the **connector SDK**, `@sightline/prism-connector-sdk`. That is the whole dependency.
 
 **A connector does not need the sync engine.** It does not link against it, call it, or require access to it. You can build a connector, run it against a Prism store, and never touch the engine. This is what makes connectors an extension surface rather than an internal detail.
 
-## Connectors are language-agnostic
+## Connectors Are Language-Agnostic
 
 A connector is any program that can read your source and transmit a snapshot. Prism ships collectors in three languages, and you can add a fourth.
 
@@ -18,7 +18,7 @@ A connector is any program that can read your source and transmit a snapshot. Pr
 
 Pick the language that reaches your source most directly. A connector that runs on a domain controller is easier to write in PowerShell than to make work from anywhere else.
 
-## The four steps every connector performs
+## The Four Steps Every Connector Performs
 
 Every shipped connector follows the same shape.
 
@@ -34,11 +34,11 @@ flowchart LR
 3. **Snapshot.** Validate every record against the schema and package the set as a snapshot. Validation happens before transmission, so an invalid record never enters the pipeline.
 4. **Transmit.** Send the snapshot to the instance's inbox. The first transmit registers the table.
 
-Note that step 4 is a transmit, not a database write. The connector does not know or care which storage backend is configured.
+Step 4 is a transmit, not a database write. The connector does not know or care which storage backend is configured.
 
-## Building one
+## Building One
 
-### 1. Start from a shipped connector
+### 1. Start from a Shipped Connector
 
 Copy the closest example rather than starting empty. The examples are complete and current.
 
@@ -52,33 +52,33 @@ cp -r packages/connectors/local-host-python packages/connectors/my-source
 
 Choose the example by shape, not by vendor. A connector for any paged REST API resembles `azure-vms` more than it resembles `spreadsheet`.
 
-### 2. Set the connector type
+### 2. Set the Connector Type
 
-Your connector's type is its directory name. It must be lowercase, and may contain letters, digits and hyphens. It must not contain a dot — the dot separates the type from the instance in the derived table identifier.
+Your connector's type is its directory name. It must be lowercase, and may contain letters, digits and hyphens. It must not contain a dot: the dot separates the type from the instance in the derived table identifier.
 
-### 3. Declare your credentials as references
+### 3. Declare Your Credentials as References
 
 A manifest names an environment variable for each credential. It never holds the value. See [Connector model](/docs/prism/architecture/connector-model) for what the manifest holds.
 
 Decide which variables your connector needs and document their names. Choose names that say which system they belong to.
 
-### 4. Write the transform
+### 4. Write the Transform
 
-This is the part that is genuinely yours. Everything else is pattern.
+This is the part that is genuinely yours, and everything else is pattern.
 
 Map the source's fields to the schema you chose. For each source field, ask whether Prism's schema has a place for it. If yes, map it there. If no, put it in `extendedData`.
 
 Resist the urge to invent schema fields. A field you will query on, that more than one source supplies, belongs in the schema itself. Ask for it rather than working around its absence.
 
-### 5. Test against a mock first
+### 5. Test Against a Mock First
 
 Run the two mock connectors before you point yours at a live system. They need no credentials and exercise the whole pipeline, so a failure tells you whether your environment is wrong or your connector is.
 
-### 6. Verify the transmit
+### 6. Verify the Transmit
 
-Confirm the snapshot arrived and the table registered. Until the first transmit succeeds, no sync rule can target your connector — a rule pointing at an unregistered table fails rather than defaulting.
+Confirm the snapshot arrived and the table registered. Until the first transmit succeeds, no sync rule can target your connector: a rule pointing at an unregistered table fails rather than defaulting.
 
-## Practices worth following
+## Practices Worth Following
 
 **Handle the source's paging.** A source that returns 100 records per page will silently give you 100 records and no error. Page until the source says it is done.
 
@@ -87,12 +87,3 @@ Confirm the snapshot arrived and the table registered. Until the first transmit 
 **Fail loudly on authentication, quietly on one bad record.** A wrong credential should stop the collection with a clear message. One malformed record among ten thousand should be skipped with a warning, not abort the run.
 
 **Never log a credential.** Log the variable name, never its value, and check what your error handler prints when the source rejects your authentication.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What is a manifest, exactly? | [Connector model](/docs/prism/architecture/connector-model) |
-| Which schema should I produce? | [Data model](/docs/prism/architecture/data-model) |
-| What happens to my snapshot afterwards? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| How do I run my connector? | [Running a collector](/docs/prism/usage/collect) |

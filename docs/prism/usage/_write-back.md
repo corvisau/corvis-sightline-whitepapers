@@ -4,7 +4,7 @@ A write-back is a two-location operation, and that is the whole difficulty. One 
 
 [Sync engine](/docs/prism/architecture/sync-engine) explains the outbox design. This page is the procedure.
 
-## The two halves
+## The Two Halves
 
 | Half | Where it runs | What it does |
 |---|---|---|
@@ -13,7 +13,7 @@ A write-back is a two-location operation, and that is the whole difficulty. One 
 
 Nothing reaches the source in the first half. The queue is the handover.
 
-## Half one: enqueue, centrally
+## Half One: Enqueue, Centrally
 
 **Start in your central [runtime instance](/docs/prism/install/runtime-instance).**
 
@@ -26,7 +26,7 @@ A write-back runs through the same command as any other rule. The direction foll
 
 **Expected output.** The usual sync summary. The queued writes are in the source's outbox, not at the source.
 
-## Half two: drain, at the edge
+## Half Two: Drain, at the Edge
 
 **Start where the source system is actually reachable.** That is often not the machine that ran the sync; it is the point of splitting the operation.
 
@@ -37,7 +37,7 @@ npx prism-drain <source>
 
 **Expected output.** A line naming the outbox being drained, one line per item, and a summary counting written and failed.
 
-## ⚠️ The shipped drain command writes nothing
+## ⚠️ the Shipped Drain Command Writes Nothing
 
 **Read this before you run `prism-drain` against a real queue.**
 
@@ -51,7 +51,7 @@ Each line it prints is tagged as a dry run, and the opening line says so too. Th
 
 A production write-back needs a connector that supplies its own writer, backed by its authenticated API client. A connector does that by using the drain routine from the SDK and passing that writer in. Until a connector does that for your source, treat the queue as unattended and do not drain it.
 
-## Half two, by hand: the review app's Outbox
+## Half Two, by Hand: The Review App's Outbox
 
 When no connector can reach the source, the queue is still actionable by a person. The review app's **Outbox** entry lists every source that has an outbox, with the number of writes queued for it. It shows each queued write in full, and downloads the lot as JSON.
 
@@ -69,7 +69,7 @@ A `create` item needs one extra thing: the native id the source gave the record 
 
 [The review app](/docs/prism/usage/review-app) covers where the entry is.
 
-## The completion guarantee
+## The Completion Guarantee
 
 When a real writer is in place, this guarantee applies.
 
@@ -78,12 +78,3 @@ An item stays `pending` until the edge acts on it. Only then is it marked `done`
 That is what makes the operation safe to repeat. A drain that never ran leaves every item pending, and running it later processes exactly those items. A write that failed is marked `failed` with its error, and is not silently counted as delivered.
 
 This is also why the dry-run default is dangerous rather than merely useless. The edge did act, so the guarantee's mechanism is satisfied. The work the guarantee is about never happened.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I write a rule with a remote target? | [Create and edit rules](/docs/prism/usage/manage-rules) |
-| How does the outbox work? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| How do I run the rule? | [Run a sync rule](/docs/prism/usage/sync) |
-| How do I build a connector that writes? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |

@@ -2,7 +2,7 @@ An annotation bubble takes its colour and leading icon from three optional contr
 
 ---
 
-## Set the style in the properties drawer
+## Set the Style in the Properties Drawer
 
 Select an annotation to open the properties drawer, or choose **Add annotation** to open the create drawer. Both show the same controls. See [Create in drawer](/docs/sightline/usage/shared/create-in-drawer) for the create flow.
 
@@ -18,7 +18,7 @@ Each control resolves on its own. A value in **Colour** replaces the preset colo
 
 A **Style** of `-` or `Plain`, or an empty **Style**, gives the default bubble, with no colour and no icon. A value in **Colour** or **Icon** still applies to a default bubble. The matching ignores case. An unrecognised preset name adds no colour and no icon.
 
-## Style presets
+## Style Presets
 
 The **Style** field offers the ten choices in the first column.
 
@@ -45,21 +45,21 @@ Any other text is used as a literal CSS colour, for example `#7048e8`, `rebeccap
 
 The **Icon** field takes the name of any VS Code codicon, for example `shield`. Browse the names in the [codicon reference](https://microsoft.github.io/vscode-codicons/dist/codicon.html). The presets use `pass`, `error`, `warning`, `info` and `note`. A name that is not a codicon shows an empty glyph.
 
-## How it renders
+## Annotation Colour Rendering
 
 The resolved colour sets a 1.5 px border, a 12% tint of the bubble background and the colour of the leader line. The icon appears as a glyph before the text.
 
-## drawio export
+## Drawio Export
 
 The export includes annotations. A named colour exports as a fixed hex value, with an approximate lightened fill. A literal CSS colour with no hex value exports as a border only. A theme-variable colour with no hex fallback exports as the default bubble. The icon is never exported, because draw.io has no codicon font.
 
-## Older models
+## Older Models
 
 A model that still carries the older severity setting shows the matching style on the canvas. To change it, set **Style** in the properties drawer.
 
 ## Tetra
 
-### Link style
+### Link Style
 
 The **Style** field in the link settings dialog is a different control. Select the settings button on a link in the annotation's properties drawer to open the dialog. **Style** chooses how the bubble labels the linked entity, with `value` or `id`. It does not colour anything.
 
@@ -80,7 +80,7 @@ When several annotations glow the same target, the strongest style wins.
 
 ## Lamina
 
-### Setting the style from the canvas
+### Setting the Style from the Canvas
 
 Right-click an annotation and choose **Set style**. The submenu lists **None** and the presets above. **None** clears the style. The menu item does nothing, and is disabled, in a read-only session.
 
@@ -88,6 +88,6 @@ Right-click an annotation and choose **Set style**. The submenu lists **None** a
 
 The Template Editor shows the same **Style**, **Colour** and **Icon** controls on an annotation template.
 
-### drawio export
+### Drawio Export
 
 **Sightline: Export Draw.io** exports each bubble as a rounded cell. The cell shows the annotation text. It shows the annotation id in id display mode, and for a `statusgrid` annotation. The leader line from a bubble to its owner is not exported. The bubble keeps the size that it has on the canvas.

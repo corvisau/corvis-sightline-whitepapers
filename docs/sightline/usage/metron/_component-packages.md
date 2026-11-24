@@ -5,7 +5,7 @@ package**: a folder with its own entry in the Models tree and its own editor.
 A requirement package names the component packages it consumes on its
 **Packages** tab. It does not copy their content.
 
-## The four package kinds
+## The Four Package Kinds
 
 | Kind | Holds |
 |---|---|
@@ -18,7 +18,7 @@ Every package has a name, an id, a version and an optional description. The name
 is the package's one display name: the tree, the editor heading and the package
 pickers all show it. A rule package also has a domain.
 
-## Create a component package
+## Create a Component Package
 
 1. Select **Sightline** in the activity bar, then find the folder in the **Models** tree that should hold the package.
 2. Select **New…** on the folder and choose the kind you want.
@@ -29,17 +29,19 @@ scheme. Select the package in the tree to open its editor.
 
 Every component-package editor has the same three tabs. The first authors the
 catalogue. **Package meta** edits the package name, version and description. **References**
-shows which requirement packages consume this one. On a rule package, **Package
-meta** also has a **Domain** select. Changing it changes which app runs the
+shows which requirement packages consume this one. On a rule package, **References**
+also lists the Tetra models that use it. On a rule package, **Package meta** also has a
+**Domain** select. Changing it changes which app runs the
 package's rules the next time that app runs them; the rules themselves do not
 change.
 
-A rule package authors in a full-width grid. Select **+ Add** to create an
-entry in the props drawer. Right-click a row to **Open** it in the same drawer,
-or to **Delete** it. A new entry and a deletion wait in the save bar until you
-select **Save all**. An attribute-set package shows its sets and attributes as a
-tree, described in the next section. A scheme package edits the selected scheme
-in a panel beside its grid.
+A rule package and a scheme package author in a full-width grid. Select **+ Add**
+to create an entry in the props drawer. Click a row to open it in the same
+drawer. Enter in a focused cell and a double-click also open it. Right-click a
+row for a menu that starts with **Open**, followed by **Delete**. A new entry
+and a deletion wait in the save bar until you select **Save all**. An
+attribute-set package shows its sets and attributes as a tree, described in the
+next section.
 
 A rule package that Tetra authored opens and saves here like any other. A rule keeps
 every field it carries when you edit another field of it. The rule drawer shows every field of a rule, the same
@@ -55,7 +57,7 @@ The starter scheme carries one outcome that maps to `yes` and one that maps to
 `no`. It defines no statuses of its own, so the package inherits the three
 built-in statuses.
 
-## Edit an attribute-set package
+## Edit an Attribute-Set Package
 
 The attribute-set editor shows each set as a row with its attributes beneath it,
 in the order the file lists them. Select the arrow on a set to collapse or
@@ -66,15 +68,17 @@ requirements attach it, and its links. An attribute row shows its name under
 **id**, its label under **name**, and its **type**, **owner**, **value** and
 **description**.
 
-Right-click a row to open its menu.
+Click a set or an attribute to open it in the props drawer. Enter in a focused
+cell and a double-click also open it. The arrow on a set row only collapses or
+expands the set. Right-click a row to open its menu.
 
 | Row | Menu item | Effect |
 |---|---|---|
-| Set | **Edit** | Opens the set in the props drawer. |
+| Set | **Open** | Opens the set in the props drawer. |
 | Set | **Add attribute** | Opens a form for a new attribute. The attribute goes last in the set. |
 | Set | **Duplicate** | Adds a copy of the set and its attributes, with the id `<id>-copy`. |
 | Set | **Delete** | Asks for confirmation, then removes the set and its attributes. |
-| Attribute | **Edit** | Opens the attribute in the props drawer. |
+| Attribute | **Open** | Opens the attribute in the props drawer. |
 | Attribute | **Duplicate** | Adds a copy directly after the attribute, named `<name>-copy`. |
 | Attribute | **Remove** | Removes the attribute. |
 
@@ -92,7 +96,7 @@ attribute stays in view, with only the matching attributes beneath it.
 The create form for a new set can list its first attributes. The props drawer of
 an existing set shows how many attributes it holds. Edit them in the tree.
 
-## Consume a component package
+## Consume a Component Package
 
 Open the requirement package and select the **Packages** tab. The tab lists
 every package this one consumes, with the kind, the pinned version and what
@@ -127,7 +131,7 @@ nothing:
 | `version 2 not installed` | The entry pins a version the installed package does not carry |
 | `duplicate id` | Two packages share that kind and id, so the reference is ambiguous. The new-package forms refuse an id that another model already uses. Packages made before that check can still share an id across kinds |
 
-### Column visibility
+### Column Visibility
 
 The Packages tab has its own **`[Edit columns]`** toolbar button to show, hide and reorder columns. Only **kind** and
 **id** are manageable. The **pin** and **status** columns and the row's
@@ -138,7 +142,7 @@ Drag the handle at the left of the **kind** or **id** header to swap them. You c
 Your choice is personal and local.
 Dragging a column's resize handle saves its width the same way.
 
-### Remove a package
+### Remove a Package
 
 Select **Remove** on the entry's row. A removal that breaks a reference asks
 first and names what breaks.
@@ -152,7 +156,7 @@ kind. Referenced rules are offered in the requirement drawer's rule pickers for
 the scope rule and the assessment rule. Referenced attribute sets are offered in the
 drawer's attribute-set picker and attach exactly as a local set does.
 
-### A requirement package does not author rules or attribute sets
+### A Requirement Package Does Not Author Rules or Attribute Sets
 
 A requirement package holds no rules or attribute sets of its own. Its **Rules**
 and **Attribute sets** tabs are read-only lists of what the packages on the
@@ -166,14 +170,14 @@ A notice above each tab says where its entries are authored. The host also
 refuses any rule or attribute-set write against a requirement package,
 whatever sends it.
 
-### A package that still holds its own files
+### A Package That Still Holds Its Own Files
 
 Metron does not load rules, attribute sets or schemes that sit in a requirement
 package's own folder. Such a file contributes nothing, and Metron raises one
 warning for each. See [Metron fragment migration](/docs/sightline/upgrade/metron-fragment-migration)
 to move them into component packages.
 
-## Select a scoring scheme
+## Select a Scoring Scheme
 
 A rule or an attribute set is consumed by a requirement. A scheme is consumed by
 the package: the package is assessed against one scheme, and every requirement in
@@ -190,7 +194,7 @@ scheme packages widens the choice; it never merges two schemes into one.
 If the selected scheme is no longer in the catalogue, the package fails to load.
 The error names the schemes that are available.
 
-### The built-in scheme
+### The Built-in Scheme
 
 A new requirement package opens on a built-in scheme with one outcome that maps to
 `yes`, **Pass**, and one that maps to `no`, **Fail**. The built-in scheme defines no
@@ -208,7 +212,7 @@ A scheme package that is missing, pinned to a version that does not exist, or
 invalid still fails the load. A selected scheme other than the built-in one also
 fails the load when no scheme package supplies it.
 
-### A requirement package does not author its scheme
+### A Requirement Package Does Not Author Its Scheme
 
 The **Scoring scheme** tab is read-only. Edit a scheme in the scheme package that
 owns it.
@@ -216,7 +220,7 @@ owns it.
 A banner on the tab names the scheme package that supplies the scheme. Select
 **Open** to edit it there.
 
-### Pin a version, or float
+### Pin a Version, or Float
 
 A pinned entry uses that exact package version. A floating entry resolves to the
 single installed package of that id.
@@ -231,10 +235,10 @@ Two versions of one package can coexist in a workspace. A floating entry
 cannot choose between them: Metron raises a warning naming both packages, and the
 entry contributes nothing until you pin it.
 
-### A new version of a package
+### A New Version of a Package
 
 Select **New version** on the **Packages** tab of a requirement package to create the next version.
-Metron copies the package into a sibling directory, for example `aescsf-v2` beside `aescsf-v1`,
+Metron copies the package into a sibling directory, for example `aescsf-v2` beside `aescsf-v1`, or `aescsf-v2.sightline` beside `aescsf.sightline` for a package in its own folder,
 and raises the package version to the next integer. A trailing `-vN` in the directory name and the
 package name follows the new version.
 
@@ -257,7 +261,7 @@ version 2.
 A rules, attribute-set or scheme package has no **New version** button. After such a package gains
 a second version, pin every entry that names it.
 
-### Column visibility
+### Column Visibility
 
 This section covers the Schemes grid in a scheme package's own editor (see
 [Create a component package](#create-a-component-package)). The read-only
@@ -267,7 +271,7 @@ The Schemes toolbar has its own **`[Edit columns]`** button to show, hide and re
 **statuses** and **used by**. Drag the handle at the left of a column header to move that column, or focus the handle and use Space and the arrow keys. The picker shows the same order. Your choice is personal and local. Dragging a column's resize handle saves
 its width the same way.
 
-## Leaving an editor with changes pending
+## Leaving an Editor with Changes Pending
 
 Metron asks before an editor swaps out from under your pending changes.
 
@@ -275,6 +279,13 @@ Metron asks before an editor swaps out from under your pending changes.
 from a row in the **References** tab, replaces the editor you are in. With changes
 pending it asks first: **Discard** drops them and opens the other package,
 **Save** writes them and then opens it, and **Cancel** stays put.
+
+**Opening a row over a new entry.** A new entry you have typed into is not yet
+staged. Before a click opens another row, Metron asks whether to discard the new
+entry. The **Open** and **Add attribute** menu items ask too. **Discard** drops
+the new entry and opens the row. **Cancel** keeps the new entry open. A new
+entry with nothing typed into it closes without asking. The requirement editor
+does the same for a new requirement.
 
 **Closing the panel.** A package panel with pending changes is marked dirty, so
 VS Code shows its own unsaved-changes prompt on close. A refused save keeps the
@@ -289,7 +300,7 @@ of pending changes. Your work stays where it was when you switch to
 save carries a yellow tint. It also shows a bar on its left edge in the grid.
 The tint stays until you save or discard the change, or undo it.
 
-## Undo, redo and the journal
+## Undo, Redo and the Journal
 
 **Undo** and **Redo** sit beside the pool save bar in every package editor.
 The bar sits at the bottom of the window and shows on every tab of the editor.
@@ -321,7 +332,7 @@ An id defined in two of those packages resolves to the one in the package added
 later. Metron raises a warning naming both the winner and the definition it
 shadows.
 
-### Two different orderings
+### Two Different Orderings
 
 ⛔ Catalogue precedence and the order of a requirement's attribute sets are separate axes.
 
@@ -332,7 +343,7 @@ shadows.
 
 The first picks the set. The second folds the sets a requirement attached.
 
-## What a broken reference does
+## Broken Package References
 
 An unresolved Packages entry never fails a load. Metron raises a warning and the
 entry contributes nothing:
@@ -346,7 +357,7 @@ entry contributes nothing:
 A requirement that named a rule from the failed entry then reports its own
 unresolved-reference diagnostic.
 
-## Reference counts
+## Reference Counts
 
 A component package's **References** tab counts how often each entry is used,
 across every requirement package that names this one. What counts as a
@@ -365,6 +376,34 @@ packages it reports only the references in one of them.
 An entry that nothing references shows `0` in the References tab, counted across
 the whole workspace.
 
+### Tetra Models, Records, Problems and Cause Links
+
+A Tetra model runs every rule of each rule package in its `uses:` list. On a rule
+package, these columns add what the Tetra models that list it contribute:
+
+| Column | Where | What it shows |
+|---|---|---|
+| **used by** | Rules grid | The requirement references to the rule, plus one for each Tetra model that lists the package |
+| **records** | Rules grid | The open records of the rule across those Tetra models. A record is open when the rule still emits it and the rule does not hide it |
+| **problems** | Rules grid | The problems that the last run of each Tetra model reported for the rule, each starting with the model id |
+| **kind** | Consumed by | `requirement package` or `Tetra model` |
+| **requirements** | References by entry | The requirement references to the entry |
+| **cause links** | References by entry | The Lamina causes that link an open record of the rule. A cause that links the same record twice counts once |
+
+Select a Tetra model in **Consumed by** to open its diagram. Select a requirement
+package to open that package.
+
+The counts of records, problems and cause links load after the editor opens, and
+their cells stay empty until then. A rule with no open record shows `0`. A run of
+the rules in Tetra saves its problems for each package. A dry run, and a **Test
+rule** run, save nothing. A Lamina model that still holds an `actor`, `vector` or
+`exposure` on a cause cannot be read for cause links. The References tab names it and
+leaves its causes out of the count.
+
+The **own links** column of the Rules grid summarises the links that the author of
+the rule attached to it. It does not show the records that link to the rule, and it
+is hidden until you choose it in the **Columns** picker.
+
 Deleting an entry is not blocked on its reference count. A requirement package
 keeps its Packages entry. A requirement that named a deleted rule reports an
 unresolved-reference diagnostic on its next load. One that attached a deleted
@@ -373,16 +412,17 @@ attribute set inherits nothing from it, with a warning.
 ⛔ A deleted scheme is the exception. A package that selects it
 fails to load until you select another scheme on the **Package meta** tab.
 
-## Column visibility
+## Column Visibility
 
 The References tab has two grids, each with its own **`[Edit columns]`**
-picker. **Consumed by** manages its 4 columns (`package`, `name`,
-`pinned to`, `path`). Its picker appears only
-once the workspace scan finishes. **References by entry** manages its 3
-(`entry`, `title`, `references`). Its picker is always shown.
+picker. **Consumed by** manages its columns: `package`, `name`, `pinned to` and
+`path`, and on a rule package `kind` as well. Its picker appears only
+once the workspace scan finishes. **References by entry** manages `entry`,
+`title` and `requirements`, and on a rule package `cause links` as well. Its picker
+is always shown.
 A resized column's width persists per grid too. Each grid also reorders when you drag the handle at the left of a column header. Space and the arrow keys on the handle do the same. A grid's picker shows that grid's order.
 
-## Related pages
+## Related Pages
 
 - [Rules](/docs/sightline/usage/metron/rules): what a Rule is, and how scope and assessment use one.
 - [Attributes](/docs/sightline/usage/metron/attributes): the attribute model AttributeSets carry, and

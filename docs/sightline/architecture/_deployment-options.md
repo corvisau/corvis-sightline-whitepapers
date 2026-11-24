@@ -24,7 +24,7 @@ Corvis runs Corvis Sightline for you. Each customer has a separate deployment.
 
 Corvis supports this option fully.
 
-## How the licence applies
+## Licence Scope Across Deployment Options
 
 All three options use the same licence. A licence names the apps that it unlocks, and an app that the licence does not name does not save. Viewing and export stay usable.
 

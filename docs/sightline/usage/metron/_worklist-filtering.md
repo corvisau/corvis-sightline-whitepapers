@@ -1,12 +1,12 @@
 Three separate mechanisms narrow or organise what the assessment worklist shows. They look similar, since all live in the worklist toolbar, but they answer different questions. All three are view-only and change nothing that is assessed.
 
-## Compliance slice (coarse, model-authored)
+## Compliance Slice (Coarse, Model-Authored)
 
 A **Compliance slice** is a compound filter authored on the assessment itself. It combines a category prefix, a set of attributes, target entity kinds, and/or an entity filter query. It narrows the worklist to the pairs whose requirement and entity both satisfy the slice's ANDed predicates. Slices are a fixed, authored list per assessment.
 
 The worklist has no Tetra-authored data slice picker. A pair exists only after it passes the scope Rule of its own requirement, so a Tetra data slice would narrow nothing further.
 
-### Creating and editing Compliance slices
+### Creating and Editing Compliance Slices
 
 Use the New, Edit, Duplicate and Delete icon buttons next to the Compliance slice picker to author slices:
 
@@ -17,10 +17,10 @@ Use the New, Edit, Duplicate and Delete icon buttons next to the Compliance slic
   - **Category**: a `/`-separated prefix path (for example `Asset Management/Inventory`) matched against each requirement's own category path. A slice with `Asset Management` matches any requirement whose category starts with that segment.
   - **Attributes**: key and optional value pairs matched against each requirement's attributes, whether the requirement inherits or declares them. A predicate with no value matches any value for that key.
   - **Target kinds**: restricts the slice to requirements whose scope targets any of the ticked entity kinds.
-  - **Entity filter**: a query that narrows which entities survive, independent of the requirement-level predicates above. The editor shows the program as a list of steps, with a line above it that reads **(no query)**, **1 statement** or the number of statements. Each statement is a numbered row with a badge that says what it does. **Show code** shows the program as text, with a **Copy** button. Select **Edit query** to open the same visual query builder as the Filter popover's Advanced tab in its own dialog. **Apply** returns the edited program to the editor, and **Cancel** or Escape keeps it as it was. Escape closes only the query dialog. A slice with no entity filter keeps every entity. **Edit query** on such a slice opens the builder on `model |> add()`, and the slice stays without an entity filter until you select **Apply**. A **Show code** button in the opened builder reveals the exact program as read-only text with a Copy button.
+  - **Entity filter**: a query that narrows which entities survive, independent of the requirement-level predicates above. The editor shows the program as one summary line, for example **Filter · 1 statement**, which reads **(no query)** when the program has no statement. Select **Edit query** to open the same visual query builder as the Filter popover's Advanced tab in its own dialog. **Apply** returns the edited program to the editor, and **Cancel** or Escape keeps it as it was. Escape closes only the query dialog. A slice with no entity filter keeps every entity. **Edit query** on such a slice opens the builder on `model |> add()`, and the slice stays without an entity filter until you select **Apply**. The **Show code** button in the opened builder reveals the exact program as read-only text with a Copy button.
 - When no Compliance slice has been authored yet, the picker shows a synthetic "Default" placeholder (matches everything, mirrors "None"). It is never editable or deletable, and **New** replaces it with your first real slice.
 
-### Assessing a progression together
+### Assessing a Progression Together
 
 A **progression** is a set of practices climbing MIL1&rarr;MIL3 for one progression area. For example, the AESCSF practices `ASSET-1a`, `1d` and `1f` all maintain an asset inventory at increasing maturity. The mechanisms above assess a progression together when composed:
 
@@ -33,7 +33,7 @@ Each practice's outcome stays independently stored. Bulk edit applies the same v
 
 If practices in the progression also carry assessable attributes (see [Per-attribute assessment](/docs/sightline/usage/metron/attribute-assessment)), those are assessed per practice in the Assess drawer. Per-attribute state is deliberately excluded from bulk edit, so progression-wide bulk edit only ever touches Outcome/State/Notes.
 
-## Filter + Group (per-view, ad hoc)
+## Filter + Group (per-View, Ad Hoc)
 
 The `[Filter]` and `[Group]` toolbar buttons choose which of the pairs in scope to see right now and how to organise them. They are the shared popover components, used the same way across Metron, Lamina and Tetra. Both operate on the same underlying Bonsai query:
 
@@ -41,7 +41,7 @@ The `[Filter]` and `[Group]` toolbar buttons choose which of the pairs in scope 
 - **`[Filter]` → Advanced tab**: the full query builder, editing the exact same query as raw pipeline steps. Any expression Bonsai supports works here, including fields the Basic tab offers no picker for (see below). A **Show code** button reveals the same program as read-only text with a Copy button. A statement can be disabled with the round button at the right of its row. When every statement is disabled, the filter matches nothing. See [Disabling a statement](/docs/sightline/usage/shared/tabular-filtering#disabling-a-statement).
 - **`[Group]`**: pick a low-cardinality attribute to group the grid rows by (or "None" to ungroup). Only a handful of fields are offered. Grouping by a near-unique field like Requirement or Entity would produce one row per group, which isn't useful.
 
-### Available Basic-tab filter fields
+### Available Basic-Tab Filter Fields
 
 | Field | Type | Notes |
 |---|---|---|
@@ -55,17 +55,17 @@ The `[Filter]` and `[Group]` toolbar buttons choose which of the pairs in scope 
 
 The Basic tab offers no field for a requirement's attributes (MIL/security-level/SLT), because they are a list of key/value pairs and not a single scalar value. The Advanced tab reaches them by direct path (`item.attributes.mil.value == "MIL3"`). On the worklist that path resolves the pair's full attribute map, not only what was typed inline. The map holds what the requirement inherits, what it declares, and anything the target state overrides for that one entity. ⛔ Never pipe an attribute path into `hasAny`/`hasAll`/`hasNone`. They return `false` for a record with no diagnostic, so the filter silently matches nothing. `tags` is an array, so `item.tags |> hasAny('EDR')` is correct there. See [Attributes](/docs/sightline/usage/metron/attributes).
 
-### Available Group-by fields
+### Available Group-by Fields
 
 Only **State** and **Outcome** are groupable. Each maps to a real worklist column with a low-cardinality value.
 
-### Dashboard drill-in
+### Dashboard Drill-In
 
 Clicking a requirement row or a coverage segment on the Dashboard tab jumps to the worklist with a matching condition already applied (e.g. clicking the "draft" segment for ACM-1 sets `State = draft AND Requirement = ACM-1`). A drill-in replaces whatever filter program was active.
 
 The Dashboard tab itself shows a distribution at every level (requirement, category, package root): a literal count of `done`-fundamental pairs per fundamental outcome (`yes`/`no`/`partial`/`indeterminate`/`not-applicable`). The fundamental outcome is the only compliance signal, so no scoring scheme, weighting or rollup method exists to configure.
 
-## Saved Filters (personal, local)
+## Saved Filters (Personal, Local)
 
 The `[Saved filters]` button names and saves the current filter program so it can be re-applied or deleted later. Saved filters are:
 
@@ -75,7 +75,7 @@ The `[Saved filters]` button names and saves the current filter program so it ca
 
 For example, save `Outcome = no AND State = done` as "Non-compliant and done" to reapply it with one click next time you work through the backlog.
 
-## Column visibility
+## Column Visibility
 
 The `[Edit columns]` toolbar button lets you show, hide and reorder the grid's Req/Entity/Outcome/State/Notes columns. It is the same column picker that Lamina and Tetra offer in their Tabular Editors. This is a different axis from the row-narrowing mechanisms above.
 

@@ -1,7 +1,7 @@
 A group must have a name. The **New group** drawer marks **Label** as required and
 does not create the group until it holds text.
 
-## Other entities
+## Other Entities
 
 | Entity | Label |
 |---|---|

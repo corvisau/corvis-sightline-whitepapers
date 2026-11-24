@@ -1,6 +1,6 @@
 Tetra writes a picture of a diagram to the `reports/` directory of the model directory.
 
-## In the editor
+## In the Editor
 
 **Export PNG** and **Export all Dataslices as PNG** render in a separate, offscreen view that the extension drives. The diagram on screen is never touched. Because VS Code has no fully hidden view, a render tab briefly appears beside the editor and closes when the batch completes.
 

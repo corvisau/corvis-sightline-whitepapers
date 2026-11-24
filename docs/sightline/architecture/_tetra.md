@@ -1,6 +1,6 @@
 Tetra models networks and systems as block diagrams. A Tetra model is a set of files in a model directory. The extension draws an interactive canvas, a Tabular Editor and a tree view over them.
 
-## What you model
+## Elements of a Tetra Model
 
 A Tetra model describes zones, groups, devices, networks, channels, flows and information. Templates let an entity inherit a shared body instead of repeating it. See [Templates](/docs/sightline/usage/tetra/templates). For what each entity is for and when to choose it, see [Tetra entities](/docs/sightline/methodology/tetra-entities) and [Tetra channels and flows](/docs/sightline/methodology/tetra-channels-and-flows).
 
@@ -11,7 +11,7 @@ A Tetra model describes zones, groups, devices, networks, channels, flows and in
 - **Tree view.** The **Tetra** group of the **Models** tree in the **Sightline** activity-bar view lists the models in the workspace. See [Tree browser panel](/docs/sightline/usage/shared/tree-browser-panel).
 - **Props drawer.** The drawer opens the properties of one entity.
 
-## Data slices and layout
+## Data Slices and Layout
 
 A data slice narrows a model with a filter expression. Each slice can also keep its own layout. See [Data slice filtering](/docs/sightline/usage/tetra/data-slice-filtering) and [Per-slice layout](/docs/sightline/usage/tetra/per-slice-layout).
 
@@ -23,8 +23,3 @@ An overlay draws extra information over the canvas. Tetra has a Findings overlay
 
 - Tetra exports the canvas as a PNG. See [PNG export](/docs/sightline/usage/tetra/png-export).
 - Tetra generates Word and Excel reports from a model. See [Reports](/docs/sightline/usage/tetra/reports).
-
-## Where to go next
-
-- [Open a Tetra model](/docs/sightline/usage/tetra/opening-a-model)
-- [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows)

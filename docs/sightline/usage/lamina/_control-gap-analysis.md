@@ -2,7 +2,7 @@ A Lamina model holds each control under the cause or outcome that owns it. The c
 
 The routes are listed in the [Discovery routes](/docs/sightline/reference/api/discovery) page of the API reference. This page explains what they count.
 
-## What a read counts
+## Counting Rules for Control Reads
 
 A control is reused through a control template. Each control that names the template is an instance of it, and the reads treat the template as the control.
 
@@ -21,7 +21,7 @@ The reads take the ratings and the critical flag from the control after its temp
 
 A Risk is a gap risk when a control that reaches it is a gap or unassessed. A Risk is a critical risk when a control that reaches it has the critical flag. The same template can be critical on one cause and not on another. A critical risk is therefore a Risk reached through a control that carries the flag.
 
-## Choose the control
+## Choose the Control
 
 | To read | Route |
 |---|---|
@@ -35,13 +35,13 @@ Add `?zone=<zone-id>` to any route to keep the controls whose zones include that
 
 A model, cause, outcome, control or template that does not exist answers 404, and the error names the missing id. A control that belongs to another cause or outcome does not match. Two models with the same id answer 409. A `scope` other than `instance` or `template` answers 400.
 
-## Read the answer
+## Read the Answer
 
 | Member | Content |
 |---|---|
 | `control` | The template id, with the label, type, category and group of the first control. |
 | `instances` | Each matched control: its owner, ratings, state, critical flag, zones and the events it reaches. |
-| `risks` | Each Risk reached: its id, name, source, events and rating, the controls that reach it, and its gap and critical flags. |
+| `risks` | Each Risk reached: its id, label, source, events and rating, the controls that reach it, and its gap and critical flags. |
 | `summary` | The number of controls and Risks, the ids of the gap and critical Risks, and the number of controls in each state. |
 | `ratingBasis` | The risk matrix and the likelihood rule that the ratings used. |
 | `issues` | The Risk definitions that the read could not fully honour. |

@@ -10,7 +10,7 @@ the assessment.
 
 ---
 
-## The Evidence tab
+## The Evidence Tab
 
 The assessment shell's **Evidence** tab (after Worklist / Dashboard /
 Findings, always visible) hosts the general-evidence Tabular Editor, a
@@ -44,7 +44,7 @@ Use the **Columns** picker to show or hide the Title, Kind, Value, Version,
 Retrieved and Comment columns. The Open and Remove columns always show. Use the
 grid's search box to filter rows by the text of any visible column.
 
-### Filtering, grouping, and bulk actions
+### Filtering, Grouping, and Bulk Actions
 
 The toolbar also offers the same query-builder controls as the Worklist tab:
 
@@ -81,7 +81,7 @@ Worklist and Findings tabs also use. **Save all** persists the table in a single
 with any other staged Worklist or Findings edits. **Discard all** drops every
 staged edit across all three tabs and restores the last-saved table.
 
-### Opening the evidence file
+### Opening the Evidence File
 
 The **Open** column renders a link for any row whose **Value** is set:
 
@@ -94,7 +94,7 @@ The **Open** column renders a link for any row whose **Value** is set:
 
 The Open column becomes plain text when the panel is read-only.
 
-## Linking a record to a pair
+## Linking a Record to a Pair
 
 Open a pair's Assess drawer. Below the inline **Evidence** editor, the **Linked
 evidence** section lists each record already linked to the pair as a removable
@@ -109,13 +109,13 @@ either, both or neither. A pair linked to a
 [shared assessment](/docs/sightline/usage/metron/shared-assessments) shows the linked evidence that the
 shared assessment cites when the pair has none of its own.
 
-## Deleting a linked record
+## Deleting a Linked Record
 
 Deleting a record in the Evidence tab removes it from the table and clears its id
 from every pair that linked it. It also clears the id from every
 [shared assessment](/docs/sightline/usage/metron/shared-assessments) that cited it.
 
-## Report and exports
+## Report and Exports
 
 - **Reports and JSON export**: every authored record appears in full. A linked
   pair carries only the ids of its linked records.
@@ -123,7 +123,7 @@ from every pair that linked it. It also clears the id from every
   joined with `;`. CSV is per pair, so it carries only the link ids. The full
   records are in the JSON and report exports.
 
-## Moving an existing assessment
+## Moving an Existing Assessment
 
 An assessment that still holds its general evidence in the older location is moved
 with the same one-time command as shared assessments. See

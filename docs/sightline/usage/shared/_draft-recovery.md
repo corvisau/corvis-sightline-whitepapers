@@ -2,7 +2,7 @@ A diagram or package editor in a browser page keeps its unsaved changes in the b
 
 ---
 
-## The prompt
+## The Prompt
 
 A **Restore unsaved changes?** dialog opens when the model loads. It states how many changes the browser kept and when it saved them.
 
@@ -15,7 +15,7 @@ The dialog has no close button. Choose one action to continue editing.
 
 When the model changed after the browser saved the changes, the dialog says so. Restoring puts your changes over the latest version. Where both versions changed the same field, your value is the one that saves. Read the **Journal** before you select **Save all**. See [Changes made elsewhere](/docs/sightline/usage/shared/concurrent-edits).
 
-## What the browser keeps
+## Draft Data in Browser Storage
 
 - One draft for each model, in the browser's local storage for that site
 - An update to the draft after every change
@@ -27,7 +27,7 @@ When the browser blocks local storage or the storage is full, the diagram works 
 
 ---
 
-## Per-app differences
+## Per-App Differences
 
 | App | Behaviour |
 |---|---|

@@ -2,7 +2,7 @@ Collects endpoint devices from Cylance, now BlackBerry Aurora, and produces `Ass
 
 This is a production connector. It calls the vendor API with real credentials.
 
-## What it collects
+## Collected Cylance Device Data
 
 Every device the Cylance tenant reports, with its operating system, network interfaces and run status.
 
@@ -26,7 +26,7 @@ The connector authenticates with a signed token exchange. Your manifest supplies
 
 All three are required. The collector stops with a clear message if any is missing, rather than failing later at the API.
 
-As with every connector, a manifest holds an `env:` reference for each of these, never the value. See [Connector model](/docs/prism/architecture/connector-model).
+As with every connector, a manifest holds an `env:` reference for each of these, never the value. See the [Connector model](/docs/prism/architecture/connector-model) page for how a manifest references credentials.
 
 ## Configuration
 
@@ -39,7 +39,7 @@ Two optional settings, both in the manifest's `config` object.
 
 The default `baseUrl` is region-specific. A tenant outside that region must set it, or authentication fails against the wrong regional service.
 
-## How it runs
+## Cylance Collection Steps
 
 The collector performs the four standard steps:
 
@@ -48,12 +48,4 @@ The collector performs the four standard steps:
 3. It transforms each device to `AssetComputer`.
 4. It transmits the snapshot to the instance inbox.
 
-It allows partial success. A device that fails schema validation is reported and skipped; the remaining devices still transmit. A collection is not lost because one record is malformed.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I configure an instance? | [Connector model](/docs/prism/architecture/connector-model) |
-| How do I run it? | [Running a collector](/docs/prism/usage/collect) |
-| What happens to the snapshot? | [Sync engine](/docs/prism/architecture/sync-engine) |
+It allows partial success. A device that fails schema validation is reported and skipped; the remaining devices still transmit.

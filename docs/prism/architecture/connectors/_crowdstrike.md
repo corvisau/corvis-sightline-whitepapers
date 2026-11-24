@@ -1,10 +1,10 @@
-Collects endpoint data from CrowdStrike Falcon API and normalizes it to the `AssetComputer` schema.
+Collects endpoint data from CrowdStrike Falcon API and normalises it to the `AssetComputer` schema.
 
 ## Configuration
 
-The connector loads its config from a `.env` file **in this folder**
-(`connectors/crowdstrike/.env`), not the repo root. This file is gitignored —
-copy the values from the Falcon console into it:
+The connector loads its config from a `.env` file in this folder
+(`connectors/crowdstrike/.env`), not the repo root. This file is gitignored.
+Copy the values from the Falcon console into it:
 
 ```bash
 # MongoDB
@@ -31,10 +31,10 @@ npm install
 npm run collect:crowdstrike
 ```
 
-## Upload-only replay (no live API call)
+## Upload-Only Replay (No Live API Call)
 
 Replay a previously-captured `output/*.json` snapshot into an instance's inbox
-without hitting the Falcon API — useful for demos or replaying a known-good
+without hitting the Falcon API, useful for demos or replaying a known-good
 capture:
 
 ```bash
@@ -60,7 +60,7 @@ Each run produces two outputs, in this order:
 The connector calls the real Falcon API directly. It authenticates with OAuth2
 client credentials at `/oauth2/token`, then queries device IDs from
 `/devices/queries/devices/v1`. It fetches the details from
-`/devices/entities/devices/v2` in batches of **100 IDs**, which is that
+`/devices/entities/devices/v2` in batches of 100 IDs, which is that
 endpoint's per-request limit. `axios` is already a project dependency; no extra install is
 needed.
 
@@ -164,7 +164,7 @@ Creates snapshots in MongoDB collection: `snapshots_crowdstrike`
 Each snapshot contains:
 - Timestamp
 - Schema version
-- Array of normalized `AssetComputer` objects
+- Array of normalised `AssetComputer` objects
 - Metadata (item counts, validation errors, duration)
 
 ## Security Considerations

@@ -1,6 +1,6 @@
 Sightline is a VS Code extension for modelling architecture, risk and compliance. Each model is a set of files in a model directory on disk. The extension draws interactive views of the model and writes your edits back to it.
 
-## The apps
+## The Apps
 
 | App | What it does |
 |---|---|
@@ -8,7 +8,7 @@ Sightline is a VS Code extension for modelling architecture, risk and compliance
 | [Lamina](/docs/sightline/architecture/lamina) | Models risk as bow-tie diagrams |
 | [Metron](/docs/sightline/architecture/metron) | Assesses a model against a set of requirements |
 
-## What the apps share
+## Shared Foundations of the Apps
 
 - **Plain-text models.** You can review, compare and version a model with any tool that reads text. A model directory holds the files of one model.
 - **The same editing surfaces.** Lamina and Tetra draw a canvas and show the same data in a Tabular Editor. Both open a props drawer for one entity at a time.
@@ -16,16 +16,10 @@ Sightline is a VS Code extension for modelling architecture, risk and compliance
 - **One authoring language for templates.** Lamina and Tetra resolve templates and partials with the same engine.
 - **One licence.** A licence unlocks editing for each app that it names, and one licence covers every app on a machine. See [Licensing](/docs/sightline/usage/shared/licensing).
 
-## How the apps work together
+## Cross-App Integration
 
 The apps find each other's files in the workspace. A finding that Metron records can become a cause in Lamina. Tetra can draw the assessment coverage of Metron on its diagram. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 
-## Ways to run Sightline
+## Ways to Run Sightline
 
 Sightline runs in your own VS Code, on infrastructure that you operate, or on a deployment that Corvis runs for you. The options differ in who operates Sightline and what support applies. See [Deployment options](/docs/sightline/architecture/deployment-options).
-
-## Where to go next
-
-- [Install Sightline](/docs/sightline/install/extensions)
-- [Quickstart](/docs/sightline/usage/quickstart)
-- [Modelling methodology](/docs/sightline/methodology/overview)

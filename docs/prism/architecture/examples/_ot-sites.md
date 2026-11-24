@@ -3,7 +3,7 @@ This example is an operational technology (OT) estate across two sites. Site A c
 ![Site A has a collector node that sends snapshots outbound to the Prism store in the corporate network. Site B has an offline connector that writes a snapshot file, which is carried out and uploaded. The central node runs the sync engine, and write-back updates the target CMDB.](./img/ot-sites-light.svg#light)
 ![Site A has a collector node that sends snapshots outbound to the Prism store in the corporate network. Site B has an offline connector that writes a snapshot file, which is carried out and uploaded. The central node runs the sync engine, and write-back updates the target CMDB.](./img/ot-sites-dark.svg#dark)
 
-## The estate
+## The Estate
 
 | Source | Where | What it knows well |
 |---|---|---|
@@ -15,7 +15,7 @@ The OT asset database is a specialised product, and Prism ships no connector for
 
 The site registers stay in use. Each site team keeps editing its own spreadsheet, and Prism reads each saved version.
 
-## Where each part runs
+## Component Placement Across the OT Sites
 
 | Part | Runs on | Reason |
 |---|---|---|
@@ -24,9 +24,9 @@ The site registers stay in use. Each site team keeps editing its own spreadsheet
 | Prism store | PostgreSQL, in the corporate network | Both the collector node and the central node reach it. |
 | Central node | A machine in the corporate network, installed with the `central` role | It runs the sync engine, and operators review changes in the review TUI. |
 
-The collector node sends its snapshots outbound to the store. Prism needs no connection from the corporate network into the site.
+The collector node sends its snapshots outbound to the store.
 
-## Collecting from the air-gapped site
+## Collecting from the Air-Gapped Site
 
 Site B never connects to the store. Its collection moves as a file.
 
@@ -37,7 +37,7 @@ Site B never connects to the store. Its collection moves as a file.
 
 The snapshot stays unchanged in the store after the upload. An auditor can compare it with the file that left the site.
 
-## Rules for OT sources
+## Rules for OT Sources
 
 | Field | Wins | Why |
 |---|---|---|
@@ -53,16 +53,10 @@ Three settings matter more here than in an IT estate:
 
 [Designing sync rules](/docs/prism/methodology/designing-rules) explains each setting.
 
-## Write-back
+## Write-Back
 
 A reverse rule maps the consolidated dataset to the corporate CMDB. The CMDB gets one inventory of both sites, with the firmware, zone and owner of every device. The rule's mode is `review`, so an operator approves each change before it is queued.
 
 The write needs a connector for the CMDB that supplies its own writer, as the Jira Assets connector does. Until one does, an operator completes the queued writes by hand. [Run a write-back](/docs/prism/usage/write-back) describes both paths.
 
 This design writes nothing into the OT sites. A write into an OT network changes a production system. If a site wants enrichment, such as a criticality value in its asset database, keep the reverse rule in `review` mode. For site B, the queued writes cross the air gap by the same procedure as the snapshot file. A site operator then completes them by hand.
-
-## Where to go next
-
-- [Example architecture 1: an IT estate on Windmill](/docs/prism/architecture/examples/it-estate)
-- [Install Standalone Prism](/docs/prism/install/prism)
-- [The asset data problem](/docs/prism/methodology/asset-data-problem)

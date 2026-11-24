@@ -4,20 +4,20 @@ To colour a bubble or give it an icon, see [Annotation styling](/docs/sightline/
 
 ---
 
-## Text and Markdown types
+## Text and Markdown Types
 
 - `text`: the value renders literally on the canvas. Newlines are preserved, and the bubble wraps them as line breaks. No Markdown syntax is applied: `**bold**` shows as literal asterisks, and `- a` shows as a literal dash.
 - `markdown`: the value renders as Markdown on the canvas. `**bold**` renders bold, and `- a` / `- b` renders as a bulleted list. A single newline renders as a line break, not as a CommonMark soft-break space. A Markdown value can also link to another object in the model. See [Markdown links](/docs/sightline/usage/shared/markdown-links).
 
 The remaining types render through their own dedicated presentations. See the [Tetra](#tetra) and [Lamina](#lamina) sections.
 
-## The props drawer Value field
+## The Props Drawer Value Field
 
 The props drawer edits the **Value** of an existing annotation with the shared Markdown editor. The editor is the same for both `text` and `markdown` types. It previews rendered Markdown while you edit, and it matches the annotation create surface.
 
 The **Value** field of a `text` annotation can therefore look different from the canvas bubble. The canvas keeps `text` literal, but the drawer editor always previews Markdown formatting, whatever the type. To make the canvas bubble render Markdown, set the annotation **Type** to `markdown`.
 
-## Setting a bubble's width
+## Setting a Bubble's Width
 
 The **Width** field in the props drawer sets the bubble width in pixels. The bubble renders exactly that wide. The field is also on the create surface.
 
@@ -27,7 +27,7 @@ The **Width** field in the props drawer sets the bubble width in pixels. The bub
 - An id-only badge ignores **Width**. The badge appears when the view option shows annotation ids, or when the link **Style** is `id`.
 - Clear the field to return the bubble to its content size.
 
-## One bubble for several targets
+## One Bubble for Several Targets
 
 An annotation linked to several owners shows one bubble per owner by default. To draw a single bubble instead, set **Bubble** to `shared` in the props drawer. The setting is also on the create surface, in Tetra and in Lamina.
 
@@ -38,7 +38,7 @@ An annotation linked to several owners shows one bubble per owner by default. To
 - An annotation with one link looks the same in both modes. A `scope` annotation ignores **Bubble** and keeps one badge per zone.
 - Set **Bubble** back to `perLink`, or clear it, to return to one bubble per owner.
 
-## Moving a nudge panel
+## Moving a Nudge Panel
 
 The Alt+right-click panels have a title bar that names the panel. Drag the title bar to move the panel off the part of the diagram you are adjusting.
 
@@ -48,9 +48,9 @@ The Alt+right-click panels have a title bar that names the panel. Drag the title
 - Press Home on the move button to return the panel to its default place.
 - The close button in the title bar closes the panel, as Escape does.
 
-The application stores the position on this computer, not in the model. A saved position that no longer fits the window is pulled back inside it. Lamina has the annotation placement panel only. Tetra also has the segment nudge and Container Properties panels.
+The application stores the position on this computer, not in the model. A saved position that no longer fits the window is pulled back inside it. All of these panels have the title **Layout**. Lamina has the annotation placement panel only. Tetra also has the segment panel and the container panel.
 
-## Where a note goes when you set no placement
+## Default Annotation Placement
 
 A note that has no placement set takes the first free slot around its owner. The first note sits above the owner. A later note on the same owner moves to the next slot that does not overlap a note already placed.
 
@@ -70,11 +70,11 @@ A note that has no placement set takes the first free slot around its owner. The
 
 A Tetra annotation has one of five types: `text`, `markdown`, `array`, `statusgrid` or `scope`.
 
-### Editing a value
+### Editing a Value
 
 The bubble stays read-only on the canvas for `markdown`. Edit the value of an existing annotation in the props drawer.
 
-### Deleting an annotation
+### Deleting an Annotation
 
 1. Right-click the annotation bubble and choose **Delete…**.
 2. Read the confirmation. It states how many owners the annotation is linked to.
@@ -95,12 +95,12 @@ The delete removes the annotation and all of its links, whichever bubble you rig
 
 A Lamina annotation has one of three types: `text`, `markdown` or `statusgrid`. The `statusgrid` type renders through its own chip-grid presentation.
 
-### Editing a value
+### Editing a Value
 
 Edit the text of an annotation in the props drawer, not on the canvas bubble. To open the drawer, double-click the bubble or select **Edit** on its right-click menu. The right-click menu also offers **Set type** and **Set style**.
 
-A double-click on any Lamina node opens its props drawer. A double-click on the Lamina canvas does not zoom. Use the scroll wheel or the zoom buttons instead.
+A double-click on any Lamina node opens its props drawer. A double-click on a consequence category cell of an outcome, in the Inherent or the Residual row, opens the drawer already on that category. **Back** returns to the outcome. An aggregate outcome has no ratings of its own, so a double-click on it opens its read-only drawer without drilling in. A double-click on the Lamina canvas does not zoom. Use the scroll wheel or the zoom buttons instead.
 
-### Shared bubble
+### Shared Bubble
 
 The picked Risk changes which targets appear, but it does not move annotations. A shared bubble stays beside the first visible target, and it moves to the next visible target when the Risk leaves the first off the canvas.

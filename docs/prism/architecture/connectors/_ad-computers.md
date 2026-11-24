@@ -1,4 +1,4 @@
-Collects computer objects from Active Directory and pushes snapshots to MongoDB — entirely in PowerShell, no Node.js required.
+Collects computer objects from Active Directory and pushes snapshots to MongoDB (entirely in PowerShell, no Node.js required).
 
 ## Architecture
 
@@ -12,7 +12,7 @@ flowchart TD
     P --> M[("MongoDB")]
 ```
 
-Both scripts can run on the same Windows machine. If the AD machine cannot reach MongoDB directly, copy the YAML file to a machine that can and run `Push-ADSnapshot.ps1` there.
+Both scripts can run on the same Windows machine. If the AD machine cannot reach MongoDB directly, copy the YAML file to a machine that can reach it. Run `Push-ADSnapshot.ps1` there.
 
 ## Prerequisites
 
@@ -72,7 +72,7 @@ Connection defaults:
 - `Database`: `$env:MONGODB_DB` or `prism`
 - `Collection`: `snapshots_ad-computers`
 
-### Collect and push in one go
+### Collect and Push in One Go
 
 ```powershell
 .\Collect-ADComputers.ps1 -OutputPath .\snapshot.yaml

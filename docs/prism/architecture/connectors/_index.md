@@ -1,6 +1,6 @@
 Prism ships ten connectors. Eight collect from real systems. Two are test fixtures.
 
-## What each connector collects
+## Shipped Connectors and Their Sources
 
 | Connector | Source system | Type | Produces | Status |
 |---|---|---|---|---|
@@ -12,18 +12,18 @@ Prism ships ten connectors. Eight collect from real systems. Two are test fixtur
 | [`ad-computers`](/docs/prism/architecture/connectors/ad-computers) | Active Directory | On-premise agent | `AssetComputer` | Production |
 | [`local-host-python`](/docs/prism/architecture/connectors/local-host-python) | The local machine | On-premise agent | `AssetComputer` | Production |
 | [`local-host-powershell`](/docs/prism/architecture/connectors/local-host-powershell) | The local machine | On-premise agent | `AssetComputer` | Production |
-| [`aws-ec2-mock`](/docs/prism/architecture/connectors/aws-ec2-mock) | None — synthetic data | **Test fixture** | `AssetComputer` | **Fixture, not an integration** |
-| [`jira-assets-mock`](/docs/prism/architecture/connectors/jira-assets-mock) | None — synthetic data | **Test fixture** | `BaseAsset` | **Fixture, not an integration** |
+| [`aws-ec2-mock`](/docs/prism/architecture/connectors/aws-ec2-mock) | None (synthetic data) | **Test fixture** | `AssetComputer` | **Fixture, not an integration** |
+| [`jira-assets-mock`](/docs/prism/architecture/connectors/jira-assets-mock) | None (synthetic data) | **Test fixture** | `BaseAsset` | **Fixture, not an integration** |
 
-## About the two fixtures
+## About the Two Fixtures
 
 `aws-ec2-mock` and `jira-assets-mock` connect to nothing. They emit synthetic records and need no credentials.
 
 They exist so you can run a complete collection, sync and review cycle before you configure a real source. A fixture proves your Prism installation works; it tells you nothing about a vendor integration.
 
-**Prism does not ship an AWS integration.** `aws-ec2-mock` produces records shaped like EC2 instances for testing. Do not read it as AWS support.
+Prism does not ship an AWS integration. `aws-ec2-mock` produces records shaped like EC2 instances for testing.
 
-## Agent connectors run differently
+## Agent Connectors Run Differently
 
 Three connectors run on the machine or domain they collect from, rather than calling a remote API.
 
@@ -33,14 +33,6 @@ Three connectors run on the machine or domain they collect from, rather than cal
 
 These need placement, not just credentials. Read their pages before you plan a deployment.
 
-## Choosing between the two endpoint-security connectors
+## Choosing Between the Two Endpoint-Security Connectors
 
-`crowdstrike` and `cylance` both produce `AssetComputer` records about endpoints. If you run both products, run both connectors and let the sync engine merge them — that is the case Prism is built for. Set the priority on each rule to say which vendor you trust for which field.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What is a connector, and what is a manifest? | [Connector model](/docs/prism/architecture/connector-model) |
-| How do I build one? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |
-| How do I run one? | [Running a collector](/docs/prism/usage/collect) |
+`crowdstrike` and `cylance` both produce `AssetComputer` records about endpoints. If you run both products, run both connectors and let the sync engine merge them; that is the case Prism is built for. Set the priority on each rule to say which vendor you trust for which field.

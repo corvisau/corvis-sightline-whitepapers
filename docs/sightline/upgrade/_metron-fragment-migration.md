@@ -1,6 +1,6 @@
 A Metron requirement package takes its rules, attribute sets and scoring scheme only from component packages. This page applies to a package that still holds those items in its own folder.
 
-## What Metron does with the old files
+## Metron Handling of Legacy Fragment Files
 
 Metron does not load a rules, attribute-set or scheme file that sits in a requirement package's own folder.
 
@@ -8,7 +8,7 @@ Metron raises one warning for each such file. The warning names the file.
 
 A package that selects a scheme held in its own folder does not open until the scheme moves into a scheme package. A package with no scheme has no outcomes to show.
 
-## What the migration tool does
+## Fragment Migration Tool
 
 A migration tool moves each file into a component package. Ask Corvis for the tool that matches your release. The tool does these things:
 
@@ -18,7 +18,7 @@ A migration tool moves each file into a component package. Ask Corvis for the to
 
 The tool offers a dry run that shows what it would do before it changes anything.
 
-## After the migration
+## After the Migration
 
 1. Open the requirement package and select the **Packages** tab.
 2. Check that each new package shows its rule, attribute-set or scheme entries in the **status** column.

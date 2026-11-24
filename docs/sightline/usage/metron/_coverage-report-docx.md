@@ -1,6 +1,6 @@
 The coverage report writes the coverage view of a Metron package into a Word template that you supply. The app offers the reports that the package or assessment already provides. It does not offer a way to add a report.
 
-## What the report contains
+## Coverage Report Sections
 
 | Section | Rows |
 |---|---|
@@ -12,11 +12,11 @@ The report never shows attribute satisfaction. Satisfaction is a live working si
 
 The report does not filter by status. Finding status appears as a column.
 
-## The template is yours
+## The Template Is Yours
 
 The report ships no template. Your template supplies the layout, and the report fills it with the coverage rows.
 
-## Run the report
+## Run the Report
 
 Run **Metron: Export Coverage Report** for a package, or **Metron: Export Assessment Coverage Report** for an assessment. Both commands offer the reports that the package or assessment provides. The report button on the requirements toolbar offers the same list. In VS Code, its finished file lands in the package's `outputs/` folder and opens in its default application.
 

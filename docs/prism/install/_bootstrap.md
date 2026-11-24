@@ -2,7 +2,7 @@ Sightline Prism collects CrowdStrike endpoints into a consolidated dataset. It w
 
 This recipe builds that loop on Windmill-hosted Prism over a PostgreSQL store.
 
-## The four choices
+## The Four Choices
 
 Four decisions shape an install of Prism. This recipe has made all four.
 
@@ -17,7 +17,7 @@ The recipe also fixes one name. Every source id below uses the instance `prod`, 
 
 Parts 1 to 3 follow one row of the table each, and they run at a terminal. Parts 4 to 7 run in the review app, which is where the field mapping, the collections, the rules and the reviews happen.
 
-## What you end up with
+## End State of the Bootstrap
 
 ```mermaid
 flowchart LR
@@ -37,7 +37,7 @@ The round trip takes three rules.
 
 The second and third rules make a loop rather than two one-way feeds. Jira's static entries arrive at a low priority. CrowdStrike's live values win, and the winner then goes back out over Jira's stale copy.
 
-## Before you start
+## Before You Start
 
 Read [Prerequisites](/docs/prism/install/prerequisites), then [Installing Windmill-hosted Prism](/docs/prism/install/windmill).
 
@@ -91,7 +91,7 @@ The same installer run asks for four values.
 
 The installer writes one resource, `f/prism/crowdstrike_prod_manifest`, and copies the collector script to `f/prism/crowdstrike_collect.ts`.
 
-### The manifest is the instance
+### The Manifest Is the Instance
 
 That resource holds the whole deployment: which connector it is, the instance name, the credentials it authenticates with, and the settings it collects by. A secret is stored as a pointer to a Windmill variable, never as text.
 
@@ -107,11 +107,11 @@ To add a second CrowdStrike tenant later, duplicate the manifest resource in Win
 
 You set up Jira. Prism does not create a project, an issue type, a field or a scheme.
 
-### 1. Create the project and the issue type
+### 1. Create the Project and the Issue Type
 
 Create the project, or use an existing one. Choose the issue type that represents a machine. This recipe uses the project key `ASSET` and the issue type `Computer`.
 
-### 2. Create the custom fields
+### 2. Create the Custom Fields
 
 The connector README carries the full table with each key. See [Jira Assets Connector](/docs/prism/architecture/connectors/jira-assets) § Jira Setup.
 
@@ -130,7 +130,7 @@ Add each field to the project's screens. Jira accepts a field that is not on a s
 
 You do not need the `customfield_NNNNN` id of any of them. Part 4 reads the ids from your own site and lists them for you.
 
-### 3. Answer the Jira prompts
+### 3. Answer the Jira Prompts
 
 The same installer run asks for five values.
 
@@ -146,7 +146,7 @@ It writes `f/prism/jira-assets_prod_manifest`, and it copies two scripts. `f/pri
 
 ---
 
-## Deploy the workspace
+## Deploy the Workspace
 
 The installer ends with a preview. Read it, then push.
 
@@ -167,7 +167,7 @@ Everything below runs in the review app. Open it in your Windmill workspace.
 
 ---
 
-## Part 4 — Read what each instance collects
+## Part 4 — Read What Each Instance Collects
 
 Choose **Connectors**. Both instances are listed, and both read `never read`.
 
@@ -180,7 +180,7 @@ Every connector reports what it collects, and **Refresh fields** is how you ask.
 
 Refresh both. An instance that has never been refreshed cannot collect: until then nothing says which fields that connector needs.
 
-### 1. Read the CrowdStrike fields
+### 1. Read the CrowdStrike Fields
 
 Choose **Configure** on `crowdstrike.prod`, then **Refresh fields**.
 
@@ -190,7 +190,7 @@ There is nothing to map here. CrowdStrike returns one record shape, and the conn
 
 A later release of the connector can collect a new path. Refreshing after an upgrade is how that reaches you, which is why the button is offered for this connector too.
 
-### 2. Read the Jira fields
+### 2. Read the Jira Fields
 
 Choose **Back to connectors**, then **Configure** on `jira-assets.prod`. Choose **Refresh fields**. The app asks your Jira site for its custom fields and records the answer on the manifest.
 
@@ -198,7 +198,7 @@ Choose **Back to connectors**, then **Configure** on `jira-assets.prod`. Choose 
 
 A failure here is a credential or a base URL problem. The message names the Jira endpoint it called.
 
-### 3. Map the Jira fields
+### 3. Map the Jira Fields
 
 The table holds one row per key the connector understands. The dropdown on each row lists every custom field your site returned, with its name, its id and its type.
 
@@ -219,11 +219,11 @@ Leave every other row at `(not collected)`.
 
 Choose **Save mapping**. It writes the ids to the manifest's `config.fieldIds` and touches nothing else, so a later refresh cannot disturb them.
 
-### 4. Copy the ids
+### 4. Copy the IDs
 
 Rule 6c addresses Jira by field id, so copy the `customfield_NNNNN` id of each field you mapped. The dropdown shows the id beside the name.
 
-### When a Jira field changes
+### Jira Field Changes After Mapping
 
 Add a field in Jira, then choose **Refresh fields** again. The new field joins the dropdowns, and the saved mapping is untouched.
 
@@ -231,7 +231,7 @@ Delete a field in Jira, and its row is flagged `orphaned` after the next refresh
 
 ---
 
-## Part 5 — The first collection
+## Part 5 — the First Collection
 
 Collect from the connectors before you write the rule. This allows you to browse for field names in the rule builder.
 
@@ -247,7 +247,7 @@ The app runs the collector against this manifest. It supplies the storage resour
 
 Choose **Back to connectors**. Choose **Configure** on `crowdstrike.prod`, then **Collect now**. Part 4 refreshed this instance, so it is ready.
 
-### 3. Confirm both landed
+### 3. Confirm Both Landed
 
 Choose **Browse data**, then **Inboxes**.
 
@@ -259,17 +259,17 @@ Then read one real CrowdStrike record. Part 4 named the paths; this shows the va
 
 ---
 
-## Part 6 — The three rules
+## Part 6 — the Three Rules
 
 This part is specific to your data. Work through it slowly.
 
 Choose **Rules**. [Create and edit rules](/docs/prism/usage/manage-rules) covers the editor. This part covers what to put in it.
 
-### Where the rules live
+### Rule Storage in Windmill-Hosted Prism
 
 This hosting keeps rules in the `rules` collection in your store. There is no `rules` directory and no file to load, so the editor is how a rule gets in and how it changes.
 
-### Where the consolidated dataset comes from
+### Registration of the Consolidated Dataset
 
 A connector's dataset registers itself the first time that connector collects. `consolidated-assets` belongs to no connector, so nothing registers it that way. The installer declares it as a `prism_local_table` resource in your workspace.
 
@@ -284,7 +284,7 @@ So a declared dataset is ready by the time you can name it in a rule. Nothing ha
 
 **To declare one while writing a rule**, name a merge target that nothing declares yet. The editor says so and offers to declare it, which creates the resource and registers it in one step.
 
-### How the editor presents a rule
+### Rule Editor Modes
 
 The editor has two modes, and a button switches between them.
 
@@ -303,7 +303,7 @@ A reverse rule shows no Mode and no Priority. It merges nothing. It writes one v
 
 The target sets the direction. A local target makes the rule merge, and a remote source makes it push. The app asks only when the target is absent from the table registry. [The review app](/docs/prism/usage/review-app) and [Run a sync rule](/docs/prism/usage/sync) both cover how the target sets the rule's direction.
 
-### The two ideas the mappings encode
+### The Two Ideas the Mappings Encode
 
 **Priority decides which source wins a field.** Two sources can report the same target field. The engine applies the higher priority and shadows the lower one. It keeps the shadowed value and shows it. This is why the Jira rule sits below CrowdStrike.
 
@@ -313,7 +313,7 @@ Reserve `review` for fields where a wrong value is expensive, such as security p
 
 > An approval overrides priority. A person who approves a lower-priority proposal replaces a higher-priority applied value.
 
-### 6a. CrowdStrike to the consolidated dataset
+### 6a. CrowdStrike to the Consolidated Dataset
 
 | Header field | Value |
 |---|---|
@@ -360,7 +360,7 @@ Note the shape of a source field. It uses dots, and it indexes an array by posit
 
 `reconcilePresence` stays `false` while you are still confirming that the collector sees the whole fleet. Set it to `true` and the engine proposes a decommission for any host absent from a run.
 
-### 6b. Jira to the consolidated dataset
+### 6b. Jira to the Consolidated Dataset
 
 | Header field | Value |
 |---|---|
@@ -397,7 +397,7 @@ The tie-break is `newer` for the reason [rule 6a](#6a-crowdstrike-to-the-consoli
 
 The asymmetry is deliberate. Jira wins on the business facts that only Jira holds. CrowdStrike wins on anything an agent observes live.
 
-### 6c. The consolidated dataset to Jira
+### 6c. the Consolidated Dataset to Jira
 
 | Header field | Value |
 |---|---|
@@ -422,7 +422,7 @@ Substitute your own ids. The ids above are examples and do not match your site.
 
 `hostname` appears twice on purpose. The first mapping writes the issue summary, so a person can read the issue. The second writes the Host Name field, so rule 6b can match on it next time.
 
-### What happens to a machine Jira does not hold
+### Machines Missing from Jira
 
 A push writes to an issue that already exists. It finds that issue by the key rule 6b recorded on the master record. A master with no Jira key therefore has no address, and this rule skips that machine silently on every run.
 
@@ -445,7 +445,7 @@ Another target system needs its own fields. The panel takes any JSON object, and
 
 ---
 
-## Part 7 — Run the loop
+## Part 7 — Run the Loop
 
 Every step below is a button in the review app.
 
@@ -468,11 +468,11 @@ On a first run, every host arrives as a new-asset proposal. The engine writes no
 
 The collector and the write-back read one manifest, so they cannot resolve different source ids.
 
-### When no script can reach the source
+### Manual Write-Back for an Unreachable Source
 
 Choose **Browse data**, then **Outboxes**. The screen lists the queued items, downloads them, and records the ones you performed by hand. See [Run a write-back](/docs/prism/usage/write-back).
 
-## Confirm the loop
+## Confirm the Loop
 
 1. A Jira issue exists for a CrowdStrike host. It holds the hostname, the IP address and the MAC address.
 2. The host's master record carries both sources. Choose **Browse data**, then **Local tables**, to see the source and the priority for each field.
@@ -481,18 +481,9 @@ Choose **Browse data**, then **Outboxes**. The screen lists the queued items, do
 
 Step 3 is the one to watch. If the engine applies the change instead of shadowing it, the priorities in 6a and 6b do not match this recipe.
 
-## After the first loop
+## After the First Loop
 
 - **Put the collectors on a schedule.** Nothing above runs on a timer. Windmill schedules a deployed script, so schedule `f/prism/crowdstrike_collect` and `f/prism/jira-assets_collect`. Each schedule takes the storage resource and that instance's manifest from a picker.
 - **Turn on decommissions.** Both sync rules set `reconcilePresence` to `false`. Turn it on once you trust the collector's coverage. See [rule 6a](#6a-crowdstrike-to-the-consolidated-dataset) for what the setting does.
 - **Add a second instance of a connector.** Duplicate its manifest resource in Windmill and change `instance`. It appears under **Connectors** with nothing to register.
 - **Add a second endpoint source.** Install its connector, then add a rule shaped like 6a with its own priorities.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What does each review decision mean? | [Review and apply changesets](/docs/prism/usage/review-changesets) |
-| How does the engine decide a merge? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| What else is in the review app? | [The review app](/docs/prism/usage/review-app) |
-| How do I add another connector? | [Writing a connector](/docs/prism/architecture/writing-a-connector) |

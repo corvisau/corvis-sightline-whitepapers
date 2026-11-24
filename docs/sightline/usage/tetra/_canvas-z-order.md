@@ -1,6 +1,6 @@
 This page lists how the layers of the Tetra canvas stack, from bottom to top. It also says which layers take a click and which let it pass through.
 
-## The stack, bottom to top
+## The Stack, Bottom to Top
 
 1. Zone fills
 2. Group fills
@@ -21,17 +21,17 @@ A bubble paints above its own leader, so the leader tail tucks behind the bubble
 
 Where two badge layers cover the same pixel, the later layer in items 9 and 10 wins. The order is: edge label pills, edge findings badges, edge coverage badges, then node coverage badges.
 
-### Order among channels and flows
+### Order Among Channels and Flows
 
-Information flows paint above named channels. Named channels paint above shorthand channels (the automatic device-to-network connections).
+Information flows paint above channels.
 
 An edge label pill does not hide behind a crossing edge, because pills paint in their own layer above all edges.
 
-## Layers above the canvas
+## Layers Above the Canvas
 
 The legend overlay, context menus, drawers and dialogs sit above the whole canvas.
 
-## Paint order and click order
+## Paint Order and Click Order
 
 A click normally goes to the layer painted on top. Two layers paint above objects that a click must reach, so they take clicks only where nothing else needs them.
 

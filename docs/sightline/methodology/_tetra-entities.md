@@ -1,6 +1,6 @@
 A Tetra model holds eight kinds of entity. Five are nodes that sit in the containment tree: zones, groups, devices, networks and information. Channels and flows connect nodes. A system collects nodes outside the tree. Each kind has one job, and a model stays readable when each entity does only that job.
 
-## The entity kinds
+## The Entity Kinds
 
 | Kind                                | What it represents                                                                                        | Holds members           |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
@@ -15,7 +15,7 @@ A Tetra model holds eight kinds of entity. Five are nodes that sit in the contai
 
 [Tetra channels and flows](/docs/sightline/methodology/tetra-channels-and-flows) covers the last two connecting kinds in detail.
 
-## Zones and groups
+## Zones and Groups
 
 A zone and a group both contain other nodes, and both draw a box around them. The difference is what the model does with the box.
 
@@ -29,11 +29,11 @@ A zone carries three optional fields that look alike and do different jobs:
 |---|---|
 | Zone type | Classifies the zone, for example `OT-L3` or `IT`, and sets the zone colour |
 | SL-T | States the target security level, and shows as a red pill in the zone header |
-| **Zone Trust** | Holds a display-only label, and shows as a grey pill. See [Tetra zone trust](/docs/sightline/usage/tetra/zone-trust) |
+| Threat Potential | Rates from 0 to 4 how likely a threat actor is to be present, and shows as a blue pill. See [Tetra zone Threat Potential](/docs/sightline/usage/tetra/zone-threat-potential) |
 
-## Devices, networks and information
+## Devices, Networks and Information
 
-A device is the unit that does work. Give each machine its own device, and attach it to the networks it uses through its `connections`. A device that connects to a network without an authored channel receives a channel of type `network` with the protocol `ip` automatically.
+A device is the unit that does work. Give each machine its own device, and link it to the networks it uses with a channel from the device to the network. The Channels list in the device drawer adds that channel. A channel to a network is a `direct` channel of type `network`, and it carries the network's default protocol stack, or `ip` when the network has none.
 
 A network represents the network itself, not a link. Use a network for a segment that several devices share, and a channel for a conduit between two specific nodes. A network can carry address ranges. See [Network Addressing](/docs/sightline/usage/tetra/network-addressing).
 
@@ -43,7 +43,7 @@ Information is a point, not a connection. It names a piece of data, such as a se
 
 A system gathers devices, zones, groups and networks that serve one purpose. A device can belong to a system and still sit in a zone. A system draws no box, so it describes a function without changing the layout. A data slice can select system entities by kind. See [Tetra Data Slice Filtering](/docs/sightline/usage/tetra/data-slice-filtering).
 
-## Choosing between them
+## Choosing Between Them
 
 | You want to | Use |
 |---|---|

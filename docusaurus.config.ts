@@ -8,6 +8,12 @@ const config: Config = {
   title: 'Sightline',
   tagline: 'Architecture, risk and compliance in one connected model',
   favicon: 'img/favicon.ico',
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {rel: 'icon', type: 'image/svg+xml', href: '/img/logo.svg'},
+    },
+  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -142,10 +148,6 @@ const config: Config = {
               // route, not the emitted file path.
               label: 'Overview',
               to: '/docs',
-            },
-            {
-              label: 'Standards & framework alignment',
-              to: '/docs/standards-alignment',
             },
           ],
         },

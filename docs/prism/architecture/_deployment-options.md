@@ -5,9 +5,9 @@ Sightline Prism is one product with two hostings. The hostings differ in where P
 | Standalone Prism | Your own machines, as one or more nodes | The operator CLI, in a terminal |
 | Windmill-hosted Prism | A Windmill workspace | The review app, in a browser |
 
-Both hostings run the same engine, the same connectors and the same rules. A decision that an operator records in one has the same effect in the other.
+Both hostings run the same engine, connectors and rules. A decision that an operator records in one has the same effect in the other.
 
-## Two kinds of work, in two places
+## Two Kinds of Work, in Two Places
 
 Prism splits its work by what each part must reach.
 
@@ -62,7 +62,7 @@ Each node is a [runtime instance](/docs/prism/install/runtime-instance): a direc
 
 A single machine with the `both` role is enough for a trial. The local JSON store suits that case, because it needs no database server.
 
-## Windmill-hosted Prism
+## Windmill-Hosted Prism
 
 Windmill-hosted Prism deploys the collectors as scheduled Windmill scripts, and serves the review app in a browser.
 
@@ -97,13 +97,13 @@ The review app records the same decisions as the review TUI. Both also cover a s
 
 [The review app](/docs/prism/usage/review-app) describes both in the browser.
 
-## The hostings are not exclusive
+## The Hostings Are Not Exclusive
 
 The operator CLI reads and writes an ordinary Prism store, and a Windmill-hosted store is an ordinary Prism store. An operator can run a CLI command against a Windmill-hosted deployment from a laptop, and the workspace shows the result.
 
 Choose a hosting for where your operators work.
 
-## Choose a storage backend
+## Choose a Storage Backend
 
 Prism stores its data in one of three backends.
 
@@ -115,15 +115,6 @@ Prism stores its data in one of three backends.
 
 The backends do not share data. Choose the backend before you collect data that you want to keep. [Storage backends](/docs/prism/install/storage-backends) gives the settings for each one.
 
-## What a release contains
+## Release Archive Contents
 
 Corvis supplies each hosting as one archive. The archive holds compiled code for the engine, the connectors and the interface. An install needs no source checkout, and it reaches no package registry.
-
-## Where to go next
-
-| Task | Document |
-|---|---|
-| Install Standalone Prism | [Installing Standalone Prism](/docs/prism/install/prism) |
-| Install Windmill-hosted Prism | [Installing Windmill-hosted Prism](/docs/prism/install/windmill) |
-| Learn what the operator CLI contains | [The operator CLI](/docs/prism/architecture/cli) |
-| Learn what Windmill hosting adds | [Windmill-hosted Prism](/docs/prism/architecture/windmill) |

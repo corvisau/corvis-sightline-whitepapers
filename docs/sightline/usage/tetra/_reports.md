@@ -2,7 +2,7 @@ Tetra generates an entity inventory as an Excel workbook or a Word document. Cho
 
 Lamina and Metron use the same report generator pipeline. Tetra adds two built-in generators, one for Excel workbooks and one for Word documents.
 
-## Run a report
+## Run a Report
 
 1. Choose **Export ▾** in the toolbar.
 2. Choose **Reports…**.
@@ -13,23 +13,23 @@ Lamina and Metron use the same report generator pipeline. Tetra adds two built-i
 
 In VS Code, a finished report lands in the model's `outputs/` folder and opens in its default application.
 
-## What the inventory contains
+## Report Entity Inventory
 
 Every report collects the same flat entity inventory, with one collection per block-diagram entity type: `zones`, `systems`, `groups`, `devices`, `networks`, `channels`, `information` and `flows`.
 
-A device row also carries the ids of its resolved connections. A channel row carries `nodeA` and `nodeB`.
+A device row also carries the ids of the networks that its channels reach. A channel row carries `nodeA` and `nodeB`.
 
 The inventory lists only the entities you authored.
 
-## Template reference
+## Template Reference
 
 This section is reference material for people who prepare their own report templates. It describes the placeholders that the generators accept.
 
-### Excel report
+### Excel Report
 
 The Excel report renders the inventory to an Excel workbook. Without a template, it writes a fresh multi-sheet workbook. With a template, it stamps the template.
 
-#### Excel templates
+#### Excel Templates
 
 The report stamps a template sheet when both conditions hold:
 
@@ -38,11 +38,11 @@ The report stamps a template sheet when both conditions hold:
 
 The report leaves any other sheet, such as a cover page, untouched. Columns inside the block use token placeholders such as `{{ id }}` and `{{ label }}`.
 
-### Word report
+### Word Report
 
 The Word report fills a template with the inventory. Tetra ships no template of its own, so every Word report needs one. A Word report with no template fails before anything is written.
 
-#### Word templates
+#### Word Templates
 
 Placeholders use `{...}` delimiters. A table body repeats with `FOR` and `END-FOR` over an inventory collection.
 

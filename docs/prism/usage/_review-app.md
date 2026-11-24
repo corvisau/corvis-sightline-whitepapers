@@ -6,13 +6,13 @@ The review app is the browser interface to the same operations the operator CLI 
 
 Choose by where the operator is, not by capability. Someone on a jump host uses the CLI. Someone who needs to hand a review to a colleague without shell access uses the app.
 
-## Getting there
+## Getting There
 
 Open your Windmill workspace. Start the review app. [Installing Windmill-hosted Prism](/docs/prism/install/windmill) covers deploying it; [Upgrading Windmill-hosted Prism](/docs/prism/upgrade/windmill) covers moving it forward.
 
 The app reads the same store as the CLI. A changeset you leave pending in one appears in the other.
 
-## The menu, and where each entry is documented
+## The Menu, and Where Each Entry Is Documented
 
 | Menu entry | What it does | Procedure |
 |---|---|---|
@@ -25,7 +25,7 @@ The app reads the same store as the CLI. A changeset you leave pending in one ap
 | **Connectors** | Configure a connector instance: read its fields, map them, collect from it, and write back to it | [Recipe](/docs/prism/install/bootstrap) § Part 4 |
 | **Upload** | Put a JSON document into a remote source's inbox by hand, for a source whose collector cannot run | No terminal equivalent, see below |
 
-### Browse data holds three views
+### Browse Data Holds Three Views
 
 Data moves inbox to local table to outbox, and each step answers a different question about the same records.
 
@@ -37,13 +37,13 @@ Data moves inbox to local table to outbox, and each step answers a different que
 
 **Inboxes is where you confirm a collection.** A collector reports success even where the transmit is skipped, and a local table stays empty until a sync rule runs against the inbox.
 
-### Local datasets are declared, not collected
+### Local Datasets Are Declared, Not Collected
 
 A connector's dataset appears the first time that connector collects. A consolidated dataset belongs to no connector, so this hosting declares one as a `prism_local_table` resource in the workspace, alongside the storage and manifest resources. Duplicate one and change its `id` to add another.
 
 The engine reads its table registry from the store rather than from Windmill, so a declaration is reconciled into it before it counts. **Rules** does that when it reads its dataset list, and **Re-run** does it before a rule starts. Both are idempotent, so neither costs anything on a workspace that is already in step.
 
-### Connectors is where an instance is configured
+### Connectors Is Where an Instance Is Configured
 
 A connector instance is one manifest resource, holding its identity, its credentials and its settings. The screen lists them, and drilling into one gives the run controls and what that instance collects.
 
@@ -53,7 +53,7 @@ A connector with no write-back script shows no **Write back now**.
 
 To add an instance, duplicate a manifest resource in Windmill and change `instance`. It appears in the list with nothing to register.
 
-## What differs from the CLI
+## Differences from the Operator CLI
 
 The decisions and their effects are identical. A few practical differences are worth knowing.
 
@@ -63,22 +63,12 @@ The decisions and their effects are identical. A few practical differences are w
 
 **Identity and missing records are controls, not JSON.** [Create and edit rules](/docs/prism/usage/manage-rules) lists seven fields the terminal editor reaches only through `r`. The browser editor gives two of them their own panels, because both decide whether records link rather than what a mapping carries.
 
-**Identity**, on a merge rule, holds the source's own id, the identity keys as a two-column grid, and the tie-break. A merge rule with no identity key writes a new master record for every record it reads. The panel says so where the keys are empty.
+**Identity**, on a sync rule, holds the source's own id, the identity keys as a two-column grid, and the tie-break. A sync rule with no identity key writes a new master record for every record it reads. The panel says so where the keys are empty.
 
-**Missing records**, on a push rule, decides what happens to a master the target system does not hold. A push addresses a record by the id the merge rule recorded, so a master with no id is skipped on every run. Turning this on has the connector create the record, and the id it returns becomes the address for every later run. The [recipe](/docs/prism/install/bootstrap) § 6c works an example through.
+**Missing records**, on a reverse rule, decides what happens to a master the target system does not hold. A push addresses a record by the id the sync rule recorded, so a master with no id is skipped on every run. Turning this on has the connector create the record, and the id it returns becomes the address for every later run. The [recipe](/docs/prism/install/bootstrap) § 6c works an example through.
 
 The other five fields are JSON in both interfaces.
 
 **Creating a rule does not ask which kind.** [Create and edit rules](/docs/prism/usage/manage-rules) says `n` asks for sync or reverse before the form. The app has no such step. Pick the target dataset and the direction follows it, exactly as it does at run time: a local target merges, a remote one pushes. The app only asks when it cannot tell, which means the target is not in the table registry.
 
 **Two operations have no terminal counterpart.** **Upload** and the **Outboxes** view under **Browse data** both cover a source that no connector can reach. One puts data in. The other takes the queued writes out. The CLI has no command for either. The screens carry their own guidance, and [Run a write-back](/docs/prism/usage/write-back) explains what completing a write-back means.
-
-Everything else in the linked procedures reads the same in either interface.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I install this layer? | [Installing Windmill-hosted Prism](/docs/prism/install/windmill) |
-| What is the terminal equivalent? | [The operator CLI](/docs/prism/architecture/cli) |
-| How do I start from nothing? | [First run](/docs/prism/usage/quickstart) |

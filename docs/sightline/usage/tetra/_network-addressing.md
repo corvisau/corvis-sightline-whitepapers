@@ -9,7 +9,7 @@ real range.
 
 ---
 
-## Setting addressing in the UI
+## Setting Addressing in the UI
 
 Where you edit a network decides which editor you get.
 
@@ -28,7 +28,7 @@ use the **Addressing** list:
 The Tabular Editor has a read-only **addressing** column that shows each network's
 ranges, comma-joined. It is off by default; enable it from the Column Manager.
 
-## Templated ranges
+## Templated Ranges
 
 A part of a range in braces, such as `{site}`, stands for any single octet from 0
 to 255. Type it in the **Range** field. It lets one network represent the same
@@ -56,7 +56,7 @@ Rules:
   same site.
 - Two networks can share a template.
 
-### Known instances
+### Known Instances
 
 **Known instances** records the values you happen to know for the placeholders.
 Tetra treats the list as incomplete and reports an unlisted value as new, not as a
@@ -68,7 +68,7 @@ or more placeholders.
 
 ---
 
-## Problems with a range
+## Problems with a Range
 
 Tetra reports an addressing problem as a model diagnostic that names the network
 and the entry. A malformed entry never removes the network from the diagram.
@@ -91,7 +91,7 @@ Warning:
 
 ---
 
-## Querying from a data slice
+## Querying from a Data Slice
 
 `addressing` is reachable from the data slice DSL the same way `tags` is.
 
@@ -111,7 +111,7 @@ model |> where("item.addressing |> covers('172.20.23.0/24')") |> add()
 [Address-aware helpers](#address-aware-helpers) section below describes it and
 its two companions.
 
-### Raw entries
+### Raw Entries
 
 `item.addressing` holds each entry as it was entered. A range entered without a
 note can appear as a plain string, and a range with a note or known instances
@@ -125,7 +125,7 @@ model |> where("item.addressing |> anyOf(.range == '172.20.23.0/24')") |> add()
 
 Use `covers()` for any query that must see both forms.
 
-### Address-aware helpers
+### Address-Aware Helpers
 
 Three transforms read addresses rather than strings. Unlike `.range` above, they
 read both entry forms.

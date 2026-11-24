@@ -8,7 +8,7 @@ current state against attributes, see the
 
 ---
 
-## Two rules that surprise people
+## Two Rules That Surprise People
 
 Both rules follow from the attribute record, which is keyed by name and folded
 one layer onto the next:
@@ -35,7 +35,7 @@ The later layer wins a name collision, so attachment order is precedence order.
 
 ---
 
-## 1. Author a reusable set in an attribute-set package
+## 1. Author a Reusable Set in an Attribute-Set Package
 
 You author attribute sets in an **attribute-set package**, on its **Attribute
 sets** tab. A requirement package uses them when you add that package on its
@@ -50,24 +50,25 @@ sets** tab. A requirement package uses them when you add that package on its
 
 - **+ Add attribute set** opens the **props drawer** as a create surface. Fill
   the id and an optional name. Add attribute rows. Then select **Create**.
-- To edit a set, right-click its row. Select **Edit**. The same menu carries **Duplicate** and
-  **Delete**. A left-click on a row does nothing.
+- To edit a set, click its row, or focus a cell and press Enter. A double-click
+  also opens it. Right-click a row for a menu that starts with **Open** and
+  also carries **Duplicate** and **Delete**.
 - The id is read-only once created. Every attachment points at it, and a
   rename in place would silently orphan them. To change an id, delete the set.
   Then add the set again.
 - Each set expands into its attributes in the grid. Right-click a set and select
-  **Add attribute** to add one. Right-click an attribute to select **Edit**,
-  **Duplicate** or **Remove**. The attribute drawer carries the value, label,
-  type, owner and description.
+  **Add attribute** to add one. Click an attribute to open it. Right-click an
+  attribute to select **Open**, **Duplicate** or **Remove**. The attribute
+  drawer carries the value, label, type, owner and description.
 
-### Deleting a set
+### Deleting a Set
 
 Nothing blocks a delete. A requirement or a pair that attaches the set keeps the
 reference, which then contributes no attributes. The loader raises a warning
 rather than failing to load. Read the package's **References** tab before you
 delete: it shows every requirement package that would be affected.
 
-### Attribute sets in a requirement package
+### Attribute Sets in a Requirement Package
 
 A requirement package's **Attribute sets** tab lists every set the package can
 attach. The tab is read-only. It has no **+ Add attribute set** button or
@@ -82,7 +83,7 @@ drawer, and no delete.
 When two attribute-set packages define the same id, the package that comes later
 in the list on the **Packages** tab supplies the set.
 
-## 2. Attach a set to a requirement
+## 2. Attach a Set to a Requirement
 
 Open a requirement's props drawer. The **Attribute sets** field offers every set
 in the package. An attached set folds its attributes in beneath the
@@ -95,7 +96,7 @@ by precedence.
 If you detach every set, the app removes the field rather than leaving an empty
 list.
 
-## 3. Override attributes on one pair — the Assess drawer
+## 3. Override Attributes on One Pair — the Assess Drawer
 
 When you assess a pair, the drawer shows a **Target state overrides** section
 above the per-attribute assessment.

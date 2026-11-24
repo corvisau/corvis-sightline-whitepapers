@@ -10,7 +10,7 @@ Every command runs from your [runtime instance](/docs/prism/install/runtime-inst
 cd acme-prism
 ```
 
-## Step 1 — Collect from two sources
+## Step 1 — Collect from Two Sources
 
 Run each mock collector, naming an instance.
 
@@ -23,7 +23,7 @@ npx prism-collect-jira-assets-mock demo
 
 You now have records from two sources that do not agree with each other.
 
-## Step 2 — Merge them
+## Step 2 — Merge Them
 
 Run a sync rule whose target is a consolidated dataset.
 
@@ -37,7 +37,7 @@ Use a rule that reads one of the mock sources. [Create and edit rules](/docs/pri
 
 If everything applied automatically and nothing is pending, the rule's field modes are all `auto`. Set one to `review`. Run it again, so there is something to review.
 
-## Step 3 — Decide the pending changes
+## Step 3 — Decide the Pending Changes
 
 ```bash
 npx prism-review
@@ -51,7 +51,7 @@ The full procedure, including what decline does that reject does not, is in [Rev
 
 **Expected output.** A confirmation of what was applied.
 
-## Step 4 — Confirm the result
+## Step 4 — Confirm the Result
 
 ```bash
 npx prism-review
@@ -60,12 +60,3 @@ npx prism-review
 Choose **Browse a dataset's records**. Pick your consolidated dataset. Open a record.
 
 **Expected output.** The merged record, with each field showing the source that supplied its value and that source's priority.
-
-## What to do next
-
-| Next | Document |
-|---|---|
-| Connect a real source | [Run a collector](/docs/prism/usage/collect) |
-| Understand why a value won | [Sync engine](/docs/prism/architecture/sync-engine) |
-| Do this in a browser | [The review app](/docs/prism/usage/review-app) |
-| Push a value back to its source | [Run a write-back](/docs/prism/usage/write-back) |

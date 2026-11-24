@@ -9,15 +9,15 @@ npx prism-review
 
 Choose **Manage rules**.
 
-For why priorities and conflicts resolve as they do, read [Sync engine](/docs/prism/architecture/sync-engine). This page is about the editor.
+For why priorities and conflicts resolve as they do, read [Sync engine](/docs/prism/architecture/sync-engine).
 
-## Where rules live
+## Rule File Location
 
 Rules are JSON files in a `rules/` directory inside your instance. One file per rule, named by its id.
 
-**Keep those files.** They are what the editor lists and what a sync resolves first. The storage fallback exists, but the files are the reliable path. [Run a sync rule](/docs/prism/usage/sync) explains why.
+**Keep those files.** They are what the editor lists and what a sync resolves first. The storage fallback exists, but the files are the reliable path. [Run a sync rule](/docs/prism/usage/sync) explains why the file path resolves first.
 
-## The rule list
+## The Rule List
 
 | Key | What it does |
 |---|---|
@@ -33,17 +33,17 @@ Rules are JSON files in a `rules/` directory inside your instance. One file per 
 
 Disabling a rule leaves it in place and stops it running. A sync against a disabled rule stops and says so.
 
-## Creating a rule
+## Creating a Rule
 
 `n` asks which kind first: **sync** or **reverse**. Pick, then fill in the form.
 
-The kind sets the shape; the direction that actually applies at run time follows the target table. [Run a sync rule](/docs/prism/usage/sync) covers that.
+The kind sets the shape; the direction that actually applies at run time follows the target table. [Run a sync rule](/docs/prism/usage/sync) covers how that direction applies.
 
-## The editor has two levels
+## The Editor Has Two Levels
 
 This is the part that is not obvious from the screen.
 
-### The form and its grid
+### The Form and Its Grid
 
 `enter` opens a form over the rule. It carries the header fields and a field-mapping grid.
 
@@ -57,7 +57,7 @@ This is the part that is not obvious from the screen.
 
 Expressions are checked as you type, against the same parser the engine uses. A mapping missing either side blocks the save.
 
-### The JSON escape hatch
+### The JSON Escape Hatch
 
 The form covers the rule's common shape: its id, its name, whether it is enabled, its source, its target, its field mappings and its version.
 
@@ -75,23 +75,14 @@ The form covers the rule's common shape: its id, its name, whether it is enabled
 
 The browser editor gives `identityKeys`, `tieBreak` and `mirror` controls of their own. See [The review app](/docs/prism/usage/review-app) for what those panels hold.
 
-### Your ungridded fields survive a form save
+### Your Ungridded Fields Survive a Form Save
 
 **A field the grid does not show is preserved untouched when you save from the form.** Saving does not blank the seven fields above, and it does not rewrite anything you set through the JSON view.
 
 The opposite assumption makes operators avoid the form entirely. They then edit every rule as raw JSON.
 
-## Loading rules without the editor
+## Loading Rules Without the Editor
 
 You can write rule files directly into `rules/` and the editor will list them. That is the ordinary way to move a rule between instances.
 
 Rules can also be loaded into the storage collection a sync falls back to. Load them into the collection the sync command actually reads. Keep the files as well: the file path resolves first, and it does not depend on that fallback.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I run one? | [Run a sync rule](/docs/prism/usage/sync) |
-| Why did this field lose? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| How do rules move between versions? | [Schema versions and rule migration](/docs/prism/upgrade/schema-migration) |
-| How do I do this in a browser? | [The review app](/docs/prism/usage/review-app) |

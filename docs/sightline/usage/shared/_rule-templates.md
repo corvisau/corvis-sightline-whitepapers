@@ -2,7 +2,7 @@ A built-in template is a ready-made query for a `generator` rule. The rule drawe
 
 A template holds a program only. **Insert** writes the statement into the program and leaves the **Key parts** and **Data fields** of the rule unchanged. A saved rule holds ordinary program text and keeps no reference to the template.
 
-## Start a rule from a built-in template
+## Start a Rule from a Built-in Template
 
 1. Open the rule drawer. In Metron, select **+ Add rule** in the rule package editor. In Tetra, open a rule in the Rules panel and set **Mode** to `generator`.
 2. Select **Edit query**. The query editor opens with the **Templates** tab showing, under the heading **Built-in**.
@@ -16,7 +16,7 @@ The **Built-in** list appears only while **Mode** is `generator`. A `transform` 
 
 A built-in template has no **Delete** button and no rename. Metron saves the templates that you create in the manifest of the rule package, and the **Saved** list shows them under the built-in ones. The Rules panels of both apps keep no saved templates.
 
-## Templates that ship with the apps
+## Templates That Ship with the Apps
 
 | Template | App | Records |
 |---|---|---|
@@ -26,7 +26,7 @@ A built-in template has no **Delete** button and no rename. Metron saves the tem
 
 For another kind of entity, insert a template and change the `item.kind` test in the program.
 
-## Differences between the apps
+## Differences Between the Apps
 
 | Topic | Tetra | Metron |
 |---|---|---|

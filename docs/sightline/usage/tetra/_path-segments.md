@@ -10,10 +10,10 @@ Everything the popover writes goes to the **active data slice**, never to the
 model. See [Per-Slice Layout & Nudge Overrides](/docs/sightline/usage/tetra/per-slice-layout) for the storage,
 inheritance and reset rules that apply to every field below.
 
-## Opening it
+## Opening It
 
 **Alt+right-click a channel or flow** (Option+right-click on a Mac) on the canvas. The popover opens scoped
-to the run of line you clicked, headed by the two nodes that segment joins:
+to the run of line you clicked. Its title bar reads **Layout**, like the container and annotation panels. A header names the two nodes that segment joins:
 
 ```
 < PLC 1 -> Sensor 1   2/3 >
@@ -29,7 +29,7 @@ While the popover is open, the segment it is editing glows on the canvas, so
 the mapping from control to geometry is visible. The glow covers that segment
 exactly; it stops at each node the line passes through.
 
-### What a click resolves to
+### Alt+right-Click Targets
 
 | Where you Alt+right-click | What opens |
 |---|---|
@@ -49,7 +49,7 @@ to the segment beneath it independently. The exception is a pill parked over a
 run through a node. That run is not addressable, so the pill is not either, and
 the popover opens on whatever segment it was already showing.
 
-## What each control writes
+## Segment Popover Controls
 
 The popover's two sections are **Start** (where the line leaves) and **End**
 (where it arrives). Each section has an **Offset** row, an **Edge** row and a
@@ -77,7 +77,7 @@ slot relative to the centre of the edge the line attaches to. `0` is dead centre
 
 An explicit port on a hop overrides the router's own choice. Leave the port at its inherited value to keep the automatic behaviour.
 
-### Via offset
+### Via Offset
 
 **Via offset** is stored on the data slice. The model keeps which route the traffic
 borrows. **Via offset** only says where to draw the borrowed route.
@@ -86,9 +86,11 @@ borrows. **Via offset** only says where to draw the borrowed route.
 channel's waypoints *for the segment arriving at that node*. So the offset
 belongs to that segment. The row addresses the hop the segment arrives at.
 
-Only a segment that follows another channel's route has the row. A segment that
-arrives at a hop with no via route, and the last segment, are drawn direct and are
-never offset. The panel therefore shows no **Via offset** row for them.
+Only a segment that follows another channel's route has the row. That includes a
+segment left on the `auto` setting of the via select, when a channel is drawn
+between its two nodes. A segment set to `direct` is drawn direct and is never
+offset. The same holds for a segment with no channel between its two nodes. Neither
+has a **Via offset** row. The last segment follows the same rule.
 
 The row has an **X** and a **Y** control. Each has a minus and a plus button that
 move the offset by 10 px, and a field where you type an exact value. Every change
@@ -138,7 +140,51 @@ A positive number counts pixels from the start, a negative number counts pixels 
 the end, and `0` is the centre. The rows show these as S, E and C. Editing the rows
 rewrites the whole list with an anchor on every entry.
 
-## The run through a node
+## A Flow with Several End Nodes
+
+A flow can list several nodes in `nodeB`. The model keeps one flow, and the canvas draws one line for each node in the list:
+
+```yaml
+flows:
+  - id: flow-telemetry
+    nodeA: device-rtu
+    nodeB: [device-historian, device-scada]
+    path:
+      - network-control
+```
+
+Every line runs from `nodeA` along the same `path` to its own end node. The path is drawn once, and each end node adds a line that branches off at the last hop. The model tree, the Tabular Editor and the properties drawer show the flow once. Clicking any line selects the flow, and **Edit…** on any line opens its drawer. The drawer lists the end nodes as rows, where a node is added, removed or moved. The first row is the End row of the Path section.
+
+Each line has its own segments. A segment that belongs to the shared path edits all the lines at once. A segment that arrives at an end node edits that line only:
+
+| Segment | Where it is stored | Lines it changes |
+|---|---|---|
+| Any segment that starts or ends at a hop of the path | The flow | All |
+| The last segment, which ends at an end node | The line you clicked | One |
+
+Alt+right-click the line you want to change. The popover header names the two nodes of the segment. A data slice that includes the flow shows every line, and a filter that matches one end node shows the line to that node. To give each end node its own route, define one flow for each route.
+
+## A Channel with Several End Nodes
+
+A channel can also list several nodes in `nodeB`. A hypervisor that hosts several virtual machines is the usual case. The model keeps one channel, and the canvas draws one line from `nodeA` to each node in the list, styled alike:
+
+```yaml
+channels:
+  - id: channel-hosting
+    channelType: hosting
+    nodeA: device-hypervisor
+    nodeB: [device-vm-historian, device-vm-scada]
+```
+
+The model tree, the Tabular Editor and the properties drawer show the channel once. Clicking any line selects the channel, and **Edit…** on any line opens its drawer. An annotation linked to the channel is placed on its first line, and a glow on the annotation lights every line.
+
+A hosting channel with several end nodes is several independent hosting links. A network or virtual channel with several end nodes stays one shared medium in the model, and the canvas draws it as separate lines. Rules and reports still see every end node of the channel.
+
+A `via` in a flow path that names the channel follows the line between the two nodes of that run. If no line of the channel joins the two nodes, the run is drawn direct. Two end nodes of one channel do not reach each other.
+
+A channel that has a `path` shares it between its lines. A segment that belongs to the shared path edits all the lines at once, and the segment that arrives at an end node edits that line only, as for a flow. Alt+right-click the line you want to change.
+
+## The Run Through a Node
 
 A multi-hop line enters each intermediate node on one port and leaves on
 another. The short run of line through the node joins the two. Those runs
@@ -157,7 +203,7 @@ clickable.
 Because the runs are never counted or indexed, hiding them changes no segment
 number and no click target.
 
-### Hiding them
+### Hiding Them
 
 **View → Hide Through-Node Runs** hides the runs. A multi-hop line then
 reads as separate runs entering and leaving each node, with a visible gap at each
@@ -167,41 +213,87 @@ alongside the other hide toggles in the View menu. PNG export honours it.
 This is useful mainly on information flows, which render above nodes and so show their through-node runs
 crossing the node box.
 
-## Where routing is NOT edited
+## A Zone or Group as a Hop
+
+A hop can be a zone or a group, as well as a device, a network or an
+information item. The hop picker lists them beside the other nodes. Use one when
+several channels share a leg that ends at a container and split inside it.
+
+The line **lands** on the container. It meets the border of the box once, on one
+port, and carries on from that port. The next hop is usually a node inside the
+box, so the line turns inwards and does not cross the box to the far side. When a
+hop is a channel that is drawn to the container, the line follows that channel to
+the container border, and the next run starts where the channel ended.
+
+When both neighbours of the container are outside it, the line crosses the box:
+it enters on one side and leaves on another, as it does at a device.
+
+- **A collapsed container is one box.** A hop on the container and a hop on a
+  node inside it draw as one landing, with no run between them.
+- **A hidden group has no drawn border.** A line that lands on one ends at the
+  edge of its members, where no box shows.
+
+## Routing Edit Scope
 
 Routing is edited only in the segment popover, and it is slice-only. The props
 drawer offers no attach edges, offsets, ports or via offset, on the
 relationship or on a path hop.
 
-The drawer lists the path as **segment rows**, one per run of line between
-the relationship's first node, its hops and its last node. The count matches the popover:
-`n + 1` for `n` hops. When the last hop is the last node itself, it folds into the final row,
-giving `n` rows.
-Each row is labelled `From → To` with node names, using the popover's own
-arrow.
+The drawer lists the path as a sequence of nodes. A **Start** row names the
+relationship's first node, each hop has a row of its own, and an **End** row names
+its last node. Between each pair of rows sits a **connector**, the run of line that
+joins them. The count matches the popover: `n` hops give `n + 1` connectors. When
+the last hop is the last node itself, it folds into the End row, giving `n`
+connectors.
 
-A row that arrives at a hop keeps that hop's structure: a node picker, a **via**
-select, drag-reorder and remove. The final row, which arrives at the last node, has
-no picker, drag or remove, since there is no hop to edit. It does offer a **via**
-select: choosing a channel routes the last run along that channel, and
-choosing `none (direct)` clears it. A path that already ends at the last node shows
-one final row. It is not a hop row followed by a row from that node to itself.
+A hop row has a node picker, a drag handle and a remove button. The picker lists
+nodes only, and choosing one draws the run into it directly. The drag handle
+reorders the hops. The remove button deletes the hop and joins the two connectors
+beside it. The Start and End rows are fixed.
 
-Every row, the final one included, offers two more actions:
+Every connector, the one into the End row included, has the same controls:
 
-- **Split** breaks that row's run of line in two, inserting a hop with no
-  node yet: splitting `A → B` gives `A → ?` and `? → B`. Picking a node for a hop
-  sets its **via** to `any`, so the line follows the existing channels. This
-  applies to a new hop and to a hop whose node you change. Choose `none (direct)`
-  to draw that run directly.
-- **Edit** opens the canvas segment popover on that row's run of line, the
-  same popover an Alt+right-click opens, scoped to that segment.
+| Control | What it does |
+|---|---|
+| **via** | Selects `auto`, `direct` or a channel for the run |
+| **Edit routing** | Opens the canvas segment popover on this run of line, the same popover an Alt+right-click opens |
+| **Add hop** | Splits the run in two by inserting a hop with no node yet: `A → B` becomes `A → ?` and `? → B` |
 
-The picker, **via**, Split and drag-reorder change the path's structure in the model
-itself. Edit changes nothing itself: it opens the popover, which stays the only
-place routing (attach edges, offsets, ports and via offset) gets edited.
+The **via** select lists `auto`, `direct` and the channels drawn between the
+connector's two nodes. A channel is drawn between two nodes when one is its first node
+and the other is one of its last nodes. Choosing a channel makes the run follow it end
+to end. Choosing `direct` draws the run straight between the two nodes.
 
-## Degradations worth knowing
+`auto` is the default. The run follows a channel drawn between its two nodes, and draws
+direct when there is none. Tetra prefers a channel that is not a hosting channel, then
+takes the first in the model. The option names the channel it picks, for example
+`auto (C-3KNT7)`, or reads `auto (direct)`. A flow uses `auto` on every connector,
+including a flow with no hops, so a flow beside a channel rides that channel. A channel
+uses `auto` only once its path has a hop. The one connector of a channel with no hops
+lists `direct` and the other channels between its ends, because those are its own
+parallel siblings.
+
+Several relationships can share one leg this way. Give a channel that carries the
+shared first leg, and each relationship's connector along it follows that channel. The
+lines run together along it and split where it ends.
+
+The select stays inert while the node at the end of its connector is not picked. A
+channel never lists itself, so the select of a channel relationship offers only other
+channels. The choice on the connector into the End row is stored on a trailing hop
+that names the last node.
+
+A path edited in the model file can hold a hop that names a channel that is not drawn
+between the hop's two nodes. Tetra does not follow it: that run draws directly.
+The connector shows the choice as a greyed-out option and leaves it as it is until you
+choose another value. A `via` that holds a glob such as `*` does not load; see
+[Compatibility](/docs/sightline/upgrade/compatibility).
+
+The picker, the **via** select, **Add hop** and drag-reorder change the path's
+structure in the model itself. **Edit routing** changes nothing itself: it opens the
+popover, which stays the only place routing (attach edges, offsets, ports and via
+offset) gets edited.
+
+## Degradations Worth Knowing
 
 - **A via-routed relationship glows like any other, unless it lost a hop.** It
   opens on the clicked segment and glows that segment. When a hop has no
@@ -212,8 +304,8 @@ place routing (attach edges, offsets, ports and via offset) gets edited.
   line still opens the popover, with a note that the clicked segment could not
   be identified. Its segments are otherwise fully editable, and stepping the
   header with `<` / `>` writes correctly. The drawer closes the rest of that
-  gap: the Edit button on each segment row opens the popover on that exact
-  segment. Every segment of such a relationship is therefore reachable,
+  gap: the **Edit routing** button on each connector opens the popover on that
+  exact segment. Every segment of such a relationship is therefore reachable,
   though not by clicking the canvas. The per-hop attach edges and
   offsets of a via-routed relationship never affect its geometry; only its
   via offsets do. The one exception is an end on an information badge. The
@@ -228,10 +320,11 @@ place routing (attach edges, offsets, ports and via offset) gets edited.
   get the same routing. A slice keeps overrides by hop node, not by position.
 - **A broken hop affects only that hop.** A hop naming an
   entity the model does not define is skipped, and its two neighbours join
-  directly. A hop whose via channel does not exist keeps its place in the
-  line. That one segment routes directly instead of along the missing
-  channel. The rest of the path routes as authored. The connection is drawn
+  directly. A hop whose via channel does not exist, or exists but is not drawn
+  between the hop's two nodes, keeps its place in the line. That one segment
+  routes directly instead of along that channel. The rest of the path routes as authored. The connection is drawn
   with the routing warning. Tetra names the broken reference in the
   Problems panel, or the `path-hop-missing` and `path-via-missing` rules do when
-  the model lists the starter package. Only a path with no usable hop left
+  the model lists the starter package. A channel that does not join the hop is
+  always named by Tetra, because the rules check only that the channel exists. Only a path with no usable hop left
   collapses to a straight line between the relationship's own two ends.

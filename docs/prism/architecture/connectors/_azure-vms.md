@@ -1,4 +1,4 @@
-Collects Azure Virtual Machine information and normalizes it to the `AssetComputer` schema.
+Collects Azure Virtual Machine information and normalises it to the `AssetComputer` schema.
 
 ## Configuration
 
@@ -145,7 +145,7 @@ Creates snapshots in MongoDB collection: `snapshots_azure-vms`
 Each snapshot contains:
 - Timestamp
 - Schema version
-- Array of normalized `AssetComputer` objects
+- Array of normalised `AssetComputer` objects
 - Metadata (item counts, validation errors, duration)
 
 ## Windmill Integration

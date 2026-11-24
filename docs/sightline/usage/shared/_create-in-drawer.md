@@ -1,6 +1,6 @@
 Creating an entity in Tetra or Lamina opens the props drawer in a new-entity mode. No separate dialog opens. The fields that you fill in on create are the fields that you see on a later edit. The order and the widgets are the same.
 
-## What the form shows
+## Create Form Fields
 
 The field set comes from the entity's schema. A field appears on the create surface when its schema marks it visible there.
 
@@ -14,7 +14,7 @@ An annotation has no parent picker, because nothing contains it. It links to wha
 
 For the style, colour and icon fields, see [Annotation styling](/docs/sightline/usage/shared/annotation-styling).
 
-## Finishing and abandoning
+## Finishing and Abandoning
 
 **Create** is the only way to commit a new entity. Nothing is written until you click it.
 
@@ -24,7 +24,7 @@ Closing the drawer without creating leaves the model untouched. The drawer asks 
 
 Tetra creates zones, groups, devices, networks, systems, information items, channels, flows and annotations.
 
-### Where creating starts
+### Tetra Entry Points
 
 Every entry point opens the same drawer.
 
@@ -35,14 +35,14 @@ Every entry point opens the same drawer.
 | Device drawer | **+ New channel** and **+ New flow** in a device's Relationships section, and **+ Add information** in its Information section |
 | Canvas annotations | Right-click a node or an edge, then choose **Add Annotation…** |
 
-### Form fields
+### Form Fields
 
 - **ID** is pre-seeded with a unique, correctly formatted id, and you can edit it. Zones get `Z-XXXXX`, groups `G-XXXXX` and information items `I-XXXXX`. Devices, networks and systems get `D-XXXXX`, `N-XXXXX` and `S-XXXXX`. Channels and flows get a service tag derived from their content, with a `C-` or `F-` prefix. The form accepts any id-safe value that matches the type's prefix. It also accepts a device, network or system id with a `dev-`, `net-` or `sys-` prefix, such as `dev-site-a-app`.
 - **Label** is required for zones, groups, devices, networks, information items and systems. It is optional for channels and flows. An unlabelled edge is a supported form, and the model synthesises some channels without a label.
-- **Advanced fields** are not on the create form. A new entity starts on the defaults, so the collapsible Advanced section that the Edit drawer shows does not appear. Set those fields, such as a group's **Style** and **Member Filter**, in the Edit drawer after you create the entity. The layout direction, margins, minimum sizes and alignment of a zone, group, device, network or information item are not in Advanced at all. Set them in the Container Properties panel.
+- **Advanced fields** are not on the create form. A new entity starts on the defaults, so the collapsible Advanced section that the Edit drawer shows does not appear. Set those fields, such as a group's **Style** and **Member Filter**, in the Edit drawer after you create the entity. The layout direction, margins, minimum sizes and alignment of a zone, group, device, network or information item are not in Advanced at all. Set them in the **Layout** pane.
 - **Source file** is not a create field. You choose the destination with the file control described below.
 
-### Where the entity is stored
+### Placement Controls for a New Tetra Entity
 
 Three controls surround the form. **Parent** sits above it. **Create as inline member** and **Destination file** sit together below it, because the checkbox decides whether the file control shows.
 
@@ -58,7 +58,7 @@ An information item created under an owner becomes a per-owner inline badge. The
 
 The drawer asks for **Discard** or **Cancel** when you close it, open a different entity, start another create, or switch surface or data slice.
 
-### See also
+### See Also
 
 - [Tetra templates](/docs/sightline/usage/tetra/templates) covers templated entities and inherited fields.
 - [Network Addressing](/docs/sightline/usage/tetra/network-addressing) covers how to edit a network's address ranges after you create it.
@@ -67,7 +67,7 @@ The drawer asks for **Discard** or **Cancel** when you close it, open a differen
 
 Lamina creates causes, events, outcomes, controls and annotations.
 
-### Where creating starts
+### Lamina Entry Points
 
 | Entry point | How |
 |---|---|
@@ -79,7 +79,7 @@ Lamina creates causes, events, outcomes, controls and annotations.
 
 See [Findings](/docs/sightline/usage/lamina/findings) for the findings inbox.
 
-### Required fields
+### Required Fields
 
 A field is required when the canonical model schema says that it cannot be absent. This includes one conditional rule. A label, a control type and a category are required unless a template supplies them.
 
@@ -91,10 +91,12 @@ Adding an annotation does not put an empty bubble on the canvas. The drawer hold
 
 The canvas bubble is display-only. To edit an annotation, right-click it and choose **Edit**, or select it. The drawer opens on the annotation's text, style, colour, icon and tags together.
 
-### A created entity is an unsaved change
+### A Created Entity Is an Unsaved Change
 
 Creating an entity stages it. It does not write to disk until you save. In the Table, the new row shows the same highlight as an edited cell, across the whole row, until you save or discard it. Any other pending change marks its row the same way.
 
-### Where the entity lands
+### Destination File for a New Lamina Entity
 
 The **Destination file** picker below the form chooses the file that receives the new entity. A control has no picker. Lamina always writes a control inline under the cause or outcome that owns it.
+
+The picker opens on the first file that already holds that kind of element. Files that hold no elements come after it in the list. A new element with no file goes to the first file that holds its kind when you save. When no file holds its kind, Save refuses the change and names the element. Create a file for it, then create the element again.

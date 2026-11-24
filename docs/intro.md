@@ -11,7 +11,7 @@ compliance trackers as three disconnected artefacts, Sightline binds them
 into one workspace of linked models, so a change in one place is visible
 everywhere it matters.
 
-## The three pillars
+## The Three Pillars
 
 Sightline is organised around a natural pipeline: model the architecture,
 ground risk in that architecture, then prove compliance against it.
@@ -31,12 +31,3 @@ ground risk in that architecture, then prove compliance against it.
 Alongside them, **[Prism](/docs/prism/architecture/overview)** keeps one current, auditable inventory
 of the assets in the estate. It collects asset data from cloud APIs, on-prem
 agents and files, merges it by rule, and records the source of every value.
-
-## Where to go next
-
-- New to Sightline? Start with [Tetra](/docs/sightline/architecture/tetra), since Lamina and Metron
-  both build on a Tetra model.
-- Evaluating Sightline against a specific framework? See
-  [Standards & framework alignment](./standards-alignment.md).
-- Looking for the longer-form arguments behind the product? See the
-  [whitepaper series](/blog) for the "why", alongside this section's "how".

@@ -1,6 +1,6 @@
-**This connector is a test fixture. It emits synthetic data, needs no credentials, and connects to nothing.** Use it to exercise the collection and sync pipeline before you point a real connector at a live system.
+This connector is a test fixture. It emits synthetic data, needs no credentials, and connects to nothing. Use it to exercise the collection and sync pipeline before you point a real connector at a live system.
 
-Prism does not ship an AWS EC2 integration. This fixture produces records shaped like EC2 instances so you can test the pipeline; it does not collect from AWS.
+Prism does not ship an AWS EC2 integration. This fixture produces records shaped like EC2 instances so you can test the pipeline.
 
 ## Configuration
 
@@ -45,7 +45,7 @@ Then update `collect.ts` to use real AWS API calls instead of mock data.
 2. Configure AWS credentials as Windmill resources/secrets
 3. Schedule as a daily job
 
-See `windmill/templates/aws-ec2-collector.ts` in the `sightline-prism-windmill` repository for a Windmill collector template. [Install Windmill](/docs/prism/install/windmill) covers the setup.
+See `windmill/templates/aws-ec2-collector.ts` in the `sightline-prism-windmill` repository for a Windmill collector template. Read [Install Windmill](/docs/prism/install/windmill) for how to set up Windmill.
 
 ## Data Mapping
 
@@ -74,7 +74,7 @@ AWS-specific fields are stored in `extendedData`:
 
 ## Output
 
-Creates snapshots in MongoDB collection: `snapshots_aws-ec2`
+The connector creates snapshots in the MongoDB collection `snapshots_aws-ec2`.
 
 Each snapshot contains:
 - Timestamp

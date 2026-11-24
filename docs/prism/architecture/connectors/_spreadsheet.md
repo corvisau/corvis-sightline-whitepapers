@@ -1,4 +1,4 @@
-Imports asset data from Excel (`.xlsx`) files using a JSON mapping configuration, with a YAML intermediate file for inspection.
+The connector imports asset data from Excel (`.xlsx`) files using a JSON mapping configuration, with a YAML intermediate file for inspection.
 
 ## Data Flow
 
@@ -32,7 +32,7 @@ Without a mapping file, the connector looks for `<basename>.mapping.json` beside
 npm run collect:spreadsheet -- data/assets_2025.xlsx
 ```
 
-The YAML intermediate file is written alongside the XLSX file with a `.yaml` extension (e.g., `assets_2025.yaml`).
+The connector writes the YAML intermediate file alongside the XLSX file with a `.yaml` extension (e.g., `assets_2025.yaml`).
 
 ## Mapping Configuration
 
@@ -92,7 +92,7 @@ The connector recognises these field names and maps them to the BaseAsset schema
 | `location` | `location.building` |
 | `owner` | `ownership.owner` |
 
-Any additional fields (e.g., `serialNumber`, `manufacturer`) are placed in `extendedData`.
+The connector places any additional fields (e.g., `serialNumber`, `manufacturer`) in `extendedData`.
 
 ## Configuration
 
@@ -103,7 +103,7 @@ Any additional fields (e.g., `serialNumber`, `manufacturer`) are placed in `exte
 | `MONGODB_URI` | Yes | MongoDB connection string |
 | `MONGODB_DB` | No | Database name (default: `prism`) |
 
-\* Can also be passed as CLI argument.
+\* An operator can also pass it as a CLI argument.
 
 ## Example
 

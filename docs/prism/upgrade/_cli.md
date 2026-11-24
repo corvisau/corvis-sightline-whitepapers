@@ -2,15 +2,15 @@ The operator CLI upgrades with the rest of the node. It travels inside the insta
 
 Read [Version compatibility](/docs/prism/upgrade/compatibility) for what the target version is coupled to.
 
-## The pairing check comes first
+## The Pairing Check Comes First
 
 **A CLI carries its engine inside it.** The release workflow compiles the sync engine, the connector SDK and the shared review logic into the CLI's own entry points. The version you install therefore decides the engine you run.
 
 Before you upgrade, answer one question: **does the target CLI version pair with the Prism version you run?**
 
-The honest answer is often "nobody can tell you from the artifact". No release records which Prism commit it was built from, so you cannot read the pairing off the release. Ask Corvis when the pairing matters, and read [Version compatibility](/docs/prism/upgrade/compatibility) for what is actually evidenced.
+The honest answer is often that nobody can tell you from the artefact. No release records which Prism commit it was built from, so you cannot read the pairing off the release. Ask Corvis when the pairing matters, and read [Version compatibility](/docs/prism/upgrade/compatibility) for what is actually evidenced.
 
-**Do not infer the pairing from version numbers.** The three products number independently. A matching major and minor tells you nothing about what was compiled in.
+**Do not infer the pairing from version numbers.** Prism, the CLI and the Windmill layer number independently. A matching major and minor tells you nothing about what was compiled in.
 
 ## Upgrade the CLI
 
@@ -31,7 +31,7 @@ The installer does not overwrite your `.env`, your connector manifests or your r
 
 Then [verify the version](#verify-the-version).
 
-## Verify the version
+## Verify the Version
 
 Check the version that is actually installed, not the one you intended to install.
 
@@ -54,17 +54,8 @@ ls node_modules/.bin/
 
 A missing entry point means the install did not complete. Re-run the installer and read its output from the top.
 
-## About releases
+## About Releases
 
 Releases are produced by a continuous-integration workflow, not from a developer workstation. A workstation can bundle a file that was never committed. An automated build starts from a clean checkout, so it cannot.
 
 The workflow runs the type checker and the full test suite against the exact engine build it packs. A build that fails either check is never published.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| Which combination should I move to? | [Version compatibility](/docs/prism/upgrade/compatibility) |
-| What happens to my existing records? | [Schema versions and rule migration](/docs/prism/upgrade/schema-migration) |
-| Can I go back? | [Rollback](/docs/prism/upgrade/rollback) |
-| How do I upgrade Prism itself? | [Upgrading Prism](/docs/prism/upgrade/prism) |

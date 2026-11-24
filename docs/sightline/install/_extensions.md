@@ -6,7 +6,7 @@ models as block diagrams (Tetra) and compliance assessment (Metron).
 Metron assesses a Tetra model, so you need Tetra model files when you use
 Metron. See [Cross-app workflows](/docs/sightline/architecture/cross-app-workflows).
 
-## Install a VSIX file
+## Install a VSIX File
 
 Sightline ships as one `.vsix` file. To install a file:
 
@@ -22,11 +22,11 @@ code --install-extension <file>.vsix
 
 Reload VS Code when it asks you to.
 
-## Check the install
+## Check the Install
 
 1. Select the **Sightline** activity-bar view. It shows a combined **Models** tree with **Lamina**, **Tetra** and **Metron** groups.
 2. Open a model. See [Open a Tetra model](/docs/sightline/usage/tetra/opening-a-model) or [Open a Lamina model](/docs/sightline/usage/lamina/opening-a-model).
 
-## Next step
+## Next Step
 
 [Quickstart](/docs/sightline/usage/quickstart)

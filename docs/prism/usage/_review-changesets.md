@@ -11,13 +11,13 @@ Choose **Review pending changes** from the menu.
 
 The same operations are available in a browser, in Windmill-hosted Prism. See [The review app](/docs/prism/usage/review-app) for where each operation is in the browser.
 
-## What you are looking at
+## Changeset Review Screen Layout
 
 Changes are grouped into an asset tree. Each row is one proposed field change. It shows the old value against the new one, with the source that proposed it and that source's priority.
 
 You are not deciding whether the new value is newer. The engine already settled that. You are deciding whether it is right.
 
-## The keys
+## The Keys
 
 | Key | What it does |
 |---|---|
@@ -37,7 +37,7 @@ You are not deciding whether the new value is newer. The engine already settled 
 
 **`space` folds; it does not decide.** On a field row it clears the decision, which is the same as `s`. On an asset row it collapses the group. Use `s` when you mean to clear, and the meaning never changes under you.
 
-## Reject and decline are not the same
+## Reject and Decline Are Not the Same
 
 This is the part the key names do not tell you. All three of `r`, `d` and `D` reject the change. They differ in what they leave behind.
 
@@ -53,7 +53,7 @@ Use `r` for a change that is wrong once. Use `d` for a value that is wrong at th
 
 **Decline is unavailable on a mirror row.** A mirror proposal creates an asset rather than changing a field value, so there is no source value to suppress. Those rows take `a` and `r` only.
 
-## Linking a new asset
+## Linking a New Asset
 
 A source can propose an asset that Prism does not yet hold. `l` opens a picker so you can attach the proposal to an existing master record instead of creating a second one.
 
@@ -68,12 +68,3 @@ Only then are approved changes written into the consolidated dataset and the cha
 **Applying is the point of no return for that pass.** Anything you approved is written. To undo it afterwards you roll the changeset back. That is a data operation, and a different thing from a version rollback. See [Browse datasets and changesets](/docs/prism/usage/browse).
 
 A change you left undecided stays pending. It appears again next time you review.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I undo one I applied? | [Browse datasets and changesets](/docs/prism/usage/browse) |
-| What did I suppress, and how do I undo it? | [Manage deferrals](/docs/prism/usage/deferrals) |
-| How do I do this in a browser? | [The review app](/docs/prism/usage/review-app) |
-| Why did the engine propose this? | [Sync engine](/docs/prism/architecture/sync-engine) |

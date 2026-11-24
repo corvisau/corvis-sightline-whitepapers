@@ -1,6 +1,6 @@
 Lamina and Tetra open each other at the object that a record concerns. A cause that links a record opens the Tetra model on its channel or flow. A channel or flow lists the Lamina causes that cover it and opens one. [Record links](/docs/sightline/usage/lamina/finding-links) explains how a cause links a record.
 
-## From a cause to Tetra
+## From a Cause to Tetra
 
 The props drawer of a cause has a Records section with one block for each link. A block that names a Tetra model has an **Open in Tetra** button.
 
@@ -15,15 +15,15 @@ The result depends on the link.
 | Names no model | A warning says that the link names no Tetra model to open. |
 | Names a model that the workspace does not list | A warning gives the reason that the model did not open. |
 
-## From a channel or flow to its causes
+## From a Channel or Flow to Its Causes
 
 The props drawer of a channel or flow has a Causes section. It lists each Lamina cause that covers the channel or flow, with the cause id, its label and the name of its Lamina model. **Open** opens that Lamina model with the cause selected and its props drawer open. A channel or flow with no cause shows the text "No Lamina cause covers this".
 
-A cause covers a channel or flow when its vector links a record that has the channel or flow among its links. A link that names a Tetra model counts for that model only. A link with no model counts for any model that holds the record.
+A cause covers a channel or flow when it links a record that has the channel or flow among its links. A link that names a Tetra model counts for that model only. A link with no model counts for any model that holds the record.
 
 Tetra reads every Lamina model in the workspace, wherever it is filed. The link stays on the cause. Tetra works out the list on each load and saves nothing, so **Refresh Diagram** and an external file change both update it.
 
-### Cause badges
+### Cause Badges
 
 A badge on the line of a channel or flow shows how many causes cover it. The tooltip reads "2 Lamina causes cover this", for example. Select the badge to open the props drawer of the channel or flow.
 
@@ -31,7 +31,7 @@ The badge sits to the right of the midpoint of the line. The findings badge sits
 
 The **Cause Badges** row in the View menu turns the badges on or off. The default is on. A data slice saves the setting with its other View options. A model that no cause links shows no badge either way. PNG export draws no cause badge.
 
-## Per-app differences
+## Per-App Differences
 
 | | Lamina | Tetra |
 |---|---|---|

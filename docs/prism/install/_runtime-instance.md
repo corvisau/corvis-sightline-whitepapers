@@ -1,6 +1,6 @@
 Read this page before you run any install command. It explains the one idea that the rest of the installation documentation depends on.
 
-## Two directories, and only one of them runs commands
+## Two Directories, and Only One of Them Runs Commands
 
 Sightline Prism separates what you install from what you operate.
 
@@ -18,7 +18,7 @@ your-parent-directory/
 
 **One install directory can create many runtime instances.** A collector node and a central node are two instances built from the same archive.
 
-## What the installer puts in a runtime instance
+## Runtime Instance Contents
 
 | Item | What it holds |
 |---|---|
@@ -34,7 +34,7 @@ The installer writes `.env.example` on every run. It writes `.env` only when no 
 
 A connector manifest sits at `.connectors/<type>.<instance>/manifest.json`. It names the connector type, the instance label and the asset schema. It holds credential references, never credential values.
 
-## The two flags that shape the instance
+## The Two Flags That Shape the Instance
 
 | Flag | What it does | Default |
 |---|---|---|
@@ -53,7 +53,7 @@ A collector node runs near a data source. A central node runs the sync engine an
 
 The remaining flag, `--connectors`, chooses which connectors to install. See the [Installing Standalone Prism](/docs/prism/install/prism) guide for how to choose them.
 
-## Why the commands must run from the instance
+## Working-Directory Requirement for Prism Commands
 
 Prism resolves its own files against the **current working directory**. It does not search upward, and it does not read a configuration file that points elsewhere.
 
@@ -73,7 +73,7 @@ cd acme-prism
 npx prism-sync <rule-id>
 ```
 
-## What goes wrong when you run from the install directory
+## Symptoms of Running from the Install Directory
 
 **The commands do not tell you that you are in the wrong directory.** Read this section before you meet the problem.
 
@@ -89,12 +89,3 @@ The install directory holds `install.mjs` and the archive. It has no `.env`, `.c
 The last one is the most confusing, because nothing failed. The collector wrote a real snapshot to a real store: the wrong one. Your instance's data is untouched, and it looks like the collection did nothing.
 
 If a command behaves as though your configuration does not exist, check the working directory before you check anything else.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What must be present first? | [Prerequisites](/docs/prism/install/prerequisites) |
-| How do I create an instance? | [Installing Standalone Prism](/docs/prism/install/prism) |
-| How do I install the operator CLI? | [Installing the CLI](/docs/prism/install/cli) |
-| Where does the data go? | [Storage backends](/docs/prism/install/storage-backends) |

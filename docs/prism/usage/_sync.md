@@ -6,7 +6,7 @@ A sync rule merges records from a connected dataset into a consolidated dataset.
 cd acme-central
 ```
 
-## Run the rule
+## Run the Rule
 
 Name the rule by its id.
 
@@ -16,7 +16,7 @@ npx prism-sync aws-mock-to-consolidated
 
 **Expected output.** A start line naming the rule, then a line naming where the rule was loaded from. Per-change lines follow, each showing the mode, the priority and the status. A summary of what was applied closes the run.
 
-### Where the rule comes from
+### Rule Lookup Order
 
 The command looks in two places, in order:
 
@@ -27,7 +27,7 @@ It prints which one it used. Keep your rule files. The file path is the one that
 
 A rule that exists but is disabled stops the run with a message saying so.
 
-## Auto-apply against pending review
+## Auto-Apply Against Pending Review
 
 The mode on each field rule decides whether you have more work to do.
 
@@ -42,7 +42,7 @@ Every field rule carries a mode:
 
 Priority still governs an `auto` change. A lower-priority source does not overwrite a higher-priority value simply because its rule says `auto`.
 
-## Direction follows the target, not the rule
+## Direction Follows the Target, Not the Rule
 
 There is one rule shape for both directions. A reverse rule is run by the same command as a sync rule.
 
@@ -50,7 +50,7 @@ There is one rule shape for both directions. A reverse rule is run by the same c
 
 So you do not choose a direction when you run a rule, and there is no separate reverse-sync command. You choose a target when you write the rule. [Run a write-back](/docs/prism/usage/write-back) covers what happens after a remote target is enqueued.
 
-## If the rule is not found
+## If the Rule Is Not Found
 
 The command reports where it looked. Two causes are common, and the second one is not obvious.
 
@@ -60,17 +60,8 @@ The command reports where it looked. Two causes are common, and the second one i
 
 **Keep the `rules/*.json` files in your instance.** They are the path this command resolves first, and the one that does not depend on that mismatch.
 
-## See what the sync produced
+## See What the Sync Produced
 
 The run summary tells you the counts. It does not tell you whether the pending changes are right.
 
 Every change left pending is waiting in a changeset. Review it, decide each change, and apply what you accept: [Review and apply changesets](/docs/prism/usage/review-changesets).
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| How do I review what this produced? | [Review and apply changesets](/docs/prism/usage/review-changesets) |
-| How do I write or edit a rule? | [Create and edit rules](/docs/prism/usage/manage-rules) |
-| How do fields actually merge? | [Sync engine](/docs/prism/architecture/sync-engine) |
-| What happens with a remote target? | [Run a write-back](/docs/prism/usage/write-back) |

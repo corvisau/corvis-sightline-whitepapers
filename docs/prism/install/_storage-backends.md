@@ -2,7 +2,7 @@ Sightline Prism writes its records to one of three backends: **MongoDB**, **Post
 
 Choose before you collect anything. The choice is easy to change and the consequence is not, for the reason in [The backends do not share data](#the-backends-do-not-share-data).
 
-## Choose a backend
+## Choose a Backend
 
 Set `STORAGE_BACKEND` in the [runtime instance](/docs/prism/install/runtime-instance) environment file.
 
@@ -18,7 +18,7 @@ The value is not case-sensitive, so `Local` and `LOCAL` work too.
 
 **A value that is not one of the three stops the runtime at startup**, naming what you set and what it accepts. This is deliberate: a misspelling used to select MongoDB silently, so `STORAGE_BACKEND=postgress` wrote to a store you never intended and nothing reported it.
 
-## The MongoDB backend
+## The MongoDB Backend
 
 | Variable | What it holds |
 |---|---|
@@ -29,7 +29,7 @@ Both variables have a built-in default that points at a MongoDB on the same mach
 
 Windmill-hosted Prism does not read these variables. It reads a Windmill resource instead, which its own installer creates. See [Installing Windmill-hosted Prism](/docs/prism/install/windmill) for how the installer creates it.
 
-## The PostgreSQL backend
+## The PostgreSQL Backend
 
 PostgreSQL holds each collection in its own table, as `_id text primary key, doc jsonb`. The engine creates each table the first time something writes to that collection. There is no migration to run before you start.
 
@@ -48,7 +48,7 @@ If you select `postgres` without it, the runtime stops at startup and tells you 
 
 **`POSTGRES_URI` is optional.** Leave it blank and the driver reads the standard PostgreSQL variables instead: `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`. Use whichever your environment already provides; do not set both.
 
-### Object key order is not preserved
+### Object Key Order Is Not Preserved
 
 PostgreSQL stores documents as `jsonb`, which normalises the keys of every JSON object, ordering them by key length, then by bytes. So a record written with its keys in one order reads back with them in another.
 
@@ -58,7 +58,7 @@ This matters in one place beyond display: deciding whether a field changed. Pris
 
 Array order is preserved.
 
-### A managed server needs TLS, and will not say so clearly
+### A Managed Server Needs TLS, and Will Not Say so Clearly
 
 A managed PostgreSQL (Azure Database for PostgreSQL among them) refuses a connection that does not negotiate TLS. The refusal does not mention TLS:
 
@@ -68,7 +68,7 @@ no pg_hba.conf entry for host "203.0.113.10", user "prism", database "prism"
 
 That message reads like a firewall or permissions problem, but it is neither. Set `PGSSLMODE` to `require` or `verify-full`, or put `?sslmode=require` on the end of `POSTGRES_URI`.
 
-## The local JSON store
+## The Local JSON Store
 
 The local store is a zero-dependency backend that writes one JSON file for each collection. It needs no database and no server.
 
@@ -78,13 +78,13 @@ The local store is a zero-dependency backend that writes one JSON file for each 
 
 The default resolves against the **current working directory**, not against the directory you installed from. This is one of the reasons operational commands run from the runtime instance. Read [The runtime instance](/docs/prism/install/runtime-instance) for the rest.
 
-### The local store runs one process at a time
+### The Local Store Runs One Process at a Time
 
 **The local store is single-process.** It is intended for one operator on one machine, and for local development. It is not built for concurrent workers, and Windmill-hosted Prism must not use it.
 
 Two processes writing to the same local store at the same time can lose a write. There is no lock between them. When more than one process needs the data, use MongoDB or PostgreSQL.
 
-## The backends do not share data
+## The Backends Do Not Share Data
 
 **Nothing is copied between the backends, in any direction, at any time.** They are separate stores. A record written under one backend is not visible under another. If you switch the value of `STORAGE_BACKEND`, nothing migrates.
 
@@ -94,7 +94,7 @@ Your records are still in the first backend. Set `STORAGE_BACKEND` back to its p
 
 Plan the switch as a data move, not as a configuration change.
 
-## Every backend runs the whole product
+## Every Backend Runs the Whole Product
 
 Every connector, the sync engine and the operator CLI work against any backend, with no change to any code. Prism reaches its store through one narrow interface, and all three backends implement it; the same interface test suite runs against each of them.
 
@@ -107,7 +107,7 @@ So the choice is about where the data lives and how many processes reach it.
 | Does the operator CLI change? | No |
 | Does Windmill-hosted Prism have a choice? | Yes, between MongoDB and PostgreSQL. The local store is not an option. |
 
-## Verify the backend in use
+## Verify the Backend in Use
 
 Run any command that reaches the store, from inside the runtime instance. The runtime names the backend it selected as it connects.
 
@@ -127,12 +127,3 @@ ls .data/
 ```
 
 **Expected output.** One JSON file for each collection that has been written, named after the collection. An empty or absent `.data` directory means nothing has been collected into this store yet.
-
-## Where to go next
-
-| Question | Document |
-|---|---|
-| What is a runtime instance? | [The runtime instance](/docs/prism/install/runtime-instance) |
-| How do I install Prism? | [Installing Standalone Prism](/docs/prism/install/prism) |
-| How do I install the Windmill hosting? | [Installing Windmill-hosted Prism](/docs/prism/install/windmill) |
-| How does the data model work? | [Data model](/docs/prism/architecture/data-model) |

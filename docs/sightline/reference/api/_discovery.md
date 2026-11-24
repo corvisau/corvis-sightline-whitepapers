@@ -4,7 +4,7 @@ Answers who the bearer token acts as, so a client can show read-only controls to
 
 ### Responses
 
-**200: The caller's role, and its user id and organisation when the server authenticates.**
+**200: The caller's role, and its user id, organisation and display name when the server knows them.**
 
 ```json
 {
@@ -141,6 +141,63 @@ Lists every rule package installed under the workspace root, one element per id 
       "domain": "metron"
     }
   ]
+}
+```
+
+## `GET /discovery/rule-packages/{packageId}/usage`
+
+Answers where one installed rule package is used: the Tetra models whose `uses:` names it, for a `metron` package the Tetra models whose bound requirement packages name it (`assessedModels`, the models a Test rule run can name), and for each rule the open records of every model, the causes that link those records, and the problems the last real run of each model reported. A record is open when it is neither closed nor hidden. A cause that links one record more than once counts once. A rule with no open record, no cause link and no problem is absent from `rules`, which a client reads as zero. Requirement packages that name the package are not listed; a client reads those from the requirement packages themselves. The problems come from the file a real run of `POST /models/{modelId}/finding-runs` saves beside the register, so a dry run changes nothing here. The grant the read needs is the one of the package's domain. A Lamina model that cannot be read for cause links is named in `warnings` and the rest of the answer stands.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `packageId` | path | yes | string | The rule package id (`meta.id`). |
+
+### Responses
+
+**200: The usage of the package.**
+
+```json
+{
+  "packageId": "example-rules",
+  "consumers": [
+    {
+      "kind": "tetra",
+      "id": "example-grid",
+      "name": "Example grid",
+      "pinnedVersion": 2
+    }
+  ],
+  "assessedModels": [],
+  "rules": [
+    {
+      "ruleId": "cross-zone-relation",
+      "openRecords": 2,
+      "causeLinks": 1,
+      "diagnostics": [
+        {
+          "modelId": "example-grid",
+          "severity": "error",
+          "message": "The program does not compile."
+        }
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "warnings": []
+}
+```
+**403: The deployment refuses the read.**
+
+```json
+{
+  "error": "Reading rule packages is not permitted."
+}
+```
+**404: No installed rule package has that id.**
+
+```json
+{
+  "error": "rule package not found: example-rules"
 }
 ```
 
@@ -326,7 +383,7 @@ Returns one coverage entry for each entity of the model that an assessment cover
 
 ## `GET /cross-app/models/{modelId}/covering-causes`
 
-Scans every Lamina model in the workspace and returns, for each channel or flow of the Tetra model, the causes whose vector links a rule finding that has that channel or flow among its references. A cause whose link names a different Tetra model is left out. A cause appears once for each channel or flow it covers. This is the read that Tetra uses for its Causes section and cause badges.
+Scans every Lamina model in the workspace and returns, for each channel or flow of the Tetra model, the causes that link a rule finding that has that channel or flow among its references. A cause whose link names a different Tetra model is left out. A cause appears once for each channel or flow it covers. This is the read that Tetra uses for its Causes section and cause badges.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -382,7 +439,7 @@ Scans every Lamina model in the workspace and returns, for each channel or flow 
 
 ## `GET /cross-app/models/{modelId}/tetra-scope`
 
-Lists the Tetra models of the workspace, in any folder, each with the zone ids that it declares, sorted by model id. The Lamina model selects and authorises the read, and its own folder does not change the answer. The Model Properties drawer offers them as the choices for `tetraModel` and `tetraZones`. A zone that no relation enters has no vector and is still listed. A Tetra manifest with no `meta.id` is not a listed model and is left out.
+Lists the Tetra models of the workspace, in any folder, each with the zone ids that it declares, sorted by model id. The Lamina model selects and authorises the read, and its own folder does not change the answer. The Model Properties drawer offers them as the choices for `tetraModel` and `tetraZones`. A zone that no relation enters has no vector and is still listed. Each model also gives the Threat Potential of each zone that declares one, which the cause drawer maps to a suggested likelihood. A Tetra manifest with no `meta.id` is not a listed model and is left out.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -611,7 +668,7 @@ A Risk groups cause-event-outcome paths. The manifest's `risks` list defines eac
   "risks": [
     {
       "id": "R001",
-      "name": "Station outage",
+      "label": "Station outage",
       "source": "authored",
       "eventIds": [
         "E-001",
@@ -637,7 +694,7 @@ A Risk groups cause-event-outcome paths. The manifest's `risks` list defines eac
     },
     {
       "id": "R002",
-      "name": "Remote cause, one outcome",
+      "label": "Remote cause, one outcome",
       "source": "authored",
       "eventIds": [
         "E-001"
@@ -713,7 +770,7 @@ Collects every control in the model that names the template, and answers the Ris
 |---|---|---|---|---|
 | `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
 | `templateId` | path | yes | string | The id of a control template (`tpl-control-…`), as a control's `template` field names it. |
-| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`, else its owner's. The answer is empty, not an error, when none match. |
+| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`; a mitigative control without them takes the zones of its outcome. The answer is empty, not an error, when none match. |
 
 ### Responses
 
@@ -877,7 +934,7 @@ Answers for the control `controlId` that the cause `causeId` owns, which is a pr
 | `causeId` | path | yes | string | The `id` of a cause in the Lamina model. |
 | `controlId` | path | yes | string | The `id` of a control the cause owns. |
 | `scope` | query | no | string | `instance` (the default) answers the one control. `template` answers every control that names the same template as this one; a control that names no template answers itself alone. |
-| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`, else its owner's. The answer is empty, not an error, when none match. |
+| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`; a mitigative control without them takes the zones of its outcome. The answer is empty, not an error, when none match. |
 
 ### Responses
 
@@ -1048,7 +1105,7 @@ Answers for the control `controlId` that the outcome `outcomeId` owns, which is 
 | `outcomeId` | path | yes | string | The `id` of an outcome in the Lamina model. |
 | `controlId` | path | yes | string | The `id` of a control the outcome owns. |
 | `scope` | query | no | string | `instance` (the default) answers the one control. `template` answers every control that names the same template as this one; a control that names no template answers itself alone. |
-| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`, else its owner's. The answer is empty, not an error, when none match. |
+| `zone` | query | no | string | Keeps the instances whose zones include this zone id. An instance takes its own `zones`; a mitigative control without them takes the zones of its outcome. The answer is empty, not an error, when none match. |
 
 ### Responses
 
@@ -1211,7 +1268,7 @@ Answers for the control `controlId` that the outcome `outcomeId` owns, which is 
 
 ## `POST /cross-app/models/{modelId}/risks/query`
 
-Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk the model defines. Send `include` to rate a Risk that you build: `include` lists the cause, event and outcome ids the Risk counts, `exclude` lists ids it leaves out, `filter.program` is an optional program that runs first, and `risks` lists Risks the manifest defines that it holds. Exclude beats include, and both beat the program. `riskId` and the built form exclude each other; `id` (default `adhoc`), `name`, `aggregation` and `flattenSubRisks` are optional, and `aggregation` overrides the manifest's `riskDefaults` for this query only. The answer carries `kind`, `memberIds` and `missingNeighbourIds`, as the list route gives them. A held Risk is a Risk the manifest defines. The route takes a body, so it is a `POST`, but it only reads: it writes nothing, takes no lock and is not audited, and a read-only caller may use it. The answer is the Risk as the list route gives it, with the same `ratingBasis`. `issues` lists only the definition issues of the queried Risk, and `problems` lists the files that could not be read. An `include`, `exclude` or `risks` entry that names an unknown element or Risk adds an issue and does not fail the request.
+Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk the model defines. Send `include` to rate a Risk that you build: `include` lists the cause, event and outcome ids the Risk counts, `exclude` lists ids it leaves out, `filter.program` is an optional program that runs first, and `risks` lists Risks the manifest defines that it holds. Exclude beats include, and both beat the program. `riskId` and the built form exclude each other; `id` (default `adhoc`), `label`, `aggregation` and `flattenSubRisks` are optional, and `aggregation` overrides the manifest's `riskDefaults` for this query only. The answer carries `kind`, `memberIds` and `missingNeighbourIds`, as the list route gives them. A held Risk is a Risk the manifest defines. The route takes a body, so it is a `POST`, but it only reads: it writes nothing, takes no lock and is not audited, and a read-only caller may use it. The answer is the Risk as the list route gives it, with the same `ratingBasis`. `issues` lists only the definition issues of the queried Risk, and `problems` lists the files that could not be read. An `include`, `exclude` or `risks` entry that names an unknown element or Risk adds an issue and does not fail the request.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1225,7 +1282,7 @@ Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk
 {
   "risk": {
     "id": "station-outage",
-    "name": "Station outage",
+    "label": "Station outage",
     "source": "authored",
     "eventIds": [
       "E-001",
@@ -1294,9 +1351,127 @@ Rates one Risk without defining it in the manifest. Send `riskId` to rate a Risk
 }
 ```
 
+## `POST /cross-app/models/{modelId}/risks/preview`
+
+Answers what the list route answers for a Risk list that you send in place of the manifest's `risks`. Send the list a client has staged and not yet saved, and the answer shows the Risks, paths, members and ratings that the list would give once it is saved. The model's files, risk matrix and `riskDefaults` are the saved ones, so an element that exists only in unsaved changes is reported as an unknown element, and a changed model default aggregation is not applied. An entry that is not a valid Risk definition is an `invalid-definition` issue and does not fail the request; a Risk that the list leaves out is absent from the answer. The route takes a body, so it is a `POST`, but it only reads: it writes nothing, takes no lock and is not audited, and a read-only caller may use it.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `modelId` | path | yes | string | The Lamina model's own id (`meta.id` of its `*.bowtie.yaml`). It is not a Tetra model's id. |
+
+### Responses
+
+**200: The Risks that the supplied list gives, rated.**
+
+```json
+{
+  "risks": [
+    {
+      "id": "R001",
+      "label": "Station outage",
+      "source": "authored",
+      "eventIds": [
+        "E-001",
+        "E-002"
+      ],
+      "paths": [
+        {
+          "causeId": "C-001",
+          "eventId": "E-001",
+          "outcomeId": "O-001"
+        },
+        {
+          "causeId": "C-002",
+          "eventId": "E-001",
+          "outcomeId": "O-001"
+        },
+        {
+          "causeId": "C-001",
+          "eventId": "E-002",
+          "outcomeId": "O-002"
+        }
+      ]
+    },
+    {
+      "id": "R002",
+      "label": "Remote cause, one outcome",
+      "source": "authored",
+      "eventIds": [
+        "E-001"
+      ],
+      "paths": [
+        {
+          "causeId": "C-002",
+          "eventId": "E-001",
+          "outcomeId": "O-002"
+        }
+      ]
+    }
+  ],
+  "membership": {
+    "byElement": {
+      "C-001": [
+        "R001"
+      ]
+    },
+    "byRisk": {}
+  },
+  "uncoveredEventIds": [
+    "E-003"
+  ],
+  "issues": [
+    {
+      "riskId": "R003",
+      "kind": "unknown-element",
+      "id": "E-009"
+    }
+  ],
+  "problems": []
+}
+```
+**400: The body is not JSON, or is not an object with a `risks` list and no other key.**
+
+```json
+{
+  "error": "the request body is not a Risk preview: risks: Invalid input: expected array, received string"
+}
+```
+**404: No Lamina model has this id.**
+
+```json
+{
+  "error": "model not found: example-model"
+}
+```
+**409: More than one Lamina model has this id.**
+
+```json
+{
+  "error": "model id example-grid names 2 models",
+  "reason": "ambiguous",
+  "candidates": [
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    },
+    {
+      "kind": "bowtie",
+      "id": "example-grid"
+    }
+  ]
+}
+```
+**500: The model exists but failed to load.**
+
+```json
+{
+  "error": "unable to load example-grid"
+}
+```
+
 ## `GET /cross-app/models/{modelId}/finding-inbox`
 
-Lists the open records that their rule does not hide. The scope is the Tetra model that the Lamina manifest names under `tetraModel`, or every Tetra model the workspace lists when it names none. `findings` holds the Tetra records in the zones the manifest declares under `tetraZones`. `metron` holds the Metron findings of the same model scope, which need no zones. Each entry is marked `linked` when some cause of this Lamina model links it, so the answer to unlinked is per Lamina model.
+Lists the open records that their rule does not hide. The scope is the Tetra model that the Lamina manifest names under `tetraModel`, or every Tetra model the workspace lists when it names none. `findings` holds the Tetra records in the zones the manifest declares under `tetraZones`. `metron` holds the Metron findings of the same model scope, which need no zones. Each entry is marked `linked` when some cause of this Lamina model links it, so the answer to unlinked is per Lamina model. `omitted` counts the open Tetra records that `findings` leaves out, because their key has no `zoneId` or names a zone outside `tetraZones`. `zoneLabels` names the zones of the scoped Tetra model that have a label. Each Tetra entry lists the ids its record refers to under `refIds`.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1316,6 +1491,7 @@ Lists the open records that their rule does not hide. The scope is the Tetra mod
       "modelId": "example-grid",
       "ruleId": "cross-zone-relation",
       "title": "Relation enters a zone: Z1, F1",
+      "ruleTitle": "Relation enters a zone",
       "key": {
         "relationId": "F1",
         "zoneId": "Z1"
@@ -1952,7 +2128,7 @@ bd-plant-a,blockdiagram.tetra.yaml,assessor@example.test,pkg-grid,1,R1
 
 ## `GET /folders`
 
-Lists the workspace root and its subfolders, with siblings sorted, as paths relative to the root (`.` is the root). It skips folders that start with a dot and `node_modules`. `truncated` is true when the list stopped at its cap. Use a value as `location` on `POST /models`, or as `parent` on `POST /folders`.
+Lists the workspace root and its subfolders, with siblings sorted, as paths relative to the root (`.` is the root). It skips folders that start with a dot, `node_modules` and a model's own `<id>.sightline` folder. `truncated` is true when the list stopped at its cap. Use a value as `location` on `POST /models`, or as `parent` on `POST /folders`.
 
 ### Responses
 
@@ -1978,7 +2154,7 @@ Lists the workspace root and its subfolders, with siblings sorted, as paths rela
 
 ## `POST /folders`
 
-Creates one folder under `parent`, a folder that `GET /folders` lists, so that a model or package can be created in it with `POST /models`. The server must be configured to create models. `name` is one path segment: it has no separator, does not start with a dot and is not `node_modules`. A folder that already exists answers 409 with `reason` set to `exists` and is left as it was.
+Creates one folder under `parent`, a folder that `GET /folders` lists, so that a model or package can be created in it with `POST /models`. The server must be configured to create models. `name` is one path segment: it has no separator, does not start with a dot, does not end in `.sightline` (the suffix of a model's own folder) and is not `node_modules`. A name that breaks these answers 400. A folder that already exists answers 409 with `reason` set to `exists` and is left as it was.
 
 ### Responses
 
@@ -2156,7 +2332,7 @@ Renames a folder of the workspace, keeping its parent. Every model below it keep
 
 ```json
 {
-  "error": "name must be one folder name of 1 to 200 characters, with no slash and not starting with a dot"
+  "error": "name must be one folder name of 1 to 200 characters, with no slash, not starting with a dot and not ending in a model folder suffix"
 }
 ```
 **403: The caller may not write.**
@@ -2173,7 +2349,7 @@ Renames a folder of the workspace, keeping its parent. Every model below it keep
   "error": "no folder sites/north"
 }
 ```
-**409: The folder cannot be renamed. `reason` is `reserved` for `findings` and anything under it. It is `inside-model` with the `paths` of the model whose directory holds the folder. It is `holds-packages` with the `paths` of the Metron packages below it. It is `exists` when the destination is taken.**
+**409: The folder cannot be renamed. `reason` is `reserved` for `findings` and anything under it. It is `inside-model` with the `paths` of the model whose directory holds the folder. It is `exists` when the destination is taken.**
 
 ```json
 {
@@ -2283,7 +2459,7 @@ Re-files a folder of the workspace under another folder, keeping its name. Every
   "error": "no folder sites/north"
 }
 ```
-**409: The folder cannot be moved. `reason` is `reserved` for `findings` and anything under it. It is `inside-model` with the `paths` of the model whose directory holds the folder. It is `holds-packages` with the `paths` of the Metron packages below it. It is `exists` when the destination is taken. It is `external-files` with the `paths` of the files that a model reads outside the folder.**
+**409: The folder cannot be moved. `reason` is `reserved` for `findings` and anything under it. It is `inside-model` with the `paths` of the model whose directory holds the folder. It is `exists` when the destination is taken. It is `external-files` with the `paths` of the files that a model reads outside the folder.**
 
 ```json
 {

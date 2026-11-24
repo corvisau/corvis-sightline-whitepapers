@@ -7,9 +7,9 @@ Review", "N/A — Out of Scope"). Metron's tooling (the rollup dashboard,
 worklist filtering, CSV and report export) reasons on the shared fundamental
 values underneath, whichever custom labels a package uses.
 
-## The two fundamental vocabularies
+## The Two Fundamental Vocabularies
 
-### Status — 3 fundamentals
+### Status — 3 Fundamentals
 
 | Fundamental | Meaning |
 |---|---|
@@ -17,7 +17,7 @@ values underneath, whichever custom labels a package uses.
 | `in-progress` | Being worked — editable |
 | `done` | Finished — read-only until reopened |
 
-### Outcome — 5 fundamentals
+### Outcome — 5 Fundamentals
 
 | Fundamental | Meaning |
 |---|---|
@@ -30,7 +30,7 @@ values underneath, whichever custom labels a package uses.
 A package never authors these lists; they are fixed. A package authors its
 own **custom labels**, each tagged with the fundamental it maps to.
 
-## Custom labels: the assessment scheme
+## Custom Labels: The Assessment Scheme
 
 Every requirement package selects one assessment scheme in the **Scheme** picker on
 its **Package meta** tab. The scheme carries both axes: its outcomes and its
@@ -54,7 +54,7 @@ assessment rule returns one, and that outcome's fundamental is the compliance
 result. See the section "Rollup: a distribution, not a score" below for how the
 Dashboard tab counts outcomes.
 
-### Status labels
+### Status Labels
 
 A scheme can define its own status labels. When it defines none, the package gets
 the three built-in fundamental statuses, with a Title Case label each.
@@ -63,7 +63,7 @@ A custom status list must cover all three fundamentals at least once. Several
 custom statuses can share a fundamental, as outcomes can. Within one list, no two
 entries share an id.
 
-### Requirement statuses
+### Requirement Statuses
 
 A requirement can have its own status list. The list replaces the scheme's
 statuses for that requirement's pairs. A requirement without one uses the scheme's
@@ -84,7 +84,7 @@ statuses of every requirement, and a pair takes only a status that its own
 requirement defines. A bulk edit that sets a status the requirement of a pair
 does not define skips that pair and gives the reason.
 
-## Authoring in the scheme editor
+## Authoring in the Scheme Editor
 
 ⛔ A scheme is edited in a scheme package, never in a requirement package. The
 requirement package's **Scoring scheme** tab renders read-only and names the
@@ -99,7 +99,7 @@ editable list. The first time you turn it on, the editor seeds the 3 built-in
 statuses as a starting point to rename or extend. Turn it off to clear the
 override back to the built-in defaults.
 
-## Assessing a pair
+## Assessing a Pair
 
 The **Outcome Picker** and **Status Picker** are dropdowns. Every outcome,
 including each not-applicable variant, is an ordinary entry.
@@ -109,7 +109,7 @@ built-in defaults. A `done`-fundamental status renders as a disabled option
 until an outcome is chosen. If the pair is currently `done`-fundamental, any
 status you pick opens a confirm dialog first.
 
-## Worklist "State" vs "Outcome" - two orthogonal axes
+## Worklist "State" vs "Outcome" - Two Orthogonal Axes
 
 The assessment worklist has two columns that read alike but measure different
 things:
@@ -136,7 +136,7 @@ The **Filter** popover's **Outcome** field (see [Worklist Filtering, Grouping, a
 narrow the worklist to specific fundamental outcomes directly. For example,
 `Outcome = no OR Outcome = partial` surfaces everything that needs attention.
 
-## Rollup: a distribution, not a score
+## Rollup: A Distribution, Not a Score
 
 The Dashboard tab's rollup counts the `done`-fundamental pairs for each
 fundamental outcome, at every tree level (requirement, category, package
@@ -146,7 +146,7 @@ Draft and in-progress pairs are excluded from the count. A pair whose live
 requirement or entity has drifted past what was assessed still counts under
 its last-assessed outcome.
 
-## Per-attribute state is a separate, unscored axis
+## Per-Attribute State Is a Separate, Unscored Axis
 
 Per-attribute assessment (see [Per-attribute assessment](/docs/sightline/usage/metron/attribute-assessment))
 records, for each practice, whether each typed attribute is `met`, `partial`
@@ -156,7 +156,7 @@ describes. A pair's attribute states never resolve to a
 fundamental outcome or fundamental state. They do not appear in the
 Dashboard rollup distribution above, and they do not affect promote-eligibility.
 
-## Formal record vs live signal
+## Formal Record vs Live Signal
 
 Metron carries two kinds of statement, and a report is easy to misread when
 the two are confused.
@@ -188,7 +188,7 @@ state. The pin is set when the member is added. The Findings tab shows it in the
 and never reaches a generated document, for the same
 formal-record reason as attribute satisfaction.
 
-## Where the fundamental values show up
+## Display of Fundamental Values
 
 - **Worklist state pill**: shows the pair's custom status label as text. The
   pill's colour follows the fundamental value, independent of which custom label

@@ -20,7 +20,7 @@ Lists the models the server serves through the model routes: tetra models by def
 
 ## `POST /models`
 
-Creates a model or package of one kind, which the server must be configured to create, and answers the descriptor that discovery now lists for it. The model's files go directly in `location`, the folder you chose, with the manifest and every data file named for `id`, such as `<id>.tetra.yaml` and `<id>.zones.yaml`. The `id` is written to `meta.id` and `name` is the free-text label, so a long descriptive name does not lengthen the file names. An `id` is unique across every model in the workspace, whatever its kind: an `id` that another model already holds answers 409 with `reason` set to `duplicate`. The folder may hold unrelated files and models of other apps. A folder that already holds a model of the same app, or a file the new model would write, answers 409 with `reason` set to `exists`. The four Metron package kinds count as one app. Nothing is written in either case. A failed write removes the files this request wrote and leaves the folder and its other files in place. A Metron requirement package is written alone, with an empty `uses:` list and `schemeRef: default`. It opens at once on a built-in Pass and Fail scheme, and a commit that names a scheme package in `uses:` connects a shared scheme. Choose `location` from `GET /folders`, or make one with `POST /folders`. A rule package takes a `domain`, the app that runs its rules, which defaults to `metron`.
+Creates a model or package of one kind, which the server must be configured to create, and answers the descriptor that discovery now lists for it. The model's files go in a folder of their own, `<id>.sightline`, inside `location`, the folder you chose. The manifest and every data file are named for `id`, such as `<id>.sightline/<id>.tetra.yaml` and `<id>.sightline/<id>.zones.yaml`, and the descriptor's `locator` is the manifest's path. Trees show the model in `location`, not in its own folder. The `id` is written to `meta.id` and `name` is the free-text label, so a long descriptive name does not lengthen the file names. An `id` is unique across every model in the workspace, whatever its kind: an `id` that another model already holds answers 409 with `reason` set to `duplicate`. The folder may hold unrelated files and any other models, of any app or Metron package kind, because no two models share a directory. A `location` that already holds a folder named `<id>.sightline` answers 409 with `reason` set to `exists`. Nothing is written in either case. A failed write removes the files this request wrote and leaves the folder and its other files in place. A Metron requirement package is written alone, with an empty `uses:` list and `schemeRef: default`. It opens at once on a built-in Pass and Fail scheme, and a commit that names a scheme package in `uses:` connects a shared scheme. Choose `location` from `GET /folders`, or make one with `POST /folders`. A rule package takes a `domain`, the app that runs its rules, which defaults to `metron`.
 
 ### Responses
 
@@ -52,7 +52,7 @@ Creates a model or package of one kind, which the server must be configured to c
   "error": "the editor role is required to write"
 }
 ```
-**409: Nothing was written. `reason` is `duplicate` when another model in the workspace already has this `id`, and the body repeats it as `id`. `reason` is `exists` when the folder already holds a model of the same app or a file this model would write.**
+**409: Nothing was written. `reason` is `duplicate` when another model in the workspace already has this `id`, and the body repeats it as `id`. `reason` is `exists` when `location` already holds a folder named `<id>.sightline`.**
 
 ```json
 {
@@ -71,7 +71,7 @@ Creates a model or package of one kind, which the server must be configured to c
 
 ## `GET /models/{id}`
 
-Returns every file of the model and the content-hash version of that read. An at parameter other than the current version answers 410.
+Returns every file of the model and the content-hash version of that read. An at parameter other than the current version answers 410. When the model's loader cannot load it, the read still answers, so the model can be repaired: `refusal` holds the loader's message, and `files` holds only the files the loader read before it stopped.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -137,7 +137,7 @@ Returns every file of the model and the content-hash version of that read. An at
 
 ## `PATCH /models/{id}`
 
-Changes the name a Tetra or Lamina model is listed under. Only that name changes: the id, the directory and every other field and comment of the manifest stay as they are, so nothing that names the model's id is affected. Other model kinds answer 400 with `reason: "unsupported-kind"`.
+Changes the name a Tetra, Lamina or Metron package model is listed under. Only that name changes: the id, the directory and every other field and comment of the manifest stay as they are, so nothing that names the model's id is affected. A Metron assessment answers 400 with `reason: "unsupported-kind"`.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -160,7 +160,7 @@ Changes the name a Tetra or Lamina model is listed under. Only that name changes
   }
 }
 ```
-**400: The model is not a Tetra or Lamina model, or the request is not valid. The `reason` is `unsupported-kind` for a model of another kind.**
+**400: The model is a Metron assessment, or the request is not valid. The `reason` is `unsupported-kind` for an assessment.**
 
 ```json
 {
@@ -184,7 +184,7 @@ Changes the name a Tetra or Lamina model is listed under. Only that name changes
 
 ## `DELETE /models/{id}`
 
-Removes a Tetra or Lamina model's directory and everything in it. It refuses, and removes nothing, while another file still names the model's id: a findings register, a bound Metron assessment, or a Lamina manifest that scopes to it. It also refuses when the directory is the workspace root or holds other models. A caller removes or re-points the referrers first. Other model kinds answer 400 with `reason: "unsupported-kind"`.
+Removes a Tetra, Lamina or Metron package model's directory and everything in it. It refuses, and removes nothing, while another file still names the model's id: a findings register, a bound Metron assessment, a Lamina manifest that scopes to it, or a Metron requirement package that lists it in `uses:`. It also refuses when the directory is the workspace root or holds other models. A caller removes or re-points the referrers first. A Metron assessment answers 400 with `reason: "unsupported-kind"`.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -200,7 +200,7 @@ Removes a Tetra or Lamina model's directory and everything in it. It refuses, an
   "ok": true
 }
 ```
-**400: The model is not a Tetra or Lamina model, or the request is not valid. The `reason` is `unsupported-kind` for a model of another kind.**
+**400: The model is a Metron assessment, or the request is not valid. The `reason` is `unsupported-kind` for an assessment.**
 
 ```json
 {
@@ -357,7 +357,7 @@ data: 41ab...
 
 ## `POST /models/{id}/commits`
 
-Applies changes only when `baseVersion` matches the current version. A stale write answers 409 with the current version and the paths it touched, so no update is lost. The commit applies every change or none. A failed write restores every file. Two server processes that write one directory are not coordinated.
+Applies changes only when `baseVersion` matches the current version. A stale write answers 409 with the current version and the paths it touched, so no update is lost. The commit applies every change or none. A failed write restores every file. Two server processes that write one directory are not coordinated. The server loads the files the commit would leave before it writes, and refuses a commit the model's loader cannot load or one that changes the model's identity. Nothing is written then.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -374,7 +374,7 @@ Applies changes only when `baseVersion` matches the current version. A stale wri
   "version": "a81e..."
 }
 ```
-**400: `version` is not a positive integer, a change path is outside the model directory, or the commit would leave a Tetra model the loader refuses (the answer carries the loader message and nothing is written).**
+**400: `version` is not a positive integer, or a change path is outside the model directory. Also answers 400 with `reason` set to `invalid` when the model the commit would leave does not load (the `error` holds the loader message) or when the commit changes the kind, id or version in the model's manifest; a rename is `PATCH /models/{id}`. Nothing is written.**
 
 ```json
 {
@@ -396,7 +396,7 @@ Applies changes only when `baseVersion` matches the current version. A stale wri
   "error": "model not found: plant-a"
 }
 ```
-**409: baseVersion is not the current version. Also answers 409 with `reason` set to `ambiguous` when the id names more than one model: the body then holds `error` and `candidates`.**
+**409: baseVersion is not the current version. Also answers 409 with `reason` set to `ambiguous` when the id names more than one model: the body then holds `error` and `candidates`. Answers 409 with `reason` set to `duplicate` and the model `id` when the commit would add a second manifest naming this model: the body then holds `error`, `reason` and `id`.**
 
 ```json
 {
@@ -447,6 +447,108 @@ Writes one file into the model's `outputs/` folder and creates the folder when i
 ```json
 {
   "error": "model not found: plant-a"
+}
+```
+
+## `GET /models/{id}/notes`
+
+Merges the notes of every user's notes file beside the model, so the caller sees every user's notes. `perUser` is false, and both lists are empty, when the server has no user identity (a server started without authentication); notes are then saved in the model's manifest. A notes file that does not parse is skipped and named in `problems`.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `id` | path | yes | string |  |
+| `version` | query | no | integer | The package version (`meta.version`) to address, for a Metron package whose id is shared by several versions. Not the content-hash version that responses carry. Omit it for a model with one match. |
+
+### Responses
+
+**200: The merged notes.**
+
+```json
+{
+  "perUser": true,
+  "userId": "user-b",
+  "riskNotes": [
+    {
+      "riskId": "R001",
+      "owner": "user-a",
+      "ownerName": "Ann",
+      "mine": false,
+      "note": {
+        "id": "note-4k2m9a",
+        "x": -150,
+        "y": -260,
+        "width": 220,
+        "height": 120,
+        "text": "**Check** the relief valve"
+      }
+    }
+  ],
+  "canvasNotes": [],
+  "problems": []
+}
+```
+**404: No model has this id.**
+
+```json
+{
+  "error": "model not found: plant-a"
+}
+```
+**409: The id names several models. The answer lists them in `candidates`.**
+
+```json
+{
+  "error": "model id plant-a names 2 models; address one with ?version=<n>",
+  "reason": "ambiguous"
+}
+```
+
+## `PATCH /models/{id}/notes`
+
+Applies note edits to a notes file that belongs to the signed-in user, so two users who add notes at the same time never overwrite each other. The file is not part of the model, so its version does not change and no `baseVersion` applies. The ops are `setRiskNote` and `deleteRiskNote` (with a `riskId`) for Lamina Risk notes, and `setCanvasNote` and `deleteCanvasNote` for Tetra canvas notes. A set adds a note or replaces the caller's note with the same id. A delete of a note that only another user holds is refused. Every op is checked before any is written. A server with no user identity writes nothing and answers `perUser: false`; send the edit through `POST /models/{id}/commits` instead.
+
+| Parameter | In | Required | Type | Description |
+|---|---|---|---|---|
+| `id` | path | yes | string |  |
+| `version` | query | no | integer | The package version (`meta.version`) to address, for a Metron package whose id is shared by several versions. Not the content-hash version that responses carry. Omit it for a model with one match. |
+
+### Responses
+
+**200: The ops are saved, or ignored when `perUser` is false.**
+
+```json
+{
+  "ok": true,
+  "perUser": true
+}
+```
+**400: The body is not JSON or has no `ops` list, an op is not a note op, or a note fails validation (an unknown key, or a width or height of zero or less).**
+
+```json
+{
+  "error": "not a note op: saveRisk"
+}
+```
+**403: The caller may not write.**
+
+```json
+{
+  "error": "the editor role is required to write"
+}
+```
+**404: No model has this id.**
+
+```json
+{
+  "error": "model not found: plant-a"
+}
+```
+**409: A delete names a note that only another user holds (`reason: not-owner`), or the id names several models (`reason: ambiguous`).**
+
+```json
+{
+  "error": "note n1 belongs to another user",
+  "reason": "not-owner"
 }
 ```
 
@@ -1491,7 +1593,7 @@ Answers the journal entries of one record, oldest first. Each entry carries the 
 
 ## `GET /models/{modelId}/findings/{findingId}/usages`
 
-Lists the causes that link the record through a `record` link on their vector, across every Lamina model in the workspace. Nothing is stored on the record itself. An unlinked record answers an empty list. The grant the read needs is the one of the record's domain, so a licence that holds only the Tetra grant reads `tetra` records and is refused `metron` ones.
+Lists the causes that link the record through a `record` link, across every Lamina model in the workspace. Each cause carries its label when it has one. Nothing is stored on the record itself. An unlinked record answers an empty list. The grant the read needs is the one of the record's domain, so a licence that holds only the Tetra grant reads `tetra` records and is refused `metron` ones.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1507,7 +1609,8 @@ Lists the causes that link the record through a `record` link on their vector, a
   "usages": [
     {
       "modelId": "lam-1",
-      "causeId": "C001"
+      "causeId": "C001",
+      "label": "Pump trips"
     }
   ]
 }
@@ -1894,7 +1997,7 @@ Reconciles the diagnostic generators of the rule packages the model uses, in mem
 
 ## `POST /models/{id}/move`
 
-Re-files a Tetra or Lamina model's whole directory under another folder of the workspace, keeping its directory name. The id does not change, so nothing that names the model's id is affected. A bound assessment that sits in the directory moves with it. It refuses, and moves nothing, when the target directory exists, when the model's directory is the workspace root or holds other models, or when the model reads a file outside its own directory. Other model kinds answer 400 with `reason: "unsupported-kind"`.
+Re-files a Tetra, Lamina or Metron package model's whole directory under another folder of the workspace, keeping its directory name. The id does not change, so nothing that names the model's id is affected. A bound assessment that sits in the directory moves with it. It refuses, and moves nothing, when the target directory exists, when the model's directory is the workspace root or holds other models, or when the model reads a file outside its own directory. A requirement package's reads of the packages it uses do not count, because it finds them by kind and id. A Metron assessment answers 400 with `reason: "unsupported-kind"`.
 
 | Parameter | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -1917,7 +2020,7 @@ Re-files a Tetra or Lamina model's whole directory under another folder of the w
   }
 }
 ```
-**400: The model is not a Tetra or Lamina model, or the request is not valid. The `reason` is `unsupported-kind` for a model of another kind.**
+**400: The model is a Metron assessment, or the request is not valid. The `reason` is `unsupported-kind` for an assessment.**
 
 ```json
 {

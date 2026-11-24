@@ -6,7 +6,7 @@ what it changes on top.
 
 ---
 
-## What a slice overrides
+## Per-Slice Overrides
 
 A slice holds overrides for three kinds of thing:
 
@@ -18,7 +18,7 @@ A slice holds overrides for three kinds of thing:
 
 A slice with no tweak for an entity or field stores nothing for it.
 
-### Per-hop routing
+### Per-Hop Routing
 
 A channel or flow that routes through intermediate nodes has its own attach edges,
 offsets and ports at each hop. A slice stores them per hop, so the segment popover
@@ -30,10 +30,34 @@ can edit any run of the line:
   if the hop returns.
 - A node that appears twice as a hop in one path shares one set of overrides. Both
   occurrences get the same routing.
+- A flow with several nodes in `nodeB` is drawn as one line for each node. A hop on the
+  shared path keeps its overrides once for the flow, and every line uses them. The
+  override for the last segment, and the flat fields such as the start offset, belong to
+  the line you nudged. See [Path segments](/docs/sightline/usage/tetra/path-segments#a-flow-with-several-end-nodes).
+- A channel with several nodes in `nodeB` follows the same rule. A hop on the shared path
+  keeps its overrides once for the channel, and every line uses them. The override for the
+  last segment, and the flat fields, belong to the line you nudged. See
+  [Path segments](/docs/sightline/usage/tetra/path-segments#a-channel-with-several-end-nodes).
 
 An explicit port on a hop overrides the router's own choice, including the
 perpendicular-transit alignment. Leave the port at its inherited value to keep the
 automatic behaviour.
+
+When a path joins a device to a network bar, automatic routing aligns their ports
+where space permits. This keeps the connecting segment straight, including when
+several flows share the bar. A connection to a neighbour beyond the end of a
+network bar uses its end face. Local connections above or below a horizontal
+bar still use its long edge; the same rule applies sideways to a vertical bar.
+
+Automatic routes prefer short orthogonal runs without retracing their corners.
+Flows passing through the same node use distinct internal lanes, which stay
+inside its bounds even on a crowded network. A turn through adjacent faces of
+a device follows their shared corner. Explicit ports, offsets and attach-edge
+choices still apply.
+
+To remove the visible runs through node boxes while keeping the connections
+between them, use **View → Through-Node Runs → Hide**. See
+[Path segments](/docs/sightline/usage/tetra/path-segments#hiding-them).
 
 A hop's routing geometry and the via offset exist only in a slice. The model holds
 which route a hop borrows, and a slice holds where to draw it.
@@ -43,17 +67,18 @@ model names these values from the hop instead. A hop's entry is the line arrivin
 from the previous node, and its exit is the line leaving toward the next one.
 
 > **Editing:** Alt+right-click the run of line you want on the canvas. The
-> segment nudge popover is the only editing surface for routing. The page
+> segment popover (its title bar reads **Layout**) is the only editing surface for routing. The page
 > [Path segments and the segment nudge popover](/docs/sightline/usage/tetra/path-segments) explains which
 > control changes which value. It also covers the cases (a via-routed
 > relationship, a collapsed hop) where a segment is reachable only through the
 > popover's header stepper.
 
-## Layout inheritance
+## Layout Inheritance
 
-A slice can list other slices (see
+A slice can inherit the layout of other slices (see
 [Building a slice from other slices](/docs/sightline/usage/tetra/data-slice-filtering#building-a-slice-from-other-slices)).
-Layout overrides follow the same list:
+Layout overrides follow the same list. Choose the list, and its order, in the
+**Inherit slices** field of the **Edit** dialog, or write it in the model file:
 
 - The nearest slice that defines a given value for a given entity wins. A later
   entry in the list wins over an earlier entry, and the slice's own values win
@@ -67,15 +92,29 @@ So a slice such as OT View can lay out about 80% of a diagram. A slice such as
 OT View: Site 42 lists OT View and layers on just the two or three nudges specific to
 that view.
 
-## Editing overrides
+## Editing Overrides
 
 **Edge routing** has its own Alt+right-click nudge panel (Position: Start/
 End offset, port, attach edge, label positions, and the groups to avoid).
 
-**Container structural fields** have two surfaces. Alt+right-click a zone, group, device, network or information node to open the **Container Properties** panel. It sets minimum width and height, margins, alignment, match sibling size, and (zone and group only) the annotation position and its offset. Right-click the container and choose **Layout**, then **Rows** or **Columns**, to set the layout direction. The props
-drawer's Advanced section does not show these fields.
+**Container structural fields** have their own Alt+right-click pane. Alt+right-click a zone, group, device, network or information node to open the **Layout** pane. It sets:
 
-**Annotation placement** has its own Alt+right-click nudge panel (Side /
+- The layout direction, **Rows** or **Columns**
+- The minimum width and height
+- The three margins
+- The alignment, vertical alignment and match sibling size
+- **Hidden** (group only), which draws the group with no border or label
+- The annotation position and its offset (zone and group only)
+
+Each row shows where its value comes from. A row that the active slice sets offers **Reset to inherited**.
+
+The **Layout** item in the right-click menu also switches between **Rows** and **Columns**. It is the quick route. The pane adds the origin hint and the reset.
+
+The **Hidden** value in the pane belongs to the active slice and wins over the group's own setting. The **Hidden** check box in the props drawer edits the group in the model, for every slice. The drawer's Advanced section shows none of the other fields.
+
+A device is never narrower than 120 px, and an information badge with a minimum width above 0 is never narrower than 40 px. A badge with a minimum width of 0 sizes itself to its label. The panel saves a lower value as the lowest width. A lower value already in a model file stays as written, and the diagram draws it at the lowest width.
+
+**Annotation placement** has its own Alt+right-click nudge panel, titled **Layout** (Side /
 Line / X / Y), shared with Lamina.
 
 Drag a panel by its title bar to move it off the diagram. See [Moving a nudge panel](/docs/sightline/usage/shared/annotations#moving-a-nudge-panel).
@@ -85,7 +124,7 @@ through the model, whichever slice is active (see the section "A model
 with no data slices" below). The canvas updates immediately, and the change is
 written on **Save** with the rest of the unsaved changes.
 
-### Child order
+### Child Order
 
 Child order is edited by dragging rows in the props drawer's Children
 list on a zone or group. There is no nudge panel for it. The drag changes the
@@ -111,7 +150,7 @@ same-category children into segments, and networks and containers each force
 a segment break. Moving a device from one side of a network to the other
 therefore changes the container's row and column structure.
 
-### File order
+### File Order
 
 The **File order** list changes the order of a container's `members` in the model file. It is separate from the Children list: Children orders the active data slice's view, and File order orders the file for every slice.
 
@@ -122,15 +161,16 @@ The **File order** list changes the order of a container's `members` in the mode
 - The list adds and removes nothing. Use the Children list for that.
 - **File order** does not need a data slice. A model without a root container shows no list in Model Properties.
 
-### Avoiding groups
+### Avoiding Groups
 
 A channel or flow can name groups that its route must go around. By default the
 router avoids devices, networks and zones only, so a line can cut straight through a
 group. An avoid list keeps one line out of the groups you choose.
 
-> **Editing:** Alt+right-click the line to open the segment nudge popover. The
-> **Avoid** section lists the visible groups with a checkbox each. Tick a group to
-> route the line around it. Clear the tick to let the line cross it again.
+> **Editing:** Alt+right-click the line to open the segment popover. The
+> **Avoid** section lists the groups on the avoid list. To add a group, type part of
+> its name in the field below the list and select the group. To let the line cross a
+> group again, select **×** on its row.
 
 The route keeps a clear gap of about 28 px from an avoided group, wider than the gap
 it keeps from devices, networks and zones, so the detour is easy to see.
@@ -149,10 +189,9 @@ the reason:
 | `not found` | The model has no group with that id. |
 
 A skipped entry stays in the slice. It takes effect again if the model changes so
-that it applies, and you can clear its tick at any time. Synthetic channels, which come
-from a device's `connections` list, cannot hold an avoid list. Promote the channel first.
+that it applies, and you can remove it at any time.
 
-### Information order
+### Information Order
 
 The **Information** section in the props drawer of a device or zone sets the order of that owner's information badges. The canvas draws the badges in the order the list shows. The order belongs to the model, so every data slice shows the same order.
 
@@ -168,14 +207,14 @@ The new order stays with the other unsaved changes until **Save** writes it. Onl
 - A read-only view disables the handles.
 - The section also adds, relabels, retypes and deletes badges, on a zone as well as on a device.
 
-### A model with no data slices
+### A Model with No Data Slices
 
 Layout overrides belong to a data slice, so a model with no slices has nowhere
 to keep them. Its Diagram view shows an empty state instead of the canvas. A
 props drawer opened from the Table view disables the Children list's drag
 handles, with a "Create a data slice to edit the layout" hint.
 
-### Inherited vs. local (nudge panel hints)
+### Inherited vs. Local (Nudge Panel Hints)
 
 When a slice is active, all three nudge panels and the Children list show, per field:
 
@@ -188,7 +227,7 @@ When a slice is active, all three nudge panels and the Children list show, per f
 
 The Children list carries one hint for the whole list, because the child order is a single value describing the entire order. The hint reads `order inherited from <base>` when the order comes from an ancestor. A `Reset order to inherited` button appears when this slice sets it.
 
-### Pushing nudges to the base slice
+### Pushing Nudges to the Base Slice
 
 The command **Tetra: Push Layout Nudges to Base Slice** moves the layout nudges of the active data slice into its base slice, the one slice that it lists. It runs from the command palette and needs an open diagram.
 
@@ -215,7 +254,7 @@ The command shows the reason and changes nothing in these cases:
 - The slice holds no nudges of its own.
 - The view is read-only.
 
-### Canvas-wide indicator
+### Canvas-Wide Indicator
 
 The nudge-panel hints above answer the question one field at a time. To see
 the shape of a slice's whole deviation from its base at a glance, turn on
@@ -233,11 +272,11 @@ both a local field and an inherited one shows filled, since a local
 override is present. For per-field or per-hop detail, use the nudge-panel
 hints above or the override inspector below.
 
-### The override inspector
+### The Override Inspector
 
 The hint above shows whether a value is local. The inspector shows which slice set it and what that value overrides.
 
-Open it with **Inspect overrides** in the segment nudge popover. It lists every
+Open it with **Inspect overrides** in the segment popover. It lists every
 layout override the channel or flow carries, and under each one every slice in
 the chain that sets it:
 

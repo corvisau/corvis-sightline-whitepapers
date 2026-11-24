@@ -6,7 +6,7 @@ identically across many zones or systems.
 A shared assessment applies to any requirement. Two pairs under different
 requirements can link to the same one.
 
-## How a pair resolves
+## Shared Assessment Resolution on a Linked Pair
 
 A linked pair shows the shared assessment underneath its own values.
 
@@ -18,7 +18,7 @@ A linked pair shows the shared assessment underneath its own values.
 An empty field is a blank comment, no outcome, no evidence or no linked evidence.
 Clear a field on the pair to return it to the shared value.
 
-## What a shared assessment carries
+## Shared Assessment Fields
 
 | Field | Behaviour on a linked pair |
 |---|---|
@@ -30,18 +30,21 @@ Clear a field on the pair to return it to the shared value.
 The assessment state stays on the pair. Draft, in progress and done are
 per-pair workflow, so a shared assessment never sets them.
 
-## Author a shared assessment
+## Author a Shared Assessment
 
 The **Shared** tab sits beside **Evidence**.
 
 1. Select **+ Add shared assessment**.
-2. Select **Edit...** on the new row.
+2. Double-click the **Used by** cell of the new row to open it in a drawer.
 3. Enter a label. Set the outcome, comment, evidence and linked evidence.
 4. Select **Save all**.
 
-The grid edits **Label**, **Outcome** and **Comment** inline. **Edit...** opens a
-drawer for the evidence fields, which a grid cell cannot hold. A row needs a
-label before it can save.
+The grid edits **Label**, **Outcome** and **Comment** inline. The drawer holds the
+evidence fields, which a grid cell cannot hold. A double-click on a cell that does
+not edit in place opens the drawer, and so do Enter in such a cell and **Edit...**
+on the row. A click selects the row. Right-click a row for a menu whose first item,
+**Open**, opens the drawer, followed by **Remove**. A row needs a label before it
+can save.
 
 The **Used by** column is read-only. It shows the number of pairs that link the shared
 assessment, across every requirement.
@@ -49,11 +52,11 @@ assessment, across every requirement.
 Filter, group, search and column visibility work as on the **Evidence** tab. To
 delete several rows, select them and right-click.
 
-## Link a pair
+## Link a Pair
 
 Link a pair in the Assess drawer:
 
-1. Open the pair with right-click, then **Edit...**.
+1. Double-click the pair in the worklist. Alternatively, right-click it and select **Open**.
 2. Choose a record in **Shared assessment**.
 3. Select **Save**.
 
@@ -73,7 +76,7 @@ like any other edit and saves with **Save all**.
 The **Shared** worklist column shows which record each pair links. It is off by
 default. Turn it on with **Edit columns**.
 
-## Override and revert
+## Override and Revert
 
 Type in a field on a linked pair to override it. The pair keeps its own value, and
 its **from shared** marker disappears. A later edit to the shared assessment leaves
@@ -85,7 +88,7 @@ returns.
 A linked pair can move to done with an inherited outcome. A pair with no outcome of
 its own or from its record cannot.
 
-## Completed pairs
+## Completed Pairs
 
 When a pair enters a done status, Metron records the shared assessment's outcome, comment,
 evidence and linked evidence as they stand. A later change to any of them differs from
@@ -103,7 +106,7 @@ Two link changes on a done pair raise the same warning:
 
 A done pair that you unlink keeps the values it showed as its own, so it raises no warning.
 
-## Delete a shared assessment
+## Delete a Shared Assessment
 
 When you delete a shared assessment, Metron unlinks every pair that used it.
 
@@ -115,18 +118,18 @@ When you delete a shared assessment, Metron unlinks every pair that used it.
 When you delete a general-evidence record, Metron removes its id from every shared
 assessment that cited it.
 
-## Reports and exports
+## Reports and Exports
 
 The dashboard, the CSV export, the JSON export and the reports read the
 resolved values. A linked pair appears with its shared outcome, comment and linked
 evidence, as if the pair held them. No report field changes.
 
-## A link to a missing shared assessment
+## A Link to a Missing Shared Assessment
 
 A link that names no shared assessment raises a warning in the Problems panel. The pair
 shows only its own values, and Metron does not flag it for revalidation.
 
-## Moving an existing assessment
+## Moving an Existing Assessment
 
 An assessment file that still holds a `sharedAssessments` list is not read for it,
 raises a warning, and a save is refused so the list is not lost. Moving the list to the
@@ -134,7 +137,7 @@ shared register is a one-time command, not an action in the app. The
 [upgrade page](/docs/sightline/upgrade/compatibility#moving-old-assessments-to-the-shared-register)
 gives the command.
 
-## Choosing between reuse tools
+## Choosing Between Reuse Tools
 
 | Tool | Reuse | Carries |
 |---|---|---|
